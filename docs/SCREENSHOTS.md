@@ -1,5 +1,7 @@
 # Menus et options / Menus and settings
 
+[Galeries dans sept langues](LOCALIZED_GALLERY.md) · [Site interactif](https://s00r1.github.io/PRISME/)
+
 [Français](README.fr.md) · [English](README.en.md) · [Deutsch](README.de.md) · [中文](README.zh.md) · [Türkçe](README.tr.md) · [Русский](README.ru.md) · [العربية](README.ar.md)
 
 Captures des vraies interfaces rendues sur Android dans une application de démonstration séparée, avec données fictives et icônes génériques. Les fenêtres des autres applications sont exclues. / Actual Android UI views rendered by an isolated demo build with fictional data; other applications’ windows are excluded.
