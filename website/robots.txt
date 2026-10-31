@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://s00r1.github.io/PRISME/sitemap.xml
