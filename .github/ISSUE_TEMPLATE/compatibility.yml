@@ -1,0 +1,30 @@
+name: Watch compatibility / Compatibilité d’une montre
+description: Report a tested model without personal data.
+title: '[Compatibility] '
+body:
+  - type: markdown
+    attributes:
+      value: 'Do not include accounts, emails, serial numbers, network names, tokens, profiles or raw device dumps. / Ne publiez aucune donnée personnelle.'
+  - type: input
+    id: model
+    attributes:
+      label: Brand and model / Marque et modèle
+    validations:
+      required: true
+  - type: input
+    id: android
+    attributes:
+      label: Android version and API / Version Android et API
+    validations:
+      required: true
+  - type: input
+    id: display
+    attributes:
+      label: Display size and shape / Résolution et forme d’écran
+  - type: textarea
+    id: results
+    attributes:
+      label: Tested features and results / Fonctions testées et résultats
+      description: Launcher, styles, Control Center, floating volume, rotation, timer, language.
+    validations:
+      required: true

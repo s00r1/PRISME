@@ -1,0 +1,30 @@
+# Private signing material and credentials
+signing/
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+.env
+.env.*
+local.properties
+# Generated outputs
+.build/
+classes/
+__pycache__/
+*.pyc
+*.class
+*.apk
+*.dex
+*.jar
+AUDIT_API25.json
+VERIFICATION.txt
+SHA256.txt
+# Local backups and device data
+*.zip
+*.log
+*.dump
+sauvegardes/
+backups/
+private/

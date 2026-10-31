@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="PrismeTheme" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">@color/prisme_window_background</item>
+        <item name="android:colorAccent">#56E6CD</item>
+        <item name="android:colorControlActivated">#56E6CD</item>
+        <item name="android:colorButtonNormal">#182431</item>
+        <item name="android:colorEdgeEffect">#56E6CD</item>
+        <item name="android:navigationBarColor">#0A0F18</item>
+        <item name="android:statusBarColor">#0A0F18</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:fontFamily">sans</item>
+    </style>
+</resources>
