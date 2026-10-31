@@ -129,3 +129,21 @@ Captures des vraies interfaces rendues sur Android dans une application de démo
 ### العربية
 
 ![العربية](../assets/screenshots/language-ar.png)
+
+## Pastilles en fonctionnement / Floating volume in use
+
+<table>
+<tr><td align="center" valign="top"><b>Volume Live Circle Closed</b><br><a href="../assets/screenshots/volume-live-circle-closed.png"><img src="../assets/screenshots/volume-live-circle-closed.png" width="410" alt="Volume Live Circle Closed"></a></td><td align="center" valign="top"><b>Volume Live Circle Open</b><br><a href="../assets/screenshots/volume-live-circle-open.png"><img src="../assets/screenshots/volume-live-circle-open.png" width="410" alt="Volume Live Circle Open"></a></td></tr>
+<tr><td align="center" valign="top"><b>Volume Live Android</b><br><a href="../assets/screenshots/volume-live-android.png"><img src="../assets/screenshots/volume-live-android.png" width="410" alt="Volume Live Android"></a></td><td align="center" valign="top"><b>Volume Live Neon</b><br><a href="../assets/screenshots/volume-live-neon.png"><img src="../assets/screenshots/volume-live-neon.png" width="410" alt="Volume Live Neon"></a></td></tr>
+<tr><td align="center" valign="top"><b>Volume Live Minimal</b><br><a href="../assets/screenshots/volume-live-minimal.png"><img src="../assets/screenshots/volume-live-minimal.png" width="410" alt="Volume Live Minimal"></a></td><td align="center" valign="top"><b>Volume Live Titanium</b><br><a href="../assets/screenshots/volume-live-titanium.png"><img src="../assets/screenshots/volume-live-titanium.png" width="410" alt="Volume Live Titanium"></a></td></tr>
+<tr><td align="center" valign="top"><b>Volume Live Light</b><br><a href="../assets/screenshots/volume-live-light.png"><img src="../assets/screenshots/volume-live-light.png" width="410" alt="Volume Live Light"></a></td><td align="center" valign="top"></td></tr>
+</table>
+
+## Personnalisation du centre / Control Center customization
+
+<table>
+<tr><td align="center" valign="top"><b>Center Ios Transparent</b><br><a href="../assets/screenshots/center-ios-transparent.png"><img src="../assets/screenshots/center-ios-transparent.png" width="410" alt="Center Ios Transparent"></a></td><td align="center" valign="top"><b>Center Ios Opaque</b><br><a href="../assets/screenshots/center-ios-opaque.png"><img src="../assets/screenshots/center-ios-opaque.png" width="410" alt="Center Ios Opaque"></a></td></tr>
+<tr><td align="center" valign="top"><b>Center Options Appearance</b><br><a href="../assets/screenshots/center-options-appearance.png"><img src="../assets/screenshots/center-options-appearance.png" width="410" alt="Center Options Appearance"></a></td><td align="center" valign="top"><b>Center Options Content</b><br><a href="../assets/screenshots/center-options-content.png"><img src="../assets/screenshots/center-options-content.png" width="410" alt="Center Options Content"></a></td></tr>
+<tr><td align="center" valign="top"><b>Center Options Layout</b><br><a href="../assets/screenshots/center-options-layout.png"><img src="../assets/screenshots/center-options-layout.png" width="410" alt="Center Options Layout"></a></td><td align="center" valign="top"><b>Center Options Gestures</b><br><a href="../assets/screenshots/center-options-gestures.png"><img src="../assets/screenshots/center-options-gestures.png" width="410" alt="Center Options Gestures"></a></td></tr>
+<tr><td align="center" valign="top"><b>Center Options Commands</b><br><a href="../assets/screenshots/center-options-commands.png"><img src="../assets/screenshots/center-options-commands.png" width="410" alt="Center Options Commands"></a></td><td align="center" valign="top"></td></tr>
+</table>

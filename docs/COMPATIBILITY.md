@@ -1,4 +1,8 @@
-# Compatibility: tested support versus installation candidates
+# RECTANGULAR WATCHES ONLY — DM100 REFERENCE
+
+**Reference: a large 2.86-inch rectangular screen, 640 × 480 in landscape (4:3), full Android 7.1+ / API 25+.**
+
+**Round and square watches are outside this release's supported target. Other rectangular sizes and resolutions are not validated.**
 
 PRISME is a conventional Android home/launcher application. Its manifest requires Android API 25 (Android 7.1) or newer. It contains Java bytecode and resources with no bundled native CPU library. That minimum is an installation requirement, not a guarantee of every feature on every firmware.
 
@@ -11,14 +15,13 @@ The manufacturer's description identifies the DM100 as a full-Android 7.1.1 devi
 ## Candidates only — not verified support
 
 - Other watches sold as DM100: confirm the actual firmware rather than relying on the product name.
-- LEMFO LEM T and LEM16.
-- KOSPET PRIME, PRIME SE, PRIME Pro and Optimus 2.
-- Other full-Android watches with API 25+ and ordinary APK installation.
+- Other rectangular full-Android watches matching the 2.86-inch / 640 × 480 reference: unverified, requiring a separate device test.
 
-These are names for community testing, **not claims that PRISME has been installed or validated on them**. Check the actual watch before trying the APK: full Android versus a proprietary OS, API level, APK installer, available home launcher, display shape, overlay permissions and battery management. Round displays and manufacturer-specific orientation rules require particular attention.
+These are conditions for community testing, **not additional certified models**. Check the actual watch: rectangular shape, display size/resolution, full Android, API level, APK installation, home launcher, overlay permissions and battery management. Style names do not identify compatible watch models.
 
 ## Outside the validated target
 
+- Round or square watches, regardless of Android version. Installer acceptance does not establish supported hardware or usable layout.
 - Wear OS / Pixel Watch / Wear OS Galaxy Watch: not validated; this APK is not a Wear OS watch-face package or Watch Face Format asset. Android's [Wear OS packaging requirements](https://developer.android.com/training/wearables/packaging) describe a distinct watch-app distribution target. Experimental sideloading is not official PRISME support.
 - watchOS, Tizen and proprietary systems without Android APK installation cannot use this ordinary Android APK.
 - Android below API 25 does not meet the manifest minimum.

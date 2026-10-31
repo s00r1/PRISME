@@ -1,5 +1,9 @@
 # Third-party notices
 
+## External DM100 product photos
+
+The README embeds two external DM100 product photographs from [this public product listing](https://www.ebay.nl/itm/185939246016), hosted at i.ebayimg.com. They illustrate the reference hardware, not PRISME or additional device certifications. They are not original project assets under the MIT licence; rights remain with their respective owners. The photo files are not copied into this repository.
+
 The production app uses Android framework APIs, system fonts and icons read at runtime from applications installed by the end user. No third-party application package, branded watch-face artwork, account data or proprietary firmware is distributed here.
 
 The test harness downloads **com.vaadin.external.google:android-json:0.0.20131108.vaadin1**, the Android JSON implementation, from Maven Central. It is test-only, not bundled into PRISME.apk, and is licensed under Apache License 2.0. The dependency is pinned by SHA-256 in `scripts/fetch-test-dependency.py`.
