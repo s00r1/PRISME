@@ -4,6 +4,11 @@
 
 > **不适用于圆形或正方形手表。本版本面向 DM100 长方形屏幕。其他长方形尺寸和分辨率尚未验证。**
 
+## 🌐 [访问 PRISME 官方网站](https://s00r1.github.io/PRISME/)
+
+**https://s00r1.github.io/PRISME/**
+
+
 <table>
 <tr><td align="center" valign="top"><a href="https://www.ebay.nl/itm/185939246016"><img src="https://i.ebayimg.com/images/g/WZgAAOSwAUlkiEmk/s-l1600.jpg" width="270" alt="DM100 2.86 rectangular watch"></a></td><td align="center" valign="top"><a href="https://www.ebay.nl/itm/185939246016"><img src="https://i.ebayimg.com/images/g/5EcAAOSwrulkiEmS/s-l1600.jpg" width="270" alt="DM100 2.86 rectangular watch"></a></td></tr>
 </table>
