@@ -58,6 +58,6 @@ La gestion de batterie constructeur peut arrêter le minuteur et les services fl
 
 Java, ressources, catalogues de langues, tests et compagnon Imou optionnel sont fournis. [Compiler et tester](docs/BUILD.md) · [Permissions et données](docs/PRIVACY.md) · [Signaler une compatibilité](https://github.com/s00r1/PRISME/issues/new/choose).
 
-Code publié pour consultation ; aucune licence open source choisie pour le moment. L’APK peut être téléchargé, installé et utilisé gratuitement. Les marques citées dans les styles décrivent une inspiration visuelle, sans affiliation.
+Code original sous licence MIT : utilisation, modification et redistribution autorisées avec conservation de la notice. Les marques citées dans les styles décrivent une inspiration visuelle, sans affiliation.
 
 ![PRISME — fr](assets/screenshots/language-fr.png)

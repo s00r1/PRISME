@@ -44,6 +44,6 @@ Images show the real interfaces of an isolated demo build with fictional data an
 
 Manufacturer battery policies can stop timers and floating services. Music controls need an active player. Secondary translations may need refinement. Physical side bands reported on a DM100 have **no confirmed fix**; PRISME does not alter the panel or repair display drivers. Layout on other screens is not guaranteed.
 
-Java source, resources, language catalogs, tests and the optional Imou companion are included. [Build and test](BUILD.md) · [Permissions](PRIVACY.md) · [Report compatibility](https://github.com/s00r1/PRISME/issues/new/choose). Source is published for inspection; no open-source licence has been selected yet. The APK may be downloaded, installed and used free of charge. Brand names describe visual inspiration, without affiliation.
+Java source, resources, language catalogs, tests and the optional Imou companion are included. [Build and test](BUILD.md) · [Permissions](PRIVACY.md) · [Report compatibility](https://github.com/s00r1/PRISME/issues/new/choose). Original code is MIT-licensed: use, modification and redistribution are permitted with the required notice. Brand names describe visual inspiration, without affiliation.
 
 ![PRISME — en](../assets/screenshots/language-en.png)

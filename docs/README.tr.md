@@ -44,6 +44,6 @@ Görseller ayrı bir demo derlemesinin gerçek arayüzlerinden, kurmaca veriler 
 
 Üretici pil yönetimi süreölçeri ve yüzen hizmetleri durdurabilir. Müzik denetimi etkin oynatıcı gerektirir. Çeviriler geliştirilebilir. DM100'de bildirilen yan siyah alanlar için **doğrulanmış onarım yoktur**. PRISME paneli veya sürücüyü değiştirmez. Diğer ekranların görünümü garanti edilmez.
 
-Java kaynakları, kaynak dosyaları, dil katalogları, testler ve isteğe bağlı Imou yardımcısı dahildir. [Derleme ve test](BUILD.md) · [İzinler](PRIVACY.md) · [Uyumluluk bildir](https://github.com/s00r1/PRISME/issues/new/choose). Kod inceleme için yayımlanmıştır; henüz açık kaynak lisansı seçilmemiştir. APK ücretsiz indirilebilir, kurulabilir ve kullanılabilir. Marka adları yalnızca görsel esinlenmeyi anlatır; markalarla bağlantı yoktur.
+Java kaynakları, kaynak dosyaları, dil katalogları, testler ve isteğe bağlı Imou yardımcısı dahildir. [Derleme ve test](BUILD.md) · [İzinler](PRIVACY.md) · [Uyumluluk bildir](https://github.com/s00r1/PRISME/issues/new/choose). Özgün kod MIT lisanslıdır; lisans bildirimi korunarak kullanım, değişiklik ve yeniden dağıtıma izin verilir. Marka adları yalnızca görsel esinlenmeyi anlatır; markalarla bağlantı yoktur.
 
 ![PRISME — tr](../assets/screenshots/language-tr.png)

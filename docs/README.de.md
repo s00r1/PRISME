@@ -44,6 +44,6 @@ Die Bilder zeigen echte Oberflächen eines getrennten Demo-Builds mit erfundenen
 
 Hersteller-Energiesparen kann Timer und schwebende Dienste beenden. Musiksteuerung benötigt einen aktiven Player. Übersetzungen können verfeinert werden. Für die gemeldeten seitlichen schwarzen Bereiche auf einer DM100 gibt es **keine bestätigte Reparatur**. PRISME verändert weder Displaypanel noch Treiber. Die Darstellung auf anderen Bildschirmen ist nicht garantiert.
 
-Java-Code, Ressourcen, Sprachdateien, Tests und optionaler Imou-Begleiter sind enthalten. [Erstellen und testen](BUILD.md) · [Berechtigungen](PRIVACY.md) · [Kompatibilität melden](https://github.com/s00r1/PRISME/issues/new/choose). Der Code ist einsehbar; eine Open-Source-Lizenz wurde noch nicht gewählt. Die APK darf kostenlos heruntergeladen, installiert und verwendet werden. Markennamen beschreiben gestalterische Inspiration, ohne Verbindung zu den Marken.
+Java-Code, Ressourcen, Sprachdateien, Tests und optionaler Imou-Begleiter sind enthalten. [Erstellen und testen](BUILD.md) · [Berechtigungen](PRIVACY.md) · [Kompatibilität melden](https://github.com/s00r1/PRISME/issues/new/choose). Originalcode unter MIT-Lizenz: Nutzung, Änderung und Weitergabe mit Erhalt des Lizenzhinweises erlaubt. Markennamen beschreiben gestalterische Inspiration, ohne Verbindung zu den Marken.
 
 ![PRISME — de](../assets/screenshots/language-de.png)

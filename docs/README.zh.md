@@ -44,6 +44,6 @@
 
 厂商省电机制可能终止计时和悬浮服务。音乐控制需要活跃的播放器。部分翻译可继续完善。DM100 上报告的侧边黑色区域**尚无已确认的修复**。PRISME 不改变面板或显示驱动，也不保证所有屏幕的布局。
 
-提供 Java 源码、资源、语言目录、测试及可选 Imou 辅助应用。[构建和测试](BUILD.md) · [权限](PRIVACY.md) · [报告兼容性](https://github.com/s00r1/PRISME/issues/new/choose)。源码可供查看，尚未选择开源许可证。APK 可免费下载、安装和使用。样式中的品牌名称仅表示视觉灵感，本项目与这些品牌无隶属关系。
+提供 Java 源码、资源、语言目录、测试及可选 Imou 辅助应用。[构建和测试](BUILD.md) · [权限](PRIVACY.md) · [报告兼容性](https://github.com/s00r1/PRISME/issues/new/choose)。原创代码采用 MIT 许可证，保留许可证声明即可使用、修改和再分发。样式中的品牌名称仅表示视觉灵感，本项目与这些品牌无隶属关系。
 
 ![PRISME — zh](../assets/screenshots/language-zh.png)
