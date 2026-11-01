@@ -277,6 +277,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         if("exportStyleGallery".equals(action)){exportStyleGallery();return;}
         if("rotationSettings".equals(action)){showRotationSettings();return;}
         if("rotateGlobal".equals(action)){toggleGlobalRotation();return;}
+        if("batteryIndicatorSettings".equals(action)){showBatteryIndicatorSettings();return;}
         if(action.startsWith("testColor:")){try{showTestColor(Integer.parseInt(action.substring(10)));}catch(NumberFormatException ignored){}return;}
         if("androidBattery".equals(action)){launch(new Intent(Intent.ACTION_POWER_USAGE_SUMMARY));return;}
         if("androidDisplay".equals(action)){launch(new Intent(Settings.ACTION_DISPLAY_SETTINGS));return;}
@@ -482,6 +483,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
                 settingsAction(b,"Ouvrir le centre de contrôle",()->openControlCenter(true));
                 settingsAction(b,"Personnaliser le centre de contrôle",()->showControlCenterSettings());
                 settingsAction(b,"Pastille de volume intégrée",()->showFloatingVolumeSettings());
+                settingsAction(b,"Indicateur de batterie flottant · 24 styles",()->showBatteryIndicatorSettings());
                 settingsAction(b,"Outils classiques",()->showTools());settingsAction(b,"Minuteur",()->showTimer(false));
                 settingsAction(b,"Chronomètre",()->showStopwatch());settingsAction(b,"Carnet local",()->showNotes());
                 settingsAction(b,"Aujourd’hui · favoris et récents",()->onAction("today"));
@@ -722,6 +724,69 @@ public final class MainActivity extends Activity implements DashboardView.Listen
             }
         });
     }
+    /** Battery appearance and position; preview and overlay reflect every change. */
+    private void showBatteryIndicatorSettings(){
+        final BatteryIndicatorPrefs battery=new BatteryIndicatorPrefs(this);
+        ScrollView scroll=scroll();LinearLayout b=column();scroll.addView(b);
+        settingsIntro(b,"Batterie flottante · PRISME 5.3",
+                "Jauge visible par-dessus les autres applications, sans capter les gestes tactiles. Position initiale : en haut à droite.");
+        DeviceSnapshot snapshot=DeviceSnapshot.read(this);
+        BatteryIndicatorView preview=new BatteryIndicatorView(this,battery);
+        preview.update(snapshot.batteryPct,snapshot.charging);
+        b.addView(preview,new LinearLayout.LayoutParams(-1,Math.max(70,preview.desiredHeight()+12)));
+        final Runnable changed=()->{
+            preview.requestLayout();preview.invalidate();
+            ControlCenterService.refresh(MainActivity.this);
+        };
+        CheckBox enable=new CheckBox(this);
+        enable.setText("Afficher l’indicateur même hors de PRISME");
+        enable.setTextColor(INK);enable.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);
+        enable.setMinHeight(48);enable.setChecked(battery.enabled());
+        enable.setOnCheckedChangeListener((view,checked)->{
+            battery.putBoolean("enabled",checked);changed.run();
+        });
+        b.addView(enable);
+        addButton(b,"Autoriser l’affichage par-dessus les applications",()->{
+            try{startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,Uri.parse("package:"+getPackageName())));}
+            catch(RuntimeException error){toast("Autorisation indisponible sur cet appareil");}
+        });
+        section(b,"24 designs différents");
+        settingChoice(b,"Style de l’indicateur",BatteryIndicatorPrefs.STYLES,battery.integer("style",0),
+                n->{battery.putInt("style",n);changed.run();});
+        section(b,"Couleurs selon la charge");
+        settingChoice(b,"Palette de batterie",BatteryIndicatorPrefs.PALETTES,battery.integer("palette",0),
+                n->{battery.putInt("palette",n);changed.run();});
+        slider(b,"Seuil batterie faible (%)",5,40,battery.integer("low",20),n->{battery.putInt("low",n);changed.run();});
+        slider(b,"Seuil batterie moyenne (%)",45,90,battery.integer("high",65),n->{battery.putInt("high",n);changed.run();});
+        b.addView(text("Chaque palette change automatiquement les couleurs pour batterie faible, moyenne, élevée, pleine et en charge.",14,MUTED));
+        section(b,"Taille et emplacement");
+        slider(b,"Taille (%)",55,200,battery.integer("size",100),n->{battery.putInt("size",n);changed.run();});
+        slider(b,"Position horizontale (%)",0,100,battery.integer("x",100),n->{battery.putInt("x",n);changed.run();});
+        slider(b,"Position verticale (%)",0,100,battery.integer("y",0),n->{battery.putInt("y",n);changed.run();});
+        slider(b,"Opacité (%)",25,100,battery.integer("opacity",100),n->{battery.putInt("opacity",n);changed.run();});
+        section(b,"Détails visuels");
+        CheckBox percent=new CheckBox(this);percent.setText("Afficher le pourcentage");
+        percent.setTextColor(INK);percent.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);
+        percent.setChecked(battery.bool("percent",true));
+        percent.setOnCheckedChangeListener((view,on)->{battery.putBoolean("percent",on);changed.run();});b.addView(percent);
+        CheckBox backdrop=new CheckBox(this);backdrop.setText("Fond sombre derrière l’indicateur");
+        backdrop.setTextColor(INK);backdrop.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);
+        backdrop.setChecked(battery.bool("backdrop",true));
+        backdrop.setOnCheckedChangeListener((view,on)->{battery.putBoolean("backdrop",on);changed.run();});b.addView(backdrop);
+        CheckBox charging=new CheckBox(this);charging.setText("Couleur spéciale pendant la recharge");
+        charging.setTextColor(INK);charging.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);
+        charging.setChecked(battery.bool("chargingColor",true));
+        charging.setOnCheckedChangeListener((view,on)->{battery.putBoolean("chargingColor",on);changed.run();});b.addView(charging);
+        CheckBox bolt=new CheckBox(this);bolt.setText("Symbole de charge électrique");
+        bolt.setTextColor(INK);bolt.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);
+        bolt.setChecked(battery.bool("chargingMark",true));
+        bolt.setOnCheckedChangeListener((view,on)->{battery.putBoolean("chargingMark",on);changed.run();});b.addView(bolt);
+        addButton(b,"Rétablir le coin supérieur droit",()->{
+            battery.putInt("x",100);battery.putInt("y",0);battery.putInt("size",100);
+            changed.run();toast("Position restaurée");
+        });
+        dialog("Indicateur de batterie",scroll,null,null);
+    }
     private void showFloatingVolumeSettings(){
         dismissOwnedDialogs();
         floatingSettings=new FloatingVolumeSettings(this,floatingPrefs,new FloatingVolumeSettings.Listener(){
@@ -755,6 +820,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         addButton(b,"Affichage et luminosité",()->launch(new Intent(Settings.ACTION_DISPLAY_SETTINGS)));
         addButton(b,"Tous les paramètres",()->launch(new Intent(Settings.ACTION_SETTINGS)));
         addButton(b,"Pastille de volume intégrée",()->showFloatingVolumeSettings());
+        addButton(b,"Indicateur de batterie · 24 styles",()->showBatteryIndicatorSettings());
         addButton(b,"Minuteur / concentration",()->showTimer(false));
         addButton(b,"Chronomètre",()->showStopwatch());
         addButton(b,"Carnet local",()->showNotes());

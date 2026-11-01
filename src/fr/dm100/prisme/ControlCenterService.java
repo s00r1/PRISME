@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -37,11 +38,17 @@ public final class ControlCenterService extends Service implements SharedPrefere
     private final BroadcastReceiver screen=new BroadcastReceiver(){
         @Override public void onReceive(Context context,Intent intent){
             if(intent==null)return;
-            if(Intent.ACTION_SCREEN_OFF.equals(intent.getAction())){closePanel();removeHandle();}
+            if(Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())){updateBattery(intent);return;}
+            if(Intent.ACTION_SCREEN_OFF.equals(intent.getAction())){closePanel();removeHandle();removeBattery();}
             else reconcile();
         }
     };
     private ControlCenterPrefs prefs;
+    private BatteryIndicatorPrefs batteryPrefs;
+    private SharedPreferences batteryStore;
+    private BatteryIndicatorView batteryView;
+    private int batteryLevel=100;
+    private boolean batteryCharging;
     private ControlCenterController controller;
     private AppRepository apps;
     private SharedPreferences store;
@@ -59,7 +66,7 @@ public final class ControlCenterService extends Service implements SharedPrefere
     public static void refresh(Context context){
         Context app=context.getApplicationContext();
         ControlCenterPrefs prefs=new ControlCenterPrefs(app);
-        if(!prefs.getBoolean("enabled",true)){
+        if(!prefs.getBoolean("enabled",true)&&!new BatteryIndicatorPrefs(app).enabled()){
             app.stopService(new Intent(app,ControlCenterService.class));
             return;
         }
@@ -74,6 +81,7 @@ public final class ControlCenterService extends Service implements SharedPrefere
         super.onCreate();
         instance=this;
         prefs=new ControlCenterPrefs(this);
+        batteryPrefs=new BatteryIndicatorPrefs(this);
         windows=(WindowManager)getSystemService(WINDOW_SERVICE);
         controller=new ControlCenterController(this,new ControlCenterController.Host(){
             @Override public void onPrismeAction(String action){launchPrisme(action);}
@@ -85,11 +93,15 @@ public final class ControlCenterService extends Service implements SharedPrefere
         catch(RuntimeException e){stopSelf();return;}
         store=getSharedPreferences("prisme_control_center",MODE_PRIVATE);
         store.registerOnSharedPreferenceChangeListener(this);
+        batteryStore=batteryPrefs.preferences();
+        batteryStore.registerOnSharedPreferenceChangeListener(this);
         IntentFilter f=new IntentFilter();
         f.addAction(Intent.ACTION_SCREEN_OFF);
         f.addAction(Intent.ACTION_SCREEN_ON);
         f.addAction(Intent.ACTION_USER_PRESENT);
-        registerReceiver(screen,f);registered=true;
+        f.addAction(Intent.ACTION_BATTERY_CHANGED);
+        Intent initial=registerReceiver(screen,f);registered=true;
+        if(initial!=null)updateBattery(initial);
     }
     private Notification notification(){
         Notification.Builder b=Build.VERSION.SDK_INT>=26?Api26.builder(this):new Notification.Builder(this);
@@ -111,9 +123,12 @@ public final class ControlCenterService extends Service implements SharedPrefere
         return power==null||power.isInteractive();
     }
     private void reconcile(){
-        if(!prefs.getBoolean("enabled",true)){stopSelf();return;}
-        if(!Settings.canDrawOverlays(this)){closePanel();removeHandle();stopSelf();return;}
-        if(!interactive()){closePanel();removeHandle();return;}
+        boolean centerEnabled=prefs.getBoolean("enabled",true);
+        if(!centerEnabled&&!batteryPrefs.enabled()){stopSelf();return;}
+        if(!Settings.canDrawOverlays(this)){closePanel();removeHandle();removeBattery();stopSelf();return;}
+        if(!interactive()){closePanel();removeHandle();removeBattery();return;}
+        reconcileBattery();
+        if(!centerEnabled){closePanel();removeHandle();return;}
         if(panel!=null){panel.open();return;}
         removeHandle();
         showHandle();
@@ -213,12 +228,54 @@ public final class ControlCenterService extends Service implements SharedPrefere
         TextView previous=handle;handle=null;
         if(previous!=null&&previous.getParent()!=null)try{windows.removeView(previous);}catch(RuntimeException ignored){}
     }
+    /** Rotate the foreground app directly. Never launch MainActivity for this command. */
     private void launchPrisme(String action){
         closePanel();
         if(action==null)return;
+        if("rotateGlobal".equals(action)||"rotation".equals(action)){
+            if(!GlobalRotationService.apply(this,GlobalRotationService.oppositeMode(this)))
+                android.widget.Toast.makeText(this,"Rotation refusée par Android",android.widget.Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent launch=new Intent(this,MainActivity.class).putExtra("controlCenterAction",action)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
         try{startActivity(launch);}catch(RuntimeException ignored){}
+    }
+    private void updateBattery(Intent state){
+        if(state==null)return;
+        int raw=state.getIntExtra(BatteryManager.EXTRA_LEVEL,-1);
+        int scale=state.getIntExtra(BatteryManager.EXTRA_SCALE,100);
+        if(raw>=0&&scale>0)batteryLevel=Math.max(0,Math.min(100,Math.round(raw*100f/scale)));
+        int status=state.getIntExtra(BatteryManager.EXTRA_STATUS,-1);
+        batteryCharging=status==BatteryManager.BATTERY_STATUS_CHARGING||status==BatteryManager.BATTERY_STATUS_FULL;
+        if(batteryView!=null)batteryView.update(batteryLevel,batteryCharging);
+    }
+    private void reconcileBattery(){
+        if(!batteryPrefs.enabled()){removeBattery();return;}
+        removeBattery();
+        if(windows==null)return;
+        Point screenSize=new Point();windows.getDefaultDisplay().getRealSize(screenSize);
+        BatteryIndicatorView indicator=new BatteryIndicatorView(this,batteryPrefs);
+        indicator.update(batteryLevel,batteryCharging);
+        int width=Math.min(screenSize.x,indicator.desiredWidth());
+        int height=Math.min(screenSize.y,indicator.desiredHeight());
+        int flags=WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE|
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL|
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        WindowManager.LayoutParams layout=new WindowManager.LayoutParams(width,height,type(),flags,PixelFormat.TRANSLUCENT);
+        layout.gravity=Gravity.TOP|Gravity.LEFT;
+        layout.x=Math.round(Math.max(0,screenSize.x-width)*batteryPrefs.integer("x",100)/100f);
+        layout.y=Math.round(Math.max(0,screenSize.y-height)*batteryPrefs.integer("y",0)/100f);
+        layout.alpha=batteryPrefs.integer("opacity",100)/100f;
+        layout.setTitle("fr.dm100.prisme:BatteryIndicator");
+        try{windows.addView(indicator,layout);batteryView=indicator;}
+        catch(RuntimeException ignored){batteryView=null;}
+    }
+    private void removeBattery(){
+        BatteryIndicatorView previous=batteryView;batteryView=null;
+        if(previous!=null&&previous.getParent()!=null&&windows!=null)
+            try{windows.removeView(previous);}catch(RuntimeException ignored){}
     }
     @Override public void onSharedPreferenceChanged(SharedPreferences shared,String key){
         handler.removeCallbacks(delayedRefresh);
@@ -226,13 +283,14 @@ public final class ControlCenterService extends Service implements SharedPrefere
     }
     @Override public void onConfigurationChanged(Configuration config){
         super.onConfigurationChanged(config);
-        closePanel();removeHandle();reconcile();
+        closePanel();removeHandle();removeBattery();reconcile();
     }
     @Override public void onDestroy(){
         handler.removeCallbacksAndMessages(null);
-        closePanel();removeHandle();
+        closePanel();removeHandle();removeBattery();
         if(registered)unregisterReceiver(screen);
         if(store!=null)store.unregisterOnSharedPreferenceChangeListener(this);
+        if(batteryStore!=null)batteryStore.unregisterOnSharedPreferenceChangeListener(this);
         if(apps!=null)apps.close();
         if(instance==this)instance=null;
         stopForeground(true);

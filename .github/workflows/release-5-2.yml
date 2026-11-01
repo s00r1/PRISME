@@ -1,9 +1,6 @@
 name: PRISME 5.2 APK release
 
 on:
-  push:
-    branches: [main]
-    paths: [AndroidManifest.xml]
   workflow_dispatch:
 
 permissions:
