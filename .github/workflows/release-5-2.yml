@@ -1,0 +1,70 @@
+name: PRISME 5.2 APK release
+
+on:
+  push:
+    branches: [main]
+    paths: [AndroidManifest.xml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Compile PRISME 5.2 for Android 7.1+
+        shell: pwsh
+        run: ./build.ps1 -Unsigned -OutputFile PRISME-5.2.apk
+      - name: Preserve the unsigned build for debugging
+        uses: actions/upload-artifact@v4
+        with:
+          name: PRISME-5.2-unsigned
+          path: PRISME-5.2-unsigned.apk
+      - name: Build signed, update-compatible PRISME 5.2
+        shell: pwsh
+        env:
+          PRISME_KEYSTORE_BASE64: ${{ secrets.PRISME_KEYSTORE_BASE64 }}
+          PRISME_STORE_PASSWORD: ${{ secrets.PRISME_STORE_PASSWORD }}
+          PRISME_KEY_PASSWORD: ${{ secrets.PRISME_KEY_PASSWORD }}
+        run: |
+          if (-not $env:PRISME_KEYSTORE_BASE64 -or -not $env:PRISME_STORE_PASSWORD -or -not $env:PRISME_KEY_PASSWORD) {
+            throw 'Release not published: the existing Android signing keystore/passwords must be set as PRISME_KEYSTORE_BASE64, PRISME_STORE_PASSWORD and PRISME_KEY_PASSWORD.'
+          }
+          $keyPath = Join-Path $env:RUNNER_TEMP 'prisme-release.jks'
+          [IO.File]::WriteAllBytes($keyPath, [Convert]::FromBase64String($env:PRISME_KEYSTORE_BASE64))
+          ./build.ps1 -Keystore $keyPath -OutputFile PRISME.apk
+      - name: Verify signing certificate matches v5.1.0
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          New-Item -ItemType Directory -Force -Path previous | Out-Null
+          gh release download v5.1.0 --repo ${{ github.repository }} --pattern PRISME.apk --dir previous
+          if ($LASTEXITCODE -ne 0) { throw 'Unable to retrieve previous signed APK.' }
+          $sdk = if ($env:ANDROID_SDK_ROOT) { $env:ANDROID_SDK_ROOT } else { $env:ANDROID_HOME }
+          $tools = Get-ChildItem (Join-Path $sdk 'build-tools') -Directory |
+            Where-Object { $_.Name -match '^\d+\.\d+\.\d+$' } |
+            Sort-Object { [version]$_.Name } -Descending | Select-Object -First 1 -ExpandProperty FullName
+          $signer = Join-Path $tools 'lib/apksigner.jar'
+          $old = & java -jar $signer verify --print-certs --min-sdk-version 25 previous/PRISME.apk
+          if ($LASTEXITCODE -ne 0) { throw 'Old APK signature verification failed.' }
+          $new = & java -jar $signer verify --print-certs --min-sdk-version 25 PRISME.apk
+          if ($LASTEXITCODE -ne 0) { throw 'New APK signature verification failed.' }
+          $oldCert = @($old | Where-Object { $_ -match '^Signer #1 certificate SHA-256 digest:' })
+          $newCert = @($new | Where-Object { $_ -match '^Signer #1 certificate SHA-256 digest:' })
+          if ($oldCert.Count -ne 1 -or $newCert.Count -ne 1 -or $oldCert[0] -ne $newCert[0]) {
+            throw 'Signing certificate differs from 5.1: refusing to publish an APK that cannot update existing installations.'
+          }
+      - name: Publish signed APK as v5.2.0
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v5.2.0 PRISME.apk --repo ${{ github.repository }} --target ${{ github.sha }} --title 'PRISME 5.2 - Control Center global' --notes 'Control Center accessible via une poignée flottante dans toutes les applications Android. Autoriser Afficher par-dessus les autres applications. Les autres fonctionnalités restent inchangées.'
+          if ($LASTEXITCODE -ne 0) { throw 'Could not publish v5.2.0.' }
