@@ -849,15 +849,11 @@ public final class MainActivity extends Activity implements DashboardView.Listen
                 "Play / pause, piste suivante et précédente, sur les 22 styles de dashboard.");
         final Runnable changed=()->refreshDashboardOverlays();
         musicOption(b,"Afficher le mini-lecteur","enabled",true,changed);
-        musicOption(b,"Tenter de préserver la lecture en revenant à l'accueil","preserve",true,changed);
-        b.addView(text("Ce mode évite de réinitialiser les tâches au changement d'écran et peut relancer une session mise en pause. Il ne peut pas garantir la lecture des vidéos restreintes ni empêcher le firmware d'arrêter Spotify.",14,MUTED));
+        musicOption(b,"Préférer les transitions d’accueil sans réinitialisation des tâches","preserve",true,changed);
+        b.addView(text("PRISME évite de réinitialiser les tâches au changement d’écran, sans lire les notifications. La continuité audio reste gérée par Spotify, Deezer ou le firmware. La reprise automatique avancée est désactivée dans ce correctif.",14,MUTED));
         MusicPlayback.State state=MusicPlayback.state(this);
         b.addView(text("État : "+state.title+" · "+(state.playing?"lecture":"pause / arrêt"),14,ACCENT));
-        b.addView(text(state.connected?"Accès aux sessions média autorisé":"Pour afficher les vrais titres et commander directement les lecteurs, active l'accès aux notifications.",13,MUTED));
-        addButton(b,"Autoriser le contrôle des sessions multimédias",()->{
-            try{startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));}
-            catch(RuntimeException ex){toast("Réglage indisponible sur ce firmware");}
-        });
+        b.addView(text("Commandes multimédias Android, sans accès aux notifications. Le titre et l'artiste ne sont plus récupérés dans cette version pour éviter le blocage Play Protect.",13,MUTED));
         section(b,"12 styles de lecteur");
         settingChoice(b,"Design du mini-lecteur",MusicPrefs.STYLES,musicPrefs.number("style",0),
                 n->{musicPrefs.putInt("style",n);changed.run();});
@@ -866,7 +862,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         slider(b,"Position horizontale (%)",0,100,musicPrefs.number("x",50),n->{musicPrefs.putInt("x",n);changed.run();});
         slider(b,"Position verticale (%)",0,100,musicPrefs.number("y",87),n->{musicPrefs.putInt("y",n);changed.run();});
         slider(b,"Opacité (%)",30,100,musicPrefs.number("opacity",100),n->{musicPrefs.putInt("opacity",n);changed.run();});
-        musicOption(b,"Afficher titre et artiste","title",true,changed);
+        musicOption(b,"Afficher l’état audio du lecteur","title",true,changed);
         musicOption(b,"Afficher le fond du lecteur","background",true,changed);
         section(b,"Tester les commandes");
         LinearLayout row=new LinearLayout(this);
