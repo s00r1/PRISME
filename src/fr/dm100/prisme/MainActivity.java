@@ -156,7 +156,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         mainLayer.addView(controlPanel,new FrameLayout.LayoutParams(-1,-1));
         setContentView(mainLayer);I18n.bind(mainLayer);
         applyWindowPrefs();
-        requestVolumeSettings(getIntent());requestUtilityAction(getIntent());
+        requestVolumeSettings(getIntent());requestUtilityAction(getIntent());requestControlCenterAction(getIntent());
         settingsTab=Math.max(0,Math.min(SETTINGS_TABS.length-1,getSharedPreferences("prisme_ui",MODE_PRIVATE).getInt("settingsTab",0)));
         cancelSettingsRestore=getIntent()!=null&&(getIntent().hasCategory(Intent.CATEGORY_HOME)||getIntent().getBooleanExtra("volumeSettings",false));
         if(state!=null){
@@ -180,7 +180,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     }
     @Override protected void onNewIntent(Intent intent){
         super.onNewIntent(intent);setIntent(intent);
-        requestVolumeSettings(intent);requestUtilityAction(intent);
+        requestVolumeSettings(intent);requestUtilityAction(intent);requestControlCenterAction(intent);
         if(intent!=null&&intent.hasCategory(Intent.CATEGORY_HOME)){
             cancelSettingsRestore=true;
             closeControlExtras();
@@ -204,6 +204,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         loadApps();refreshBoard();
         if(GlobalRotationService.mode(this)>0&&!GlobalRotationService.isRunning())GlobalRotationService.apply(this,GlobalRotationService.mode(this));
         if(floatingPrefs!=null&&(fr.dm100.prisme.volume.FloatingVolumeService.isRunning()||floatingPrefs.mayResume(currentBoot())))fr.dm100.prisme.volume.FloatingVolumeService.refresh(this);
+        ControlCenterService.refresh(this);
     }
     @Override protected void onPause(){
         visible=false;if(experience!=null)experience.pause();closeScreenLamp();if(controlPanel!=null)controlPanel.onHostPause();if(controlController!=null)controlController.onHostPause();board.onHostPause();main.removeCallbacks(tick);main.removeCallbacks(timerTick);main.removeCallbacks(stopwatchTick);
@@ -619,7 +620,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     private void showControlCenterSettings(){
         dismissOwnedDialogs();
         controlSettings=new ControlCenterSettings(this,controlPrefs,new ArrayList<AppEntry>(apps),new ControlCenterSettings.Listener(){
-            public void onChanged(){board.refresh();if(controlPanel.isOpen())controlPanel.refresh();}
+            public void onChanged(){board.refresh();if(controlPanel.isOpen())controlPanel.refresh();ControlCenterService.refresh(MainActivity.this);}
             public void onPreview(){if(controlSettings!=null)controlSettings.dismiss();openControlCenter(true);}
         });
         controlSettings.show();
@@ -643,7 +644,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         }
         onAction(action);
     }
-    private void resetDashboardSafely(){try{SafetyBackup.save(this,prefs);String note=prefs.getString("notes","");GlobalRotationService.release(this);getSharedPreferences("prisme_rotation",MODE_PRIVATE).edit().putBoolean("boot",false).apply();fr.dm100.prisme.volume.FloatingVolumeService.stop(this);prefs.reset();controlPrefs.resetAll();floatingPrefs.resetAll();prefs.putString("notes",note);refreshBoard();toast("Bureau réinitialisé · sauvegarde de sécurité disponible");}catch(Exception e){toast("Sauvegarde indisponible · remise à zéro annulée");}}
+    private void resetDashboardSafely(){try{SafetyBackup.save(this,prefs);String note=prefs.getString("notes","");GlobalRotationService.release(this);getSharedPreferences("prisme_rotation",MODE_PRIVATE).edit().putBoolean("boot",false).apply();fr.dm100.prisme.volume.FloatingVolumeService.stop(this);prefs.reset();controlPrefs.resetAll();floatingPrefs.resetAll();ControlCenterService.refresh(this);prefs.putString("notes",note);refreshBoard();toast("Bureau réinitialisé · sauvegarde de sécurité disponible");}catch(Exception e){toast("Sauvegarde indisponible · remise à zéro annulée");}}
     private void importSafely(JSONObject data)throws Exception{SafetyBackup.save(this,prefs);prefs.importJSONObject(data);}
     private void requestUtilityAction(Intent intent){if(intent==null)return;String action=intent.getStringExtra("utilityAction");if(action!=null){intent.removeExtra("utilityAction");main.post(()->{if(!isFinishing()){dismissOwnedDialogs();onAction(action);}});}}
     private void showTestColor(int color){
@@ -698,6 +699,19 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     }
     private void copyCapture(InputStream in,OutputStream out)throws java.io.IOException{
         byte[] buffer=new byte[8192];int count;while((count=in.read(buffer))!=-1)out.write(buffer,0,count);
+    }
+    private void requestControlCenterAction(final Intent requested){
+        if(requested==null||requested.hasCategory(Intent.CATEGORY_HOME))return;
+        final String action=requested.getStringExtra("controlCenterAction");
+        if(action==null||action.length()==0)return;
+        cancelSettingsRestore=true;
+        requested.removeExtra("controlCenterAction");
+        board.post(()->{
+            if(!isFinishing()){
+                if("controlCenterSettings".equals(action))showControlCenterSettings();
+                else onPrismeAction(action);
+            }
+        });
     }
     private void requestVolumeSettings(final Intent requested){
         if(requested==null||!requested.getBooleanExtra("volumeSettings",false)||requested.hasCategory(Intent.CATEGORY_HOME))return;
@@ -765,7 +779,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
             }).setNegativeButton("Fermer",null).show();}
         }).setNegativeButton("Fermer",null).show();
     }
-    private void profileImported(){if(I18n.selected(this)!=activityLanguage){dismissOwnedDialogs();recreate();return;}refreshBoard();if(fr.dm100.prisme.volume.FloatingVolumeService.isRunning())fr.dm100.prisme.volume.FloatingVolumeService.refresh(this);}
+    private void profileImported(){if(I18n.selected(this)!=activityLanguage){dismissOwnedDialogs();recreate();return;}refreshBoard();if(fr.dm100.prisme.volume.FloatingVolumeService.isRunning())fr.dm100.prisme.volume.FloatingVolumeService.refresh(this);ControlCenterService.refresh(this);}
     private void exportConfig(){saveLocalConfig();}
     private void exportWithAndroid(){
         Intent i=new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("application/json").putExtra(Intent.EXTRA_TITLE,"PRISME-configuration.json");

@@ -302,6 +302,7 @@ public final class ControlCenterSettings {
         intro("Ouverture et fermeture","La zone de geste agit dans PRISME. Elle ne surveille pas les autres applications.");
         toggle("Activer le centre de contrôle","enabled",true);
         toggle("Poignée discrète dans les styles","compactHandle",true);
+        action("Autoriser le centre flottant dans toutes les applis",()->openSettings(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,Uri.parse("package:"+activity.getPackageName()))));
         choice("Bord de la zone de geste",new String[]{"Haut","Bas","Gauche","Droite"},prefs.getInt("edge",0),n->changeInt("edge",n));
         choice("Ouvrir le panneau",new String[]{"Glisser depuis le bord","Double appui sur la zone","Bouton seulement","Glisser ou bouton"},prefs.getInt("opening",3),n->changeInt("opening",n));
         choice("Fermer le panneau",new String[]{"Glisser ou toucher à l’extérieur","Glisser","Toucher à l’extérieur","Bouton seulement"},prefs.getInt("closing",0),n->changeInt("closing",n));

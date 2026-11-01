@@ -1,6 +1,6 @@
 package fr.dm100.prisme;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -22,14 +22,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-/** A modal child of PRISME's activity, never a system overlay or accessibility service. */
+/** Reusable control panel, hosted by PRISME or an Android overlay window. */
 public final class ControlCenterPanel extends FrameLayout {
     public interface Listener {
         void onCustomize();
         void onClosed();
     }
     private static final int[] ACCENTS = {0xff62d9cc, 0xff59c9ef, 0xff78a9ff, 0xffbe9bff, 0xffffb275, 0xfff79fc2};
-    private final Activity activity;
+    private final Context activity;
     private final ControlCenterPrefs prefs;
     private final ControlCenterController controller;
     private final Listener listener;
@@ -64,7 +64,7 @@ public final class ControlCenterPanel extends FrameLayout {
         }
     }
 
-    public ControlCenterPanel(Activity activity, ControlCenterPrefs prefs,
+    public ControlCenterPanel(Context activity, ControlCenterPrefs prefs,
                               ControlCenterController controller, Listener listener) {
         super(activity);
         if (prefs == null || controller == null || listener == null) throw new IllegalArgumentException("Centre de contrôle incomplet");

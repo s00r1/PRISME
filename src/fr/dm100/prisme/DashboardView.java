@@ -538,6 +538,7 @@ public final class DashboardView extends View {
         }
     }
     private void controlCenterHandle(Canvas c) {
+        if(ControlCenterService.isShowing())return;
         int opening = controlCenterPrefs.getInt("opening", 3);
         if (!controlCenterPrefs.getBoolean("enabled", true) || (opening != 2 && opening != 3)) return;
         int edge = controlCenterPrefs.getInt("edge", 0), alignment = controlCenterPrefs.getInt("handlePosition", 1);

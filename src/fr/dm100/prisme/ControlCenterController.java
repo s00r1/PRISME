@@ -1,6 +1,7 @@
 package fr.dm100.prisme;
 
 import android.app.Activity;
+import android.content.Context;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
@@ -49,13 +50,13 @@ public final class ControlCenterController {
             this.available=available;this.direct=direct;this.busy=busy;
         }
     }
-    private final Activity activity;
+    private final Context activity;
     private final Host host;
     private final AudioManager audio;
     private final WifiManager wifi;
     private final NotificationManager notifications;
     private final Set<ComponentName> launchers=new HashSet<ComponentName>();
-    public ControlCenterController(Activity activity,Host host) {
+    public ControlCenterController(Context activity,Host host) {
         this.activity=activity;this.host=host;
         audio=(AudioManager)activity.getSystemService(Activity.AUDIO_SERVICE);
         wifi=(WifiManager)activity.getApplicationContext().getSystemService(Activity.WIFI_SERVICE);
@@ -227,19 +228,21 @@ public final class ControlCenterController {
             if(i!=null&&"android.settings.TETHER_SETTINGS".equals(i.getAction()))i=new Intent(Settings.ACTION_WIRELESS_SETTINGS);
             if(!canOpen(i)){toast("Cette page n’est pas disponible sur la montre");return;}
         }
-        try{activity.startActivity(i);}catch(RuntimeException ex){toast("Android n’a pas pu ouvrir cette page");}
+        try{if(!(activity instanceof Activity))i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);activity.startActivity(i);}catch(RuntimeException ex){toast("Android n’a pas pu ouvrir cette page");}
     }
     public int volume(){try{return audio==null?0:audio.getStreamVolume(AudioManager.STREAM_MUSIC);}catch(RuntimeException e){return 0;}}
     public int volumeMax(){try{return audio==null?15:Math.max(1,audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC));}catch(RuntimeException e){return 15;}}
     public void setVolume(int value){try{if(audio!=null)audio.setStreamVolume(AudioManager.STREAM_MUSIC,Math.max(0,Math.min(volumeMax(),value)),0);}catch(RuntimeException e){toast("Le volume n’a pas pu être modifié");}}
     public int brightness(){
-        float local=activity.getWindow().getAttributes().screenBrightness;
+        Activity owner=activity instanceof Activity?(Activity)activity:null;
+        float local=owner==null?-1:owner.getWindow().getAttributes().screenBrightness;
         if(local>=0)return Math.round(local*100);
         return Math.round(Settings.System.getInt(activity.getContentResolver(),Settings.System.SCREEN_BRIGHTNESS,128)*100f/255f);
     }
     public String brightnessLabel(){
-        if(activity.getWindow().getAttributes().screenBrightness>=0)return "Luminosité PRISME";
-        return Settings.System.canWrite(activity)?"Luminosité montre":"Luminosité PRISME";
+        Activity owner=activity instanceof Activity?(Activity)activity:null;
+        if(owner!=null&&owner.getWindow().getAttributes().screenBrightness>=0)return "Luminosité PRISME";
+        return Settings.System.canWrite(activity)?"Luminosité montre":owner!=null?"Luminosité PRISME":"Autorisation Android requise";
     }
     public void setBrightness(int percent){
         int safe=Math.max(5,Math.min(100,percent));
@@ -252,7 +255,7 @@ public final class ControlCenterController {
                     valueWritten=Settings.System.putInt(activity.getContentResolver(),Settings.System.SCREEN_BRIGHTNESS,Math.max(8,Math.round(safe*255f/100f)));
                     boolean modeWritten=valueWritten&&(previousMode==Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL||Settings.System.putInt(activity.getContentResolver(),Settings.System.SCREEN_BRIGHTNESS_MODE,Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL));
                     if(valueWritten&&modeWritten){
-                        committed=true;WindowManager.LayoutParams p=activity.getWindow().getAttributes();p.screenBrightness=-1;activity.getWindow().setAttributes(p);return;
+                        committed=true;if(activity instanceof Activity){Activity owner=(Activity)activity;WindowManager.LayoutParams p=owner.getWindow().getAttributes();p.screenBrightness=-1;owner.getWindow().setAttributes(p);}return;
                     }
                 }finally{
                     if(valueWritten&&!committed){
@@ -262,7 +265,8 @@ public final class ControlCenterController {
                 }
             }
         } catch(RuntimeException ignored) { }
-        WindowManager.LayoutParams p=activity.getWindow().getAttributes();p.screenBrightness=safe/100f;activity.getWindow().setAttributes(p);
+        if(activity instanceof Activity){Activity owner=(Activity)activity;WindowManager.LayoutParams p=owner.getWindow().getAttributes();p.screenBrightness=safe/100f;owner.getWindow().setAttributes(p);}
+        else toast("Autorise la luminosité globale dans les réglages PRISME.");
     }
     public String statusText(){
         String time=new SimpleDateFormat("HH:mm",I18n.locale()).format(new Date());
