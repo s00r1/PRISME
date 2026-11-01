@@ -45,7 +45,7 @@ public final class BatteryIndicatorPrefs {
         int min=0,max=100;
         if("style".equals(key)){max=STYLES.length-1;}
         else if("palette".equals(key)){max=PALETTES.length-1;}
-        else if("size".equals(key)){min=55;max=200;}
+        else if("size".equals(key)){min=35;max=200;}
         else if("opacity".equals(key)){min=25;max=100;}
         else if("low".equals(key)){min=5;max=40;}
         else if("high".equals(key)){min=45;max=90;}
@@ -57,7 +57,7 @@ public final class BatteryIndicatorPrefs {
         int clamped=Math.max(0,Math.min(200,value));
         if("style".equals(key))clamped=Math.min(STYLES.length-1,clamped);
         if("palette".equals(key))clamped=Math.min(PALETTES.length-1,clamped);
-        if("size".equals(key))clamped=Math.max(55,clamped);
+        if("size".equals(key))clamped=Math.max(35,clamped);
         if("opacity".equals(key))clamped=Math.max(25,Math.min(100,clamped));
         if("x".equals(key)||"y".equals(key))clamped=Math.min(100,clamped);
         if("low".equals(key))clamped=Math.max(5,Math.min(40,clamped));

@@ -35,6 +35,10 @@ public final class ControlCenterService extends Service implements SharedPrefere
     private static volatile ControlCenterService instance;
     private final Handler handler=new Handler(Looper.getMainLooper());
     private final Runnable delayedRefresh=new Runnable(){@Override public void run(){reconcile();}};
+    private final Runnable batteryTick=new Runnable(){@Override public void run(){
+        updateBattery(null);
+        handler.postDelayed(this,60000);
+    }};
     private final BroadcastReceiver screen=new BroadcastReceiver(){
         @Override public void onReceive(Context context,Intent intent){
             if(intent==null)return;
@@ -47,7 +51,7 @@ public final class ControlCenterService extends Service implements SharedPrefere
     private BatteryIndicatorPrefs batteryPrefs;
     private SharedPreferences batteryStore;
     private BatteryIndicatorView batteryView;
-    private int batteryLevel=100;
+    private int batteryLevel=-1;
     private boolean batteryCharging;
     private ControlCenterController controller;
     private AppRepository apps;
@@ -101,7 +105,8 @@ public final class ControlCenterService extends Service implements SharedPrefere
         f.addAction(Intent.ACTION_USER_PRESENT);
         f.addAction(Intent.ACTION_BATTERY_CHANGED);
         Intent initial=registerReceiver(screen,f);registered=true;
-        if(initial!=null)updateBattery(initial);
+        updateBattery(initial);
+        handler.postDelayed(batteryTick,60000);
     }
     private Notification notification(){
         Notification.Builder b=Build.VERSION.SDK_INT>=26?Api26.builder(this):new Notification.Builder(this);
@@ -242,12 +247,9 @@ public final class ControlCenterService extends Service implements SharedPrefere
         try{startActivity(launch);}catch(RuntimeException ignored){}
     }
     private void updateBattery(Intent state){
-        if(state==null)return;
-        int raw=state.getIntExtra(BatteryManager.EXTRA_LEVEL,-1);
-        int scale=state.getIntExtra(BatteryManager.EXTRA_SCALE,100);
-        if(raw>=0&&scale>0)batteryLevel=Math.max(0,Math.min(100,Math.round(raw*100f/scale)));
-        int status=state.getIntExtra(BatteryManager.EXTRA_STATUS,-1);
-        batteryCharging=status==BatteryManager.BATTERY_STATUS_CHARGING||status==BatteryManager.BATTERY_STATUS_FULL;
+        BatteryLevelReader.Reading reading=BatteryLevelReader.read(this,state);
+        if(reading.level>=0||batteryLevel<0)batteryLevel=reading.level;
+        batteryCharging=reading.charging;
         if(batteryView!=null)batteryView.update(batteryLevel,batteryCharging);
     }
     private void reconcileBattery(){

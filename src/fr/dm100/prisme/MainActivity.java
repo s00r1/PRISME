@@ -730,9 +730,9 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         ScrollView scroll=scroll();LinearLayout b=column();scroll.addView(b);
         settingsIntro(b,"Batterie flottante · PRISME 5.3",
                 "Jauge visible par-dessus les autres applications, sans capter les gestes tactiles. Position initiale : en haut à droite.");
-        DeviceSnapshot snapshot=DeviceSnapshot.read(this);
+        BatteryLevelReader.Reading snapshot=BatteryLevelReader.read(this,null);
         BatteryIndicatorView preview=new BatteryIndicatorView(this,battery);
-        preview.update(snapshot.batteryPct,snapshot.charging);
+        preview.update(snapshot.level,snapshot.charging);
         b.addView(preview,new LinearLayout.LayoutParams(-1,Math.max(70,preview.desiredHeight()+12)));
         final Runnable changed=()->{
             preview.requestLayout();preview.invalidate();
@@ -760,10 +760,15 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         slider(b,"Seuil batterie moyenne (%)",45,90,battery.integer("high",65),n->{battery.putInt("high",n);changed.run();});
         b.addView(text("Chaque palette change automatiquement les couleurs pour batterie faible, moyenne, élevée, pleine et en charge.",14,MUTED));
         section(b,"Taille et emplacement");
-        slider(b,"Taille (%)",55,200,battery.integer("size",100),n->{battery.putInt("size",n);changed.run();});
+        slider(b,"Taille (%)",35,200,battery.integer("size",70),n->{battery.putInt("size",n);changed.run();});
         slider(b,"Position horizontale (%)",0,100,battery.integer("x",100),n->{battery.putInt("x",n);changed.run();});
         slider(b,"Position verticale (%)",0,100,battery.integer("y",0),n->{battery.putInt("y",n);changed.run();});
         slider(b,"Opacité (%)",25,100,battery.integer("opacity",100),n->{battery.putInt("opacity",n);changed.run();});
+        addButton(b,"Diagnostic du niveau de batterie",()->{
+            BatteryLevelReader.Reading data=BatteryLevelReader.read(MainActivity.this,null);
+            new OwnedBuilder().setTitle("Diagnostic batterie").setMessage(data.diagnostic())
+                    .setNegativeButton("Fermer",null).show();
+        });
         section(b,"Détails visuels");
         CheckBox percent=new CheckBox(this);percent.setText("Afficher le pourcentage");
         percent.setTextColor(INK);percent.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);
@@ -782,7 +787,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         bolt.setChecked(battery.bool("chargingMark",true));
         bolt.setOnCheckedChangeListener((view,on)->{battery.putBoolean("chargingMark",on);changed.run();});b.addView(bolt);
         addButton(b,"Rétablir le coin supérieur droit",()->{
-            battery.putInt("x",100);battery.putInt("y",0);battery.putInt("size",100);
+            battery.putInt("x",100);battery.putInt("y",0);battery.putInt("size",70);
             changed.run();toast("Position restaurée");
         });
         dialog("Indicateur de batterie",scroll,null,null);

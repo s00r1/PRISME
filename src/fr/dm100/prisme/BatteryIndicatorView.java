@@ -13,12 +13,12 @@ import android.view.View;
 public final class BatteryIndicatorView extends View {
     private final BatteryIndicatorPrefs prefs;
     private final Paint p=new Paint(Paint.ANTI_ALIAS_FLAG);
-    private int level=100;
+    private int level=-1;
     private boolean charging;
     public BatteryIndicatorView(Context c,BatteryIndicatorPrefs prefs){super(c);this.prefs=prefs;setLayerType(View.LAYER_TYPE_SOFTWARE,null);}
-    public void update(int percent,boolean onCharge){level=Math.max(0,Math.min(100,percent));charging=onCharge;invalidate();}
-    public int desiredWidth(){return Math.round(156*prefs.integer("size",100)/100f);}
-    public int desiredHeight(){return Math.round(56*prefs.integer("size",100)/100f);}
+    public void update(int percent,boolean onCharge){level=percent<0?-1:Math.min(100,percent);charging=onCharge;invalidate();}
+    public int desiredWidth(){return Math.round(156*prefs.integer("size",70)/100f);}
+    public int desiredHeight(){return Math.round(56*prefs.integer("size",70)/100f);}
     @Override protected void onMeasure(int w,int h){setMeasuredDimension(desiredWidth(),desiredHeight());}
     private void rect(Canvas c,float l,float t,float r,float b,float radius,int color){
         p.setStyle(Paint.Style.FILL);p.setColor(color);c.drawRoundRect(new RectF(l,t,r,b),radius,radius,p);
@@ -51,10 +51,11 @@ public final class BatteryIndicatorView extends View {
         super.onDraw(original);
         Canvas c=original;
         int col=prefs.color(level,charging),soft=0x663b4c62,ink=0xffedf8ff;
-        float ratio=level/100f;
+        float ratio=Math.max(0,level)/100f;
         int style=prefs.integer("style",0);
         boolean percent=prefs.bool("percent",true);
-        String label=percent?level+"%":"";
+        String digits=level<0?"--":String.valueOf(level);
+        String label=percent?digits+"%":"";
         c.save();c.scale(getWidth()/156f,getHeight()/56f);
         if(prefs.bool("backdrop",true))rect(c,0,1,155,55,16,0xc9151b2b);
         switch(style){
@@ -80,7 +81,7 @@ public final class BatteryIndicatorView extends View {
                 text(c,label,12,43,39,col,true);break;
             case 7: // digits
                 outline(c,6,10,149,47,5,col,1.4f);
-                text(c,(level<10?"00":level<100?"0":"")+level,14,37,28,col,true);
+                text(c,level<0?"---":(level<10?"00":level<100?"0":"")+level,14,37,28,col,true);
                 text(c,percent?"PCT":"BATT",97,33,13,ink,false);break;
             case 8: // neon strips
                 rect(c,7,10,148,46,12,0x66262442);outline(c,7,10,148,46,12,col,3);
@@ -97,10 +98,10 @@ public final class BatteryIndicatorView extends View {
                 text(c,label,14,32,20,col,true);rect(c,12,38,143,43,3,soft);
                 rect(c,12,38,12+131*ratio,43,3,col);break;
             case 12: // terminal prompt
-                rect(c,4,6,151,50,5,0xff0a161a);text(c,"> BAT "+level+(charging?"+":"")+"%",12,35,20,col,true);break;
+                rect(c,4,6,151,50,5,0xff0a161a);text(c,"> BAT "+digits+(charging?"+":"")+"%",12,35,20,col,true);break;
             case 13: // hexagon
                 polygon(c,new float[]{12,28,27,7,54,7,69,28,54,49,27,49},col,true);
-                text(c,""+level,23,35,18,ink,true);text(c,percent?"% CELL":"CELL",77,35,17,col,true);break;
+                text(c,digits,23,35,18,ink,true);text(c,percent?"% CELL":"CELL",77,35,17,col,true);break;
             case 14: // energy bolt
                 polygon(c,new float[]{32,5,16,29,32,28,23,51,52,22,36,24,44,5},col,false);
                 text(c,label,68,37,28,ink,true);break;
@@ -127,7 +128,7 @@ public final class BatteryIndicatorView extends View {
             case 21: // OLED
                 text(c,label,9,39,35,col,false);circle(c,139,26,6,col);break;
             case 22: // hairline
-                text(c,level+(percent?"%":""),9,27,18,col,true);
+                text(c,digits+(percent?"%":""),9,27,18,col,true);
                 line(c,10,37,145,37,2,soft);line(c,10,37,10+135*ratio,37,4,col);break;
             default: // 23 chronograph
                 for(int i=0;i<12;i++){double rad=Math.toRadians(i*30-90);
