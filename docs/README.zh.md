@@ -23,7 +23,7 @@
 **面向完整 Android 智能手表的可自定义桌面。** 可离线使用，无需账户，无广告或遥测。
 
 
-**[⬇ 下载 APK](https://github.com/s00r1/PRISME/releases/latest/download/PRISME.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
+**[⬇ 下载 APK](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
 
 <table>
 <tr><td align="center" valign="top"><b>Control Center</b><br><a href="../assets/localized/zh/screenshots/control-center-ios.png"><img src="../assets/localized/zh/screenshots/control-center-ios.png" width="410" alt="Control Center"></a></td><td align="center" valign="top"><b>Volume</b><br><a href="../assets/localized/zh/screenshots/volume-live-circle-open.png"><img src="../assets/localized/zh/screenshots/volume-live-circle-open.png" width="410" alt="Volume"></a></td></tr>
@@ -32,11 +32,20 @@
 
 ## 安装
 
-**[下载可直接安装的 PRISME.apk](https://github.com/s00r1/PRISME/releases/latest/download/PRISME.apk)** · [版本与校验和](https://github.com/s00r1/PRISME/releases)
+**[下载PRISME 5.4 APK](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [版本与校验和](https://github.com/s00r1/PRISME/releases)
 
 需要**完整 Android 7.1 或更高版本，最低 API 25**，并支持安装普通 Android APK。在手表浏览器下载 APK，使用 Android 安装程序打开；如有提示，允许该安装来源。启动 PRISME，固件允许时可设为默认桌面，也可作为普通应用打开。悬浮音量和全局方向需要“显示在其他应用上层”权限。在**设置 → 样式 → 语言**中选择语言。官方更新直接覆盖原有版本安装。
 
-电脑安装：`adb install -r PRISME.apk`。无需 root、刷固件或修改 Google 服务。
+电脑安装：`adb install -r PRISME-5.4.apk`。无需 root、刷固件或修改 Google 服务。
+
+## ✨ PRISME 5.4 新功能
+
+- **🔋 独立电池设置页**：24 种电池样式、12 套配色、随电量变化的颜色，以及百分比、大小、位置、透明度和阈值调节。可选**仅在桌面显示**或**覆盖其他应用**（需要 Android 悬浮窗权限）。诊断功能比较多个电量来源，但设备固件仍可能提供错误读数。
+- **🎵 独立音乐设置页**：**22 种桌面布局均有迷你播放器**，提供**播放/暂停、上一首、下一首**，12 种外观和大小、位置、透明度设置。需要已有媒体应用正在运行。
+- **🔄 全局屏幕旋转**：通过悬浮控制中心切换横竖屏，**不主动返回 PRISME 桌面**；实际效果取决于设备固件及当前应用。
+- **🎧 返回桌面**：尽量不重置正在运行的应用任务。音视频后台播放受 Android 和媒体应用自身限制，**无法保证**。
+
+**注意：** 已收到 v5.4 APK 被 Play Protect 阻止安装的报告。请勿关闭设备保护来强制安装，后续修复请查看 [Releases](https://github.com/s00r1/PRISME/releases)。图库中可能包含旧版本截图。
 
 ## 功能
 

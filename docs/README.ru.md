@@ -23,7 +23,7 @@
 **Настраиваемый домашний экран для часов с полноценным Android.** Работает без Интернета, аккаунта, рекламы и телеметрии.
 
 
-**[⬇ Скачать APK](https://github.com/s00r1/PRISME/releases/latest/download/PRISME.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
+**[⬇ Скачать APK](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
 
 <table>
 <tr><td align="center" valign="top"><b>Control Center</b><br><a href="../assets/localized/ru/screenshots/control-center-ios.png"><img src="../assets/localized/ru/screenshots/control-center-ios.png" width="410" alt="Control Center"></a></td><td align="center" valign="top"><b>Volume</b><br><a href="../assets/localized/ru/screenshots/volume-live-circle-open.png"><img src="../assets/localized/ru/screenshots/volume-live-circle-open.png" width="410" alt="Volume"></a></td></tr>
@@ -32,11 +32,20 @@
 
 ## Установка
 
-**[Скачать готовый PRISME.apk](https://github.com/s00r1/PRISME/releases/latest/download/PRISME.apk)** · [Версии и контрольные суммы](https://github.com/s00r1/PRISME/releases)
+**[Скачать PRISME 5.4 APK](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Версии и контрольные суммы](https://github.com/s00r1/PRISME/releases)
 
 Нужны **полноценный Android 7.1 или новее, минимум API 25**, и установка обычных Android APK. Скачайте APK в браузере часов, откройте установщиком Android и при запросе разрешите источник установки. Запустите PRISME и выберите домашним экраном, если прошивка позволяет; можно открывать и как обычное приложение. Для плавающей громкости и глобальной ориентации разрешите показ поверх приложений. Язык: **Настройки → Стиль → Язык**. Официальные обновления устанавливайте поверх существующей версии.
 
-С компьютера: `adb install -r PRISME.apk`. Root, перепрошивка и изменение сервисов Google для установки не нужны.
+С компьютера: `adb install -r PRISME-5.4.apk`. Root, перепрошивка и изменение сервисов Google для установки не нужны.
+
+## ✨ Новое в PRISME 5.4
+
+- **🔋 Отдельная вкладка «Батарея»**: 24 стиля индикатора, 12 цветовых палитр, цвета по уровню заряда, проценты, настройка размера, положения, прозрачности и порогов. Отображение **только на рабочем столе** или **поверх других приложений** (требуется разрешение Android). Диагностика сравнивает источники измерения, но прошивка может сообщать неверный процент.
+- **🎵 Отдельная вкладка «Музыка»**: мини-плеер во **всех 22 стилях рабочего стола**, **пуск/пауза, предыдущий и следующий трек**, 12 оформлений и настройка размера, положения и прозрачности. Требуется активный медиаплеер.
+- **🔄 Поворот экрана**: смена портретной/альбомной ориентации из плавающего Control Center **без намеренного возврата на рабочий стол PRISME**. Результат зависит от прошивки и приложения.
+- **🎧 Возврат домой**: переходы без принудительного сброса задач. Фоновое воспроизведение аудио и видео зависит от Android и приложения и **не гарантируется**.
+
+**Примечание:** сообщалось о блокировке установки v5.4 системой Play Protect. Не отключайте защиту; обновления см. на странице [Releases](https://github.com/s00r1/PRISME/releases). В галерее есть изображения предыдущих версий.
 
 ## Возможности
 

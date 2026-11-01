@@ -23,7 +23,7 @@ Photos produit externes : annonce DM100. Elles illustrent le matériel, pas PRIS
 **Un bureau personnalisable pour les montres sous Android complet**, avec 22 compositions, un centre de contrôle et des outils quotidiens. Hors ligne, sans compte, publicité ni télémétrie.
 
 
-**[⬇ Télécharger l’APK](https://github.com/s00r1/PRISME/releases/latest/download/PRISME.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
+**[⬇ Télécharger l’APK](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
 
 <table>
 <tr><td align="center" valign="top"><b>Control Center</b><br><a href="../assets/localized/fr/screenshots/control-center-ios.png"><img src="../assets/localized/fr/screenshots/control-center-ios.png" width="410" alt="Control Center"></a></td><td align="center" valign="top"><b>Volume</b><br><a href="../assets/localized/fr/screenshots/volume-live-circle-open.png"><img src="../assets/localized/fr/screenshots/volume-live-circle-open.png" width="410" alt="Volume"></a></td></tr>
@@ -32,15 +32,24 @@ Photos produit externes : annonce DM100. Elles illustrent le matériel, pas PRIS
 
 ## Télécharger
 
-**[Télécharger PRISME.apk — prêt à installer](https://github.com/s00r1/PRISME/releases/latest/download/PRISME.apk)** · [Versions et sommes de contrôle](https://github.com/s00r1/PRISME/releases)
+**[Télécharger PRISME 5.4 — APK publié](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Versions et sommes de contrôle](https://github.com/s00r1/PRISME/releases)
 
 1. La montre doit utiliser **Android complet 7.1 ou plus, API 25 minimum**, et accepter les APK Android ordinaires.
-2. Téléchargez `PRISME.apk` dans son navigateur puis ouvrez-le avec l’installateur Android. Autorisez cette source d’installation si nécessaire.
+2. Téléchargez `PRISME-5.4.apk` dans son navigateur puis ouvrez-le avec l’installateur Android. Autorisez cette source d’installation si nécessaire.
 3. Lancez PRISME ; choisissez-le comme accueil si le firmware le permet, ou ouvrez-le comme une application normale.
 4. La superposition est nécessaire pour la pastille de volume et l’orientation globale. Certains boutons peuvent demander une autorisation ou ouvrir un réglage Android.
 5. Choisissez la langue dans **Réglages → Style → Langue / Language**. Installez les mises à jour officielles par-dessus la version existante.
 
-Depuis un ordinateur : `adb install -r PRISME.apk`. Installer PRISME ne nécessite ni root, ni changement de firmware, ni modification des services Google.
+Depuis un ordinateur : `adb install -r PRISME-5.4.apk`. Installer PRISME ne nécessite ni root, ni changement de firmware, ni modification des services Google.
+
+## ✨ Nouveautés · PRISME 5.4
+
+- **🔋 Réglages Batterie dédiés** : 24 présentations de jauge, 12 palettes, couleurs dépendant du niveau de charge, pourcentage, taille, position, opacité et seuils personnalisables. Affichage au choix sur le **dashboard uniquement** ou **au-dessus des autres applications** (autorisation Android requise). Un diagnostic compare plusieurs sources de mesure : certains firmwares peuvent néanmoins transmettre un pourcentage incorrect.
+- **🎵 Réglages Musique dédiés** : mini-lecteur commun aux **22 styles de dashboard**, avec **lecture/pause, précédent et suivant**, 12 styles de présentation et taille/position/opacité réglables. Les commandes utilisent les fonctions multimédias Android et nécessitent un lecteur actif.
+- **🔄 Rotation globale** : depuis le Control Center flottant, changement de portrait/paysage **sans retour volontaire au dashboard**. Le résultat dépend du firmware et de l'application utilisée.
+- **🎧 Retour à l'accueil** : navigation pensée pour ne pas réinitialiser les tâches musicales. La lecture audio/vidéo en arrière-plan reste sous le contrôle d'Android et de chaque lecteur : elle n'est **pas garantie**.
+
+**Note de compatibilité :** un blocage de l'installation de la Release 5.4 par Play Protect a été signalé. Ne désactivez pas la protection pour forcer l'installation. Consultez les [Releases](https://github.com/s00r1/PRISME/releases) pour les correctifs disponibles. La galerie historique n'est pas une capture de tous les nouveaux écrans 5.4.
 
 ## Ce que contient PRISME
 

@@ -23,7 +23,7 @@
 **شاشة رئيسية قابلة للتخصيص للساعات التي تعمل بنظام Android الكامل.** تعمل دون اتصال، ولا تحتاج إلى حساب ولا تحتوي على إعلانات أو تتبّع.
 
 
-**[⬇ تنزيل APK](https://github.com/s00r1/PRISME/releases/latest/download/PRISME.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
+**[⬇ تنزيل APK](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
 
 <table>
 <tr><td align="center" valign="top"><b>Control Center</b><br><a href="../assets/localized/ar/screenshots/control-center-ios.png"><img src="../assets/localized/ar/screenshots/control-center-ios.png" width="410" alt="Control Center"></a></td><td align="center" valign="top"><b>Volume</b><br><a href="../assets/localized/ar/screenshots/volume-live-circle-open.png"><img src="../assets/localized/ar/screenshots/volume-live-circle-open.png" width="410" alt="Volume"></a></td></tr>
@@ -32,11 +32,20 @@
 
 ## التثبيت
 
-**[تنزيل PRISME.apk الجاهز للتثبيت](https://github.com/s00r1/PRISME/releases/latest/download/PRISME.apk)** · [الإصدارات وبصمات التحقق](https://github.com/s00r1/PRISME/releases)
+**[تنزيل PRISME 5.4 APK](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [الإصدارات وبصمات التحقق](https://github.com/s00r1/PRISME/releases)
 
 تحتاج الساعة إلى **Android الكامل 7.1 أو أحدث، بحد أدنى API 25** وإمكانية تثبيت ملفات Android APK العادية. نزّل الملف من متصفح الساعة وافتحه بمثبّت Android، واسمح بمصدر التثبيت عند الطلب. افتح PRISME واختره كشاشة رئيسية إذا سمح النظام، أو شغّله كتطبيق عادي. زر الصوت العائم والاتجاه العام يحتاجان إلى إذن الظهور فوق التطبيقات. اختر اللغة من **الإعدادات ← المظهر ← اللغة**. ثبّت التحديثات الرسمية فوق النسخة الموجودة.
 
-من الكمبيوتر: `adb install -r PRISME.apk`. لا يتطلب التثبيت root أو تغيير البرنامج الثابت أو خدمات Google.
+من الكمبيوتر: `adb install -r PRISME-5.4.apk`. لا يتطلب التثبيت root أو تغيير البرنامج الثابت أو خدمات Google.
+
+## ✨ الجديد في PRISME 5.4
+
+- **🔋 تبويب مستقل للبطارية**: 24 شكلاً للمؤشر و12 مجموعة ألوان، وتغيّر اللون حسب الشحن، مع تعديل النسبة والحجم والموقع والشفافية وحدود الشحن. يمكن عرضه **على لوحة PRISME فقط** أو **فوق التطبيقات الأخرى** (بإذن Android). تفحص أداة التشخيص عدة مصادر للقراءة، لكن بعض الأجهزة قد تعرض نسبة غير صحيحة.
+- **🎵 تبويب مستقل للموسيقى**: مشغّل مصغّر يعمل مع **أنماط لوحة التحكم الـ22** ويضم **تشغيل/إيقاف مؤقت، السابق والتالي**، مع 12 تصميماً وحجم وموقع وشفافية قابلة للتعديل. يحتاج إلى تطبيق وسائط نشط.
+- **🔄 تدوير الشاشة**: التحويل بين العمودي والأفقي من مركز التحكم العائم **دون الرجوع عمداً إلى لوحة PRISME**. تتوقف النتيجة على نظام الساعة والتطبيق المفتوح.
+- **🎧 العودة إلى الواجهة الرئيسية**: انتقالات دون إعادة ضبط مهام التطبيقات عمداً. استمرار الصوت أو الفيديو في الخلفية يعتمد على Android وتطبيق الوسائط، وهو **غير مضمون**.
+
+**تنبيه:** تم الإبلاغ عن منع تثبيت APK الإصدار 5.4 بواسطة Play Protect. لا تعطّل حماية الجهاز؛ راجع [الإصدارات](https://github.com/s00r1/PRISME/releases) لمعرفة الإصلاحات المتاحة. قد تتضمن الصور إصدارات أقدم.
 
 ## المزايا
 

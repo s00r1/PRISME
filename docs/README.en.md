@@ -23,7 +23,7 @@ External product photos: DM100 listing. They illustrate the hardware, not PRISME
 **A customizable launcher for full-Android smartwatches.** Offline, with no account, advertising or telemetry.
 
 
-**[⬇ Download the APK](https://github.com/s00r1/PRISME/releases/latest/download/PRISME.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
+**[⬇ Download the APK](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
 
 <table>
 <tr><td align="center" valign="top"><b>Control Center</b><br><a href="../assets/localized/en/screenshots/control-center-ios.png"><img src="../assets/localized/en/screenshots/control-center-ios.png" width="410" alt="Control Center"></a></td><td align="center" valign="top"><b>Volume</b><br><a href="../assets/localized/en/screenshots/volume-live-circle-open.png"><img src="../assets/localized/en/screenshots/volume-live-circle-open.png" width="410" alt="Volume"></a></td></tr>
@@ -32,11 +32,20 @@ External product photos: DM100 listing. They illustrate the hardware, not PRISME
 
 ## Install
 
-**[Download the ready-to-install PRISME.apk](https://github.com/s00r1/PRISME/releases/latest/download/PRISME.apk)** · [Releases and checksums](https://github.com/s00r1/PRISME/releases)
+**[Download the PRISME 5.4 APK](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Releases and checksums](https://github.com/s00r1/PRISME/releases)
 
 The watch needs **full Android 7.1 or later, API 25 minimum**, and ordinary Android APK installation. Download the APK in the watch browser, open it in Android’s installer and allow that installation source if prompted. Launch PRISME and select it as your home app if the firmware allows; it also opens as a normal app. Allow display over other apps for floating volume and global orientation. Choose **Settings → Style → Language**. Install official updates over the existing app.
 
-Computer installation: `adb install -r PRISME.apk`. No root, firmware replacement or Google-service modifications are required.
+Computer installation: `adb install -r PRISME-5.4.apk`. No root, firmware replacement or Google-service modifications are required.
+
+## ✨ What's new · PRISME 5.4
+
+- **🔋 Dedicated Battery settings**: 24 indicator styles, 12 color palettes, charge-dependent colors, percentage, adjustable size, position, opacity and thresholds. Choose **dashboard only** or **overlay across other apps** (Android overlay permission required). Diagnostics compare several Android battery readings, although some firmware may still report inaccurate percentages.
+- **🎵 Dedicated Music settings**: a mini player shared by **all 22 dashboards**, featuring **play/pause, previous and next**, 12 player styles, and adjustable size, position and transparency. Android media controls require an active player.
+- **🔄 Global rotation**: rotate portrait/landscape from the floating Control Center **without intentionally returning to PRISME's dashboard**. Actual behavior depends on the device firmware and foreground app.
+- **🎧 Home transitions**: avoid resetting app tasks when navigating home. Background audio/video playback remains controlled by Android and the media app and **cannot be guaranteed**.
+
+**Compatibility note:** a Play Protect installation block was reported for the v5.4 APK. Do not disable device protections to force installation; check [Releases](https://github.com/s00r1/PRISME/releases) for available fixes. Existing gallery screenshots may predate 5.4.
 
 ## Features
 

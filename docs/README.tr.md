@@ -23,7 +23,7 @@ Harici ürün fotoğrafları: DM100 ilanı. Donanımı gösterir, PRISME’yi de
 **Tam Android çalıştıran saatler için özelleştirilebilir ana ekran.** Çevrimdışı çalışır; hesap, reklam ve telemetri içermez.
 
 
-**[⬇ APK indir](https://github.com/s00r1/PRISME/releases/latest/download/PRISME.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
+**[⬇ APK indir](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
 
 <table>
 <tr><td align="center" valign="top"><b>Control Center</b><br><a href="../assets/localized/tr/screenshots/control-center-ios.png"><img src="../assets/localized/tr/screenshots/control-center-ios.png" width="410" alt="Control Center"></a></td><td align="center" valign="top"><b>Volume</b><br><a href="../assets/localized/tr/screenshots/volume-live-circle-open.png"><img src="../assets/localized/tr/screenshots/volume-live-circle-open.png" width="410" alt="Volume"></a></td></tr>
@@ -32,11 +32,20 @@ Harici ürün fotoğrafları: DM100 ilanı. Donanımı gösterir, PRISME’yi de
 
 ## Kurulum
 
-**[Kuruluma hazır PRISME.apk dosyasını indir](https://github.com/s00r1/PRISME/releases/latest/download/PRISME.apk)** · [Sürümler ve sağlama toplamları](https://github.com/s00r1/PRISME/releases)
+**[Kuruluma hazır PRISME 5.4 APK dosyasını indir](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Sürümler ve sağlama toplamları](https://github.com/s00r1/PRISME/releases)
 
 Saatte **tam Android 7.1 veya üzeri, en az API 25** ve normal Android APK kurma desteği gerekir. APK'yi saat tarayıcısından indirin, Android yükleyicisiyle açın ve istenirse bu kaynağa izin verin. PRISME'yi başlatın; aygıt yazılımı izin veriyorsa varsayılan ana ekran seçin veya normal uygulama olarak açın. Yüzen ses ve genel yönlendirme için diğer uygulamaların üzerinde gösterme izni verin. Dil: **Ayarlar → Stil → Dil**. Resmî güncellemeleri mevcut sürümün üzerine kurun.
 
-Bilgisayardan: `adb install -r PRISME.apk`. Kurulum için root, aygıt yazılımı veya Google hizmetlerini değiştirmek gerekmez.
+Bilgisayardan: `adb install -r PRISME-5.4.apk`. Kurulum için root, aygıt yazılımı veya Google hizmetlerini değiştirmek gerekmez.
+
+## ✨ PRISME 5.4 yenilikleri
+
+- **🔋 Ayrı Pil ayarları**: 24 gösterge stili, 12 renk paleti, şarj seviyesine göre renkler, yüzde göstergesi, boyut, konum, saydamlık ve eşikler. **Yalnızca ana ekranda** veya **diğer uygulamaların üzerinde** gösterim seçeneği (Android izni gerekir). Birden fazla pil kaynağı karşılaştırılır; cihaz yazılımı yine de yanlış yüzde bildirebilir.
+- **🎵 Ayrı Müzik ayarları**: **22 ana ekran stilinin tamamında** mini oynatıcı; **oynat/duraklat, önceki ve sonraki**, 12 tasarım ve ayarlanabilir boyut/konum/saydamlık. Etkin bir medya oynatıcı gerekir.
+- **🔄 Genel ekran döndürme**: uygulamadan PRISME ana ekranına dönmeden kayan Control Center üzerinden dikey/yatay geçiş denemesi. Sonuç cihaz yazılımına bağlıdır.
+- **🎧 Ana ekrana dönüş**: uygulama görevlerini sıfırlamamaya yönelik geçişler. Arka planda ses/video oynatma Android ve ilgili uygulamaya bağlıdır; **garanti edilmez**.
+
+**Not:** v5.4 APK kurulumu için Play Protect engeli bildirildi. Güvenlik korumasını kapatmayın; düzeltmeler için [Releases](https://github.com/s00r1/PRISME/releases) sayfasını kontrol edin. Galeride eski sürümlerden görseller bulunabilir.
 
 ## Özellikler
 
