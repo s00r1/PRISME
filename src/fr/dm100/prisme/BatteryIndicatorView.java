@@ -17,8 +17,8 @@ public final class BatteryIndicatorView extends View {
     private boolean charging;
     public BatteryIndicatorView(Context c,BatteryIndicatorPrefs prefs){super(c);this.prefs=prefs;setLayerType(View.LAYER_TYPE_SOFTWARE,null);}
     public void update(int percent,boolean onCharge){level=percent<0?-1:Math.min(100,percent);charging=onCharge;invalidate();}
-    public int desiredWidth(){return Math.round(156*prefs.integer("size",70)/100f);}
-    public int desiredHeight(){return Math.round(56*prefs.integer("size",70)/100f);}
+    public int desiredWidth(){return Math.round(156*prefs.integer("size",60)/100f);}
+    public int desiredHeight(){return Math.round(56*prefs.integer("size",60)/100f);}
     @Override protected void onMeasure(int w,int h){setMeasuredDimension(desiredWidth(),desiredHeight());}
     private void rect(Canvas c,float l,float t,float r,float b,float radius,int color){
         p.setStyle(Paint.Style.FILL);p.setColor(color);c.drawRoundRect(new RectF(l,t,r,b),radius,radius,p);

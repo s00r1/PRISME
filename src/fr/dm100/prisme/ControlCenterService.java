@@ -70,7 +70,7 @@ public final class ControlCenterService extends Service implements SharedPrefere
     public static void refresh(Context context){
         Context app=context.getApplicationContext();
         ControlCenterPrefs prefs=new ControlCenterPrefs(app);
-        if(!prefs.getBoolean("enabled",true)&&!new BatteryIndicatorPrefs(app).enabled()){
+        if(!prefs.getBoolean("enabled",true)&&new BatteryIndicatorPrefs(app).displayMode()!=2){
             app.stopService(new Intent(app,ControlCenterService.class));
             return;
         }
@@ -129,7 +129,7 @@ public final class ControlCenterService extends Service implements SharedPrefere
     }
     private void reconcile(){
         boolean centerEnabled=prefs.getBoolean("enabled",true);
-        if(!centerEnabled&&!batteryPrefs.enabled()){stopSelf();return;}
+        if(!centerEnabled&&batteryPrefs.displayMode()!=2){stopSelf();return;}
         if(!Settings.canDrawOverlays(this)){closePanel();removeHandle();removeBattery();stopSelf();return;}
         if(!interactive()){closePanel();removeHandle();removeBattery();return;}
         reconcileBattery();
@@ -248,12 +248,12 @@ public final class ControlCenterService extends Service implements SharedPrefere
     }
     private void updateBattery(Intent state){
         BatteryLevelReader.Reading reading=BatteryLevelReader.read(this,state);
-        if(reading.level>=0||batteryLevel<0)batteryLevel=reading.level;
+        batteryLevel=reading.level;
         batteryCharging=reading.charging;
         if(batteryView!=null)batteryView.update(batteryLevel,batteryCharging);
     }
     private void reconcileBattery(){
-        if(!batteryPrefs.enabled()){removeBattery();return;}
+        if(batteryPrefs.displayMode()!=2){removeBattery();return;}
         removeBattery();
         if(windows==null)return;
         Point screenSize=new Point();windows.getDefaultDisplay().getRealSize(screenSize);

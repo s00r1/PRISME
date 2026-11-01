@@ -44,6 +44,7 @@ public final class BatteryIndicatorPrefs {
         int value;try{value=store.getInt(key,fallback);}catch(ClassCastException error){value=fallback;}
         int min=0,max=100;
         if("style".equals(key)){max=STYLES.length-1;}
+        else if("scope".equals(key)){max=2;}
         else if("palette".equals(key)){max=PALETTES.length-1;}
         else if("size".equals(key)){min=35;max=200;}
         else if("opacity".equals(key)){min=25;max=100;}
@@ -53,9 +54,10 @@ public final class BatteryIndicatorPrefs {
     }
     public void putInt(String key,int value){
         if(!("style".equals(key)||"palette".equals(key)||"size".equals(key)||
-                "opacity".equals(key)||"x".equals(key)||"y".equals(key)||"low".equals(key)||"high".equals(key)))return;
+                "opacity".equals(key)||"x".equals(key)||"y".equals(key)||"low".equals(key)||"high".equals(key)||"scope".equals(key)))return;
         int clamped=Math.max(0,Math.min(200,value));
         if("style".equals(key))clamped=Math.min(STYLES.length-1,clamped);
+        if("scope".equals(key))clamped=Math.min(2,clamped);
         if("palette".equals(key))clamped=Math.min(PALETTES.length-1,clamped);
         if("size".equals(key))clamped=Math.max(35,clamped);
         if("opacity".equals(key))clamped=Math.max(25,Math.min(100,clamped));
@@ -64,7 +66,16 @@ public final class BatteryIndicatorPrefs {
         if("high".equals(key))clamped=Math.max(45,Math.min(90,clamped));
         store.edit().putInt(key,clamped).apply();
     }
-    public boolean enabled(){return bool("enabled",true);}
+    /** 0 = hidden, 1 = PRISME dashboard only, 2 = all applications. */
+    public int displayMode(){
+        if(!bool("enabled",true))return 0;
+        return integer("scope",2);
+    }
+    public void setDisplayMode(int value){
+        int safe=Math.max(0,Math.min(2,value));
+        store.edit().putBoolean("enabled",safe!=0).putInt("scope",safe).apply();
+    }
+    public boolean enabled(){return displayMode()!=0;}
     public int color(int level,boolean charging){
         int[] colors=COLORS[integer("palette",0)];
         if(charging&&bool("chargingColor",true))return colors[4];

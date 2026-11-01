@@ -29,16 +29,8 @@ public final class DeviceSnapshot {
         int battery = -1, memory = -1;
         boolean charging = false, wifi = false;
         double free = -1;
-        try {
-            Intent status = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-            if (status != null) {
-                int level = status.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-                int scale = status.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-                if (level >= 0 && scale > 0) battery = Math.max(0, Math.min(100, Math.round(100f * level / scale)));
-                int state = status.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-                charging = state == BatteryManager.BATTERY_STATUS_CHARGING || state == BatteryManager.BATTERY_STATUS_FULL;
-            }
-        } catch (RuntimeException ignored) { }
+        BatteryLevelReader.Reading reading=BatteryLevelReader.read(context,null);
+        battery=reading.level;charging=reading.charging;
         try {
             ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo network = connectivity == null ? null : connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI);

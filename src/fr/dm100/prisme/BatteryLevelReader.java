@@ -28,6 +28,7 @@ public final class BatteryLevelReader {
             return "Diffusion Android : "+raw+" / "+scale+" → "+format(broadcast)
                     +"\nCapacité BatteryManager : "+format(property)
                     +"\nCapacité système (sysfs) : "+format(sysfs)
+                    +"\nCapacité charge/charge_full : "+format(readChargeRatio())
                     +"\nValeur retenue : "+format(level)+" ("+source+")"
                     +"\n\nSi toutes les sources indiquent 1 % alors que la montre est chargée,"
                     +" le firmware fournit une mesure incorrecte. Une vérification ADB sera nécessaire.";
@@ -62,6 +63,7 @@ public final class BatteryLevelReader {
             }
         }catch(RuntimeException ignored){}
         int sysfs=readSysfs();
+        int cellRatio=readChargeRatio();
         int result=-1;
         String source="indisponible";
 
@@ -74,13 +76,50 @@ public final class BatteryLevelReader {
             else{result=property;source="BatteryManager";}
         }else if(property>=0){result=property;source="BatteryManager";}
         else if(broadcast>=0){result=broadcast;source="diffusion Android";}
-        if(result<=1&&sysfs>4&&(property<0||property<=1)&&(broadcast<0||broadcast<=1)){
+        if(result<=1&&cellRatio>4){
+            result=cellRatio;source="charge réelle / capacité nominale (jauge système)";
+        }else if(result<=1&&sysfs>4&&(property<0||property<=1)&&(broadcast<0||broadcast<=1)){
             result=sysfs;source="jauge système (autres sources à 1 %)";
         }else if(result<0&&sysfs>=0){result=sysfs;source="jauge système";}
+        // A charging system cannot be assumed to be full. Never fake 100% based on status.
+        if(result==1&&status!=null&&
+                status.getIntExtra(BatteryManager.EXTRA_STATUS,-1)==BatteryManager.BATTERY_STATUS_FULL){
+            result=-1;source="mesures contradictoires (statut plein / capacité 1 %)";
+        }
         return new Reading(result,broadcast,property,sysfs,raw,scale,charging,source);
     }
     private static int clamp(int value){return Math.max(0,Math.min(100,value));}
 
+    private static Long readPositive(String path){
+        File file=new File(path);
+        if(!file.isFile()||!file.canRead())return null;
+        try(BufferedReader reader=new BufferedReader(new FileReader(file))){
+            String s=reader.readLine();
+            if(s==null||s.length()>20)return null;
+            long v=Long.parseLong(s.trim());
+            return v>0?v:null;
+        }catch(Exception ignored){return null;}
+    }
+    private static int readChargeRatio(){
+        File base=new File("/sys/class/power_supply");
+        File[] supplies=base.listFiles();
+        if(supplies==null)return -1;
+        int checked=0;
+        for(File dir:supplies){
+            if(++checked>16)break;
+            if(dir==null||!dir.isDirectory())continue;
+            String name=dir.getName().toLowerCase(java.util.Locale.ROOT);
+            if(!name.contains("bat")&&!name.contains("bms"))continue;
+            for(String[] pair:new String[][]{{"charge_now","charge_full"},{"energy_now","energy_full"},{"charge_counter","charge_full"}}){
+                Long now=readPositive(new File(dir,pair[0]).getPath()),full=readPositive(new File(dir,pair[1]).getPath());
+                if(now!=null&&full!=null&&full>0&&now<=full*2L){
+                    int pct=clamp(Math.round(100d*now/full)>100?100:(int)Math.round(100d*now/full));
+                    return pct;
+                }
+            }
+        }
+        return -1;
+    }
     private static int readSysfs(){
         String[] paths={"/sys/class/power_supply/battery/capacity",
                 "/sys/class/power_supply/Battery/capacity",
@@ -94,6 +133,19 @@ public final class BatteryLevelReader {
                 int percent=Integer.parseInt(value.trim());
                 if(percent>=0&&percent<=100)return percent;
             }catch(Exception ignored){}
+        }
+        File base=new File("/sys/class/power_supply");
+        File[] supplies=base.listFiles();
+        if(supplies!=null){
+            int checked=0;
+            for(File supply:supplies){
+                if(++checked>16)break;
+                if(supply==null||!supply.isDirectory())continue;
+                String name=supply.getName().toLowerCase(java.util.Locale.ROOT);
+                if(!name.contains("bat")&&!name.contains("bms"))continue;
+                Long value=readPositive(new File(supply,"capacity").getPath());
+                if(value!=null&&value<=100)return value.intValue();
+            }
         }
         return -1;
     }

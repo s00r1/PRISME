@@ -47,6 +47,8 @@ public final class ExperienceController {
         {"notes","Carnet local","notes texte idee"},{"timer","Minuteur","alarme compte a rebours"},{"focus","Concentration","pomodoro travail repos"},
         {"stopwatch","Chronomètre","temps tours sport"},{"deskclock","Horloge de table","nuit veille heure"},
         {"controlCenter","Centre de contrôle","wifi bluetooth luminosite son"},{"floatingVolumeSettings","Pastille de volume","bouton flottant audio opacite"},
+         {"batteryIndicatorSettings","Indicateur batterie","24 styles batterie couleurs seuils position taille"},
+         {"musicPlayerSettings","Lecteur musique","Spotify Deezer YouTube titres piste suivante lecteur musique"},
         {"styles","Styles PRISME","apparence theme cadran"},{"presets","Réglages rapides","lecture discret confort preset"},
         {"device","État de la montre","batterie temperature stockage memoire"},{"displayTest","Test visuel de l’écran","bandes noir largeur hauteur mire bord"},
         {"settingsSearch","Trouver un réglage","parametres rechercher"},{"shortcuts","Raccourcis des styles","personnaliser boutons"},

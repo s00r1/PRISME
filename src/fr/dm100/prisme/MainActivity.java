@@ -70,6 +70,9 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     private ControlCenterController controlController;
     private ControlCenterPanel controlPanel;
     private ControlCenterSettings controlSettings;
+    private BatteryIndicatorView dashboardBattery;
+    private MiniMusicPlayer dashboardPlayer;
+    private MusicPrefs musicPrefs;
     private FloatingVolumePrefs floatingPrefs;
     private FloatingVolumeSettings floatingSettings;
     private View screenLamp;
@@ -88,15 +91,20 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     private LinearLayout settingsBody, expandedOptions;
     private Runnable shortcutPickerRefresh;
     private final List<Button> settingsTabs = new ArrayList<>();
-    private final int[] settingsScrollY = new int[6];
+    private final int[] settingsScrollY = new int[8];
     private int settingsTab;
     private boolean cancelSettingsRestore;
-    private static final String[] SETTINGS_TABS = {"Écran", "Style", "Raccourcis", "Applications", "Outils", "Profils"};
+    private static final String[] SETTINGS_TABS = {"Écran", "Style", "Raccourcis", "Applications", "Outils", "Batterie", "Musique", "Profils"};
     private static final String[] SHORTCUT_DEFAULTS = {"apps", "styles", "search", "tools", "customize"};
     private static final String[] SHORTCUT_ACTIONS = {"apps", "styles", "search", "favorites", "tools", "notes", "timer", "focus", "stopwatch", "workspaces", "clock", "customize", "controlCenter", "controlCenterSettings", "floatingVolumeSettings", "today", "checklist", "deskclock", "presets", "device", "settingsSearch", "rotationSettings", "language"};
     private static final String[] SHORTCUT_NAMES = {"Toutes les applications", "Choisir un style PRISME", "Rechercher une application", "Filtrer les favoris", "Centre de contrôle", "Carnet local", "Minuteur", "Concentration", "Chronomètre", "Espaces de travail", "Cadran de la montre", "Réglages PRISME", "Centre de contrôle", "Personnaliser le centre", "Pastille de volume intégrée", "Aujourd’hui", "Liste de tâches", "Horloge de table", "Réglages rapides", "État de la montre", "Trouver un réglage", "Orientation globale", "Langue / Language"};
     private TextView timerDisplay, stopwatchDisplay;
     private final List<java.lang.ref.WeakReference<AlertDialog>> ownedDialogs=new ArrayList<>();
+    private final Runnable mediaTick = new Runnable(){@Override public void run(){
+        if(!visible)return;
+        if(dashboardPlayer!=null)dashboardPlayer.update();
+        main.postDelayed(this,2500);
+    }};
     private final Runnable tick = new Runnable(){ public void run(){
         if(!visible)return;
         updateSnapshot();
@@ -126,6 +134,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         super.onCreate(state);I18n.init(this);activityLanguage=I18n.selected(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         prefs=new DashboardPrefs(this);
+        musicPrefs=new MusicPrefs(this);
         repository=new AppRepository(this);
         SafetyBackup.once(this,prefs);
         experience=new ExperienceController(this,prefs,apps,new ExperienceController.Host(){
@@ -156,8 +165,15 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         mainLayer.addView(controlPanel,new FrameLayout.LayoutParams(-1,-1));
         setContentView(mainLayer);I18n.bind(mainLayer);
         applyWindowPrefs();
+        refreshDashboardOverlays();
         requestVolumeSettings(getIntent());requestUtilityAction(getIntent());requestControlCenterAction(getIntent());
-        settingsTab=Math.max(0,Math.min(SETTINGS_TABS.length-1,getSharedPreferences("prisme_ui",MODE_PRIVATE).getInt("settingsTab",0)));
+        SharedPreferences uiTabs=getSharedPreferences("prisme_ui",MODE_PRIVATE);
+        int oldTab=uiTabs.getInt("settingsTab",0);
+        if(!uiTabs.getBoolean("settingsTabsV4",false)){
+            if(oldTab==5)oldTab=7;
+            uiTabs.edit().putBoolean("settingsTabsV4",true).putInt("settingsTab",oldTab).apply();
+        }
+        settingsTab=Math.max(0,Math.min(SETTINGS_TABS.length-1,oldTab));
         cancelSettingsRestore=getIntent()!=null&&(getIntent().hasCategory(Intent.CATEGORY_HOME)||getIntent().getBooleanExtra("volumeSettings",false));
         if(state!=null){
             pendingCaptureName=state.getString("pendingCaptureName");
@@ -182,6 +198,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         super.onNewIntent(intent);setIntent(intent);
         requestVolumeSettings(intent);requestUtilityAction(intent);requestControlCenterAction(intent);
         if(intent!=null&&intent.hasCategory(Intent.CATEGORY_HOME)){
+            MusicPlayback.prepareHomeTransition(this);
             cancelSettingsRestore=true;
             closeControlExtras();
             for(int n=ownedDialogs.size()-1;n>=0;n--){AlertDialog d=ownedDialogs.get(n).get();if(d!=null&&d.isShowing())d.dismiss();}
@@ -198,6 +215,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
             registerReceiver(changes,packages);registered=true;
         }
         main.removeCallbacks(tick);main.post(tick);
+        refreshDashboardOverlays();main.removeCallbacks(mediaTick);main.post(mediaTick);
         main.removeCallbacks(timerTick);if(timerDeadline>0)main.post(timerTick);
         main.removeCallbacks(stopwatchTick);
         if(stopwatchRunning&&stopwatchDialog!=null&&stopwatchDialog.isShowing())main.post(stopwatchTick);
@@ -207,6 +225,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         ControlCenterService.refresh(this);
     }
     @Override protected void onPause(){
+        main.removeCallbacks(mediaTick);
         visible=false;if(experience!=null)experience.pause();closeScreenLamp();if(controlPanel!=null)controlPanel.onHostPause();if(controlController!=null)controlController.onHostPause();board.onHostPause();main.removeCallbacks(tick);main.removeCallbacks(timerTick);main.removeCallbacks(stopwatchTick);
         if(registered){unregisterReceiver(changes);registered=false;}
         saveUtilities();super.onPause();
@@ -216,7 +235,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         ownedDialogs.clear();if(experience!=null)experience.shutdown();closeControlExtras();repository.close();main.removeCallbacksAndMessages(null);super.onDestroy();
     }
     @Override public void onConfigurationChanged(Configuration c){
-        super.onConfigurationChanged(c);board.refresh();if(controlPanel!=null)controlPanel.refresh();if(controlSettings!=null&&controlSettings.isShowing())controlSettings.refit();if(floatingSettings!=null&&floatingSettings.isShowing())floatingSettings.refit();
+        super.onConfigurationChanged(c);board.refresh();refreshDashboardOverlays();if(controlPanel!=null)controlPanel.refresh();if(controlSettings!=null&&controlSettings.isShowing())controlSettings.refit();if(floatingSettings!=null&&floatingSettings.isShowing())floatingSettings.refit();
         for(java.lang.ref.WeakReference<AlertDialog> ref:ownedDialogs){
             AlertDialog d=ref.get();if(d instanceof OwnedDialog&&d.isShowing())((OwnedDialog)d).fitWindow();
         }
@@ -244,7 +263,44 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         for(AppEntry a:apps)if(workspace==0||selected.contains(a.id))visibleApps.add(a);
         board.setShortcutCatalog(apps);board.setApps(visibleApps);board.refresh();updateSnapshot();applyWindowPrefs();
     }
-    private void updateSnapshot(){if(board!=null)board.setSnapshot(DeviceSnapshot.read(this));}
+    private void updateSnapshot(){
+        if(board!=null)board.setSnapshot(DeviceSnapshot.read(this));
+        if(dashboardBattery!=null){
+            BatteryLevelReader.Reading now=BatteryLevelReader.read(this,null);
+            dashboardBattery.update(now.level,now.charging);
+        }
+    }
+    /** Widgets shared by all dashboard styles, beneath the control panel. */
+    private void refreshDashboardOverlays(){
+        if(mainLayer==null||controlPanel==null)return;
+        if(dashboardBattery!=null){mainLayer.removeView(dashboardBattery);dashboardBattery=null;}
+        if(dashboardPlayer!=null){mainLayer.removeView(dashboardPlayer);dashboardPlayer=null;}
+        Point screenSize=screen();
+        if(screenSize.x<=0||screenSize.y<=0)return;
+        BatteryIndicatorPrefs bp=new BatteryIndicatorPrefs(this);
+        if(bp.displayMode()==1){
+            dashboardBattery=new BatteryIndicatorView(this,bp);
+            BatteryLevelReader.Reading state=BatteryLevelReader.read(this,null);
+            dashboardBattery.update(state.level,state.charging);
+            int width=Math.min(screenSize.x,dashboardBattery.desiredWidth());
+            int height=Math.min(screenSize.y,dashboardBattery.desiredHeight());
+            FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(width,height,Gravity.LEFT|Gravity.TOP);
+            lp.leftMargin=Math.round((screenSize.x-width)*bp.integer("x",100)/100f);
+            lp.topMargin=Math.round((screenSize.y-height)*bp.integer("y",0)/100f);
+            dashboardBattery.setAlpha(bp.integer("opacity",100)/100f);
+            mainLayer.addView(dashboardBattery,Math.max(1,mainLayer.indexOfChild(controlPanel)),lp);
+        }
+        if(musicPrefs.flag("enabled",true)){
+            dashboardPlayer=new MiniMusicPlayer(this,musicPrefs);
+            int width=Math.min(screenSize.x,dashboardPlayer.desiredWidth());
+            int height=Math.min(screenSize.y,dashboardPlayer.desiredHeight());
+            FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(width,height,Gravity.LEFT|Gravity.TOP);
+            lp.leftMargin=Math.round((screenSize.x-width)*musicPrefs.number("x",50)/100f);
+            lp.topMargin=Math.round((screenSize.y-height)*musicPrefs.number("y",87)/100f);
+            mainLayer.addView(dashboardPlayer,Math.max(1,mainLayer.indexOfChild(controlPanel)),lp);
+            dashboardPlayer.update();
+        }
+    }
     private void applyWindowPrefs(){
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             |View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
@@ -255,7 +311,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     @Override public void onApp(AppEntry app){
         haptic();
         Intent i=new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER).setComponent(app.component)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
         if(launch(i)){prefs.putInt("launch:"+app.id,(int)(System.currentTimeMillis()/1000));board.refresh();}
     }
     @Override public void onAppLongPress(final AppEntry app){
@@ -278,6 +334,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         if("rotationSettings".equals(action)){showRotationSettings();return;}
         if("rotateGlobal".equals(action)){toggleGlobalRotation();return;}
         if("batteryIndicatorSettings".equals(action)){showBatteryIndicatorSettings();return;}
+        if("musicPlayerSettings".equals(action)){showMusicPlayerSettings();return;}
         if(action.startsWith("testColor:")){try{showTestColor(Integer.parseInt(action.substring(10)));}catch(NumberFormatException ignored){}return;}
         if("androidBattery".equals(action)){launch(new Intent(Intent.ACTION_POWER_USAGE_SUMMARY));return;}
         if("androidDisplay".equals(action)){launch(new Intent(Settings.ACTION_DISPLAY_SETTINGS));return;}
@@ -483,7 +540,8 @@ public final class MainActivity extends Activity implements DashboardView.Listen
                 settingsAction(b,"Ouvrir le centre de contrôle",()->openControlCenter(true));
                 settingsAction(b,"Personnaliser le centre de contrôle",()->showControlCenterSettings());
                 settingsAction(b,"Pastille de volume intégrée",()->showFloatingVolumeSettings());
-                settingsAction(b,"Indicateur de batterie flottant · 24 styles",()->showBatteryIndicatorSettings());
+                addButton(b,"Batterie · 24 styles et affichage global",()->selectSettingsTab(5));
+                addButton(b,"Musique · lecteur et arrière-plan",()->selectSettingsTab(6));
                 settingsAction(b,"Outils classiques",()->showTools());settingsAction(b,"Minuteur",()->showTimer(false));
                 settingsAction(b,"Chronomètre",()->showStopwatch());settingsAction(b,"Carnet local",()->showNotes());
                 settingsAction(b,"Aujourd’hui · favoris et récents",()->onAction("today"));
@@ -495,6 +553,8 @@ public final class MainActivity extends Activity implements DashboardView.Listen
                 toggle(b,"Garder l’horloge de table allumée","deskKeepAwake",false);
                 settingsAction(b,"Guide et gestes",()->showHelp());
                 break;
+            case 5:renderBatteryTab(b);break;
+            case 6:renderMusicTab(b);break;
             default:
                 settingsIntro(b,"Profils et retour à la montre","Les profils enregistrent le bureau, le centre de contrôle et l’apparence de la pastille. Son activation et sa relance au démarrage restent locales.");
                 settingsAction(b,"Mes profils",()->showProfiles());settingsAction(b,"Exporter ma configuration",()->exportConfig());
@@ -724,73 +784,109 @@ public final class MainActivity extends Activity implements DashboardView.Listen
             }
         });
     }
-    /** Battery appearance and position; preview and overlay reflect every change. */
-    private void showBatteryIndicatorSettings(){
+    private void showBatteryIndicatorSettings(){showSettings(5);}
+    private void showMusicPlayerSettings(){showSettings(6);}
+    private void renderBatteryTab(LinearLayout b){
         final BatteryIndicatorPrefs battery=new BatteryIndicatorPrefs(this);
-        ScrollView scroll=scroll();LinearLayout b=column();scroll.addView(b);
-        settingsIntro(b,"Batterie flottante · PRISME 5.3",
-                "Jauge visible par-dessus les autres applications, sans capter les gestes tactiles. Position initiale : en haut à droite.");
-        BatteryLevelReader.Reading snapshot=BatteryLevelReader.read(this,null);
+        settingsIntro(b,"Batterie · 24 styles",
+                "Mesure réelle fournie par Android. Affichage au choix : Dashboard seulement, toutes les applis ou désactivé.");
+        BatteryLevelReader.Reading state=BatteryLevelReader.read(this,null);
+        b.addView(text("Charge lue : "+(state.level<0?"indisponible":state.level+" %")+" · "+state.source,14,ACCENT));
         BatteryIndicatorView preview=new BatteryIndicatorView(this,battery);
-        preview.update(snapshot.level,snapshot.charging);
-        b.addView(preview,new LinearLayout.LayoutParams(-1,Math.max(70,preview.desiredHeight()+12)));
+        preview.update(state.level,state.charging);
+        LinearLayout.LayoutParams previewLp=new LinearLayout.LayoutParams(preview.desiredWidth(),preview.desiredHeight());
+        previewLp.setMargins(4,8,4,8);b.addView(preview,previewLp);
         final Runnable changed=()->{
-            preview.requestLayout();preview.invalidate();
-            ControlCenterService.refresh(MainActivity.this);
+            previewLp.width=preview.desiredWidth();previewLp.height=preview.desiredHeight();
+            preview.setLayoutParams(previewLp);preview.invalidate();
+            refreshDashboardOverlays();ControlCenterService.refresh(MainActivity.this);
         };
-        CheckBox enable=new CheckBox(this);
-        enable.setText("Afficher l’indicateur même hors de PRISME");
-        enable.setTextColor(INK);enable.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);
-        enable.setMinHeight(48);enable.setChecked(battery.enabled());
-        enable.setOnCheckedChangeListener((view,checked)->{
-            battery.putBoolean("enabled",checked);changed.run();
-        });
-        b.addView(enable);
-        addButton(b,"Autoriser l’affichage par-dessus les applications",()->{
+        section(b,"Sur quels écrans ?");
+        settingChoice(b,"Portée de l'indicateur",new String[]{"Désactivé","Dashboard uniquement","Toutes les applications"},
+                battery.displayMode(),n->{battery.setDisplayMode(n);changed.run();});
+        b.addView(text("Le mode Dashboard ne demande aucune autorisation spéciale. Pour les autres applications, autorise la superposition Android.",14,MUTED));
+        addButton(b,"Autoriser la superposition Android",()->{
             try{startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,Uri.parse("package:"+getPackageName())));}
-            catch(RuntimeException error){toast("Autorisation indisponible sur cet appareil");}
+            catch(RuntimeException ex){toast("Permission indisponible sur cette montre");}
         });
-        section(b,"24 designs différents");
-        settingChoice(b,"Style de l’indicateur",BatteryIndicatorPrefs.STYLES,battery.integer("style",0),
+        section(b,"Styles et couleurs");
+        settingChoice(b,"Style de batterie",BatteryIndicatorPrefs.STYLES,battery.integer("style",0),
                 n->{battery.putInt("style",n);changed.run();});
-        section(b,"Couleurs selon la charge");
-        settingChoice(b,"Palette de batterie",BatteryIndicatorPrefs.PALETTES,battery.integer("palette",0),
+        settingChoice(b,"Palette de couleurs",BatteryIndicatorPrefs.PALETTES,battery.integer("palette",0),
                 n->{battery.putInt("palette",n);changed.run();});
         slider(b,"Seuil batterie faible (%)",5,40,battery.integer("low",20),n->{battery.putInt("low",n);changed.run();});
         slider(b,"Seuil batterie moyenne (%)",45,90,battery.integer("high",65),n->{battery.putInt("high",n);changed.run();});
-        b.addView(text("Chaque palette change automatiquement les couleurs pour batterie faible, moyenne, élevée, pleine et en charge.",14,MUTED));
-        section(b,"Taille et emplacement");
-        slider(b,"Taille (%)",35,200,battery.integer("size",70),n->{battery.putInt("size",n);changed.run();});
+        section(b,"Taille, position et transparence");
+        slider(b,"Taille (%)",35,200,battery.integer("size",60),n->{battery.putInt("size",n);changed.run();});
         slider(b,"Position horizontale (%)",0,100,battery.integer("x",100),n->{battery.putInt("x",n);changed.run();});
         slider(b,"Position verticale (%)",0,100,battery.integer("y",0),n->{battery.putInt("y",n);changed.run();});
         slider(b,"Opacité (%)",25,100,battery.integer("opacity",100),n->{battery.putInt("opacity",n);changed.run();});
-        addButton(b,"Diagnostic du niveau de batterie",()->{
-            BatteryLevelReader.Reading data=BatteryLevelReader.read(MainActivity.this,null);
-            new OwnedBuilder().setTitle("Diagnostic batterie").setMessage(data.diagnostic())
+        section(b,"Détails et diagnostic");
+        batteryOption(b,"Afficher le pourcentage","percent",true,battery,changed);
+        batteryOption(b,"Fond sombre derrière l'indicateur","backdrop",true,battery,changed);
+        batteryOption(b,"Couleur différente pendant la recharge","chargingColor",true,battery,changed);
+        batteryOption(b,"Afficher l'éclair de recharge","chargingMark",true,battery,changed);
+        addButton(b,"Diagnostic : comparer les sources de batterie",()->{
+            BatteryLevelReader.Reading result=BatteryLevelReader.read(this,null);
+            new OwnedBuilder().setTitle("Mesure de batterie Android").setMessage(result.diagnostic())
                     .setNegativeButton("Fermer",null).show();
         });
-        section(b,"Détails visuels");
-        CheckBox percent=new CheckBox(this);percent.setText("Afficher le pourcentage");
-        percent.setTextColor(INK);percent.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);
-        percent.setChecked(battery.bool("percent",true));
-        percent.setOnCheckedChangeListener((view,on)->{battery.putBoolean("percent",on);changed.run();});b.addView(percent);
-        CheckBox backdrop=new CheckBox(this);backdrop.setText("Fond sombre derrière l’indicateur");
-        backdrop.setTextColor(INK);backdrop.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);
-        backdrop.setChecked(battery.bool("backdrop",true));
-        backdrop.setOnCheckedChangeListener((view,on)->{battery.putBoolean("backdrop",on);changed.run();});b.addView(backdrop);
-        CheckBox charging=new CheckBox(this);charging.setText("Couleur spéciale pendant la recharge");
-        charging.setTextColor(INK);charging.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);
-        charging.setChecked(battery.bool("chargingColor",true));
-        charging.setOnCheckedChangeListener((view,on)->{battery.putBoolean("chargingColor",on);changed.run();});b.addView(charging);
-        CheckBox bolt=new CheckBox(this);bolt.setText("Symbole de charge électrique");
-        bolt.setTextColor(INK);bolt.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);
-        bolt.setChecked(battery.bool("chargingMark",true));
-        bolt.setOnCheckedChangeListener((view,on)->{battery.putBoolean("chargingMark",on);changed.run();});b.addView(bolt);
-        addButton(b,"Rétablir le coin supérieur droit",()->{
-            battery.putInt("x",100);battery.putInt("y",0);battery.putInt("size",70);
-            changed.run();toast("Position restaurée");
+        addButton(b,"Réinitialiser taille et position",()->{
+            battery.putInt("x",100);battery.putInt("y",0);battery.putInt("size",60);
+            changed.run();toast("Position batterie restaurée");
         });
-        dialog("Indicateur de batterie",scroll,null,null);
+    }
+    private void batteryOption(LinearLayout b,String label,String key,boolean fallback,
+                               BatteryIndicatorPrefs p,Runnable changed){
+        CheckBox c=new CheckBox(this);c.setText(label);c.setTextColor(INK);
+        c.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);c.setMinHeight(44);
+        c.setChecked(p.bool(key,fallback));
+        c.setOnCheckedChangeListener((view,checked)->{p.putBoolean(key,checked);changed.run();});
+        b.addView(c);
+    }
+    private void renderMusicTab(LinearLayout b){
+        settingsIntro(b,"Musique · mini-lecteur",
+                "Play / pause, piste suivante et précédente, sur les 22 styles de dashboard.");
+        final Runnable changed=()->refreshDashboardOverlays();
+        musicOption(b,"Afficher le mini-lecteur","enabled",true,changed);
+        musicOption(b,"Tenter de préserver la lecture en revenant à l'accueil","preserve",true,changed);
+        b.addView(text("Ce mode évite de réinitialiser les tâches au changement d'écran et peut relancer une session mise en pause. Il ne peut pas garantir la lecture des vidéos restreintes ni empêcher le firmware d'arrêter Spotify.",14,MUTED));
+        MusicPlayback.State state=MusicPlayback.state(this);
+        b.addView(text("État : "+state.title+" · "+(state.playing?"lecture":"pause / arrêt"),14,ACCENT));
+        b.addView(text(state.connected?"Accès aux sessions média autorisé":"Pour afficher les vrais titres et commander directement les lecteurs, active l'accès aux notifications.",13,MUTED));
+        addButton(b,"Autoriser le contrôle des sessions multimédias",()->{
+            try{startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));}
+            catch(RuntimeException ex){toast("Réglage indisponible sur ce firmware");}
+        });
+        section(b,"12 styles de lecteur");
+        settingChoice(b,"Design du mini-lecteur",MusicPrefs.STYLES,musicPrefs.number("style",0),
+                n->{musicPrefs.number("style",n);changed.run();});
+        section(b,"Taille et position");
+        slider(b,"Taille (%)",50,180,musicPrefs.number("size",85),n->{musicPrefs.number("size",n);changed.run();});
+        slider(b,"Position horizontale (%)",0,100,musicPrefs.number("x",50),n->{musicPrefs.number("x",n);changed.run();});
+        slider(b,"Position verticale (%)",0,100,musicPrefs.number("y",87),n->{musicPrefs.number("y",n);changed.run();});
+        slider(b,"Opacité (%)",30,100,musicPrefs.number("opacity",100),n->{musicPrefs.number("opacity",n);changed.run();});
+        musicOption(b,"Afficher titre et artiste","title",true,changed);
+        musicOption(b,"Afficher le fond du lecteur","background",true,changed);
+        section(b,"Tester les commandes");
+        LinearLayout row=new LinearLayout(this);
+        for(final int command:new int[]{MusicPlayback.PREVIOUS,MusicPlayback.TOGGLE,MusicPlayback.NEXT}){
+            Button btn=button(command==MusicPlayback.PREVIOUS?"⏮":command==MusicPlayback.NEXT?"⏭":"⏯");
+            btn.setOnClickListener(v->MusicPlayback.command(this,command));
+            row.addView(btn,new LinearLayout.LayoutParams(0,48,1));
+        }
+        b.addView(row);
+        addButton(b,"Replacer le lecteur en bas au centre",()->{
+            musicPrefs.number("x",50);musicPrefs.number("y",87);musicPrefs.number("size",85);
+            changed.run();toast("Position musique restaurée");
+        });
+    }
+    private void musicOption(LinearLayout b,String label,String key,boolean fallback,Runnable changed){
+        CheckBox box=new CheckBox(this);box.setText(label);box.setTextColor(INK);
+        box.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);box.setMinHeight(48);
+        box.setChecked(musicPrefs.flag(key,fallback));
+        box.setOnCheckedChangeListener((view,value)->{musicPrefs.flag(key,value);changed.run();});
+        b.addView(box);
     }
     private void showFloatingVolumeSettings(){
         dismissOwnedDialogs();
@@ -825,6 +921,8 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         addButton(b,"Affichage et luminosité",()->launch(new Intent(Settings.ACTION_DISPLAY_SETTINGS)));
         addButton(b,"Tous les paramètres",()->launch(new Intent(Settings.ACTION_SETTINGS)));
         addButton(b,"Pastille de volume intégrée",()->showFloatingVolumeSettings());
+        addButton(b,"Batterie : styles et emplacement",()->showBatteryIndicatorSettings());
+        addButton(b,"Lecteur de musique : styles et contrôle",()->showMusicPlayerSettings());
         addButton(b,"Indicateur de batterie · 24 styles",()->showBatteryIndicatorSettings());
         addButton(b,"Minuteur / concentration",()->showTimer(false));
         addButton(b,"Chronomètre",()->showStopwatch());
@@ -1042,6 +1140,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     }
     private void openNativeHome(ComponentName component){
         // An explicit target avoids returning to PRISME if PRISME is the default HOME.
+        MusicPlayback.prepareHomeTransition(this);
         dismissOwnedDialogs();
         Intent nativeHome=new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME).setComponent(component)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
@@ -1105,7 +1204,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     }
     private void showHelp(){
         ScrollView scroll=scroll();LinearLayout b=column();scroll.addView(b);
-        b.addView(text("PRISME 5.1 · "+ThemeSpec.ALL.length+" bureaux pour ta montre",23,INK));
+        b.addView(text("PRISME 5.4 · "+ThemeSpec.ALL.length+" bureaux pour ta montre",23,INK));
         b.addView(text("Nouveautés : Aujourd’hui rassemble favoris, récents et accès rapides. Recherche retrouve applications et commandes, même sans accents. La liste de tâches se coche et le carnet s’enregistre pendant la saisie. Le minuteur alerte aussi hors de PRISME. Nova et Silence sont accessibles dans Styles.\n\nDans Outils, personnalise le balayage vers le haut et le double appui sur une zone vide, puis retrouve l’horloge de table et les réglages rapides de confort. La pastille peut s’atténuer au repos. Trouver un réglage recherche les paramètres par mot-clé.",17,ACCENT));
         b.addView(text("Touche une icône pour ouvrir sa vraie application. Maintiens-la pour les favoris, le nom, les espaces ou le masquage.\n\nGlisse horizontalement pour les pages. Les dispositions en liste défilent aussi verticalement.\n\nLa barre du bas reste accessible dans chaque style : Cadrans, Styles, Aujourd’hui et Réglages. Le bouton Fermer des réglages ramène toujours au bureau.\n\nRéglages est organisé en six catégories. Écran règle le zoom global, les marges et l’adaptation ; Style règle les icônes et les couleurs. Raccourcis personnalise cinq emplacements, aussi modifiables par appui long.\n\nGlisse depuis le bord configuré pour ouvrir le centre de contrôle. Ses styles iOS et Android, ses boutons et ses gestes se personnalisent dans Outils. La pastille de volume intégrée s’active dans Outils, avec l’autorisation Android de superposition. Ses styles, formes, taille, transparence, position et mode déployable sont réglables ; sa notification permet de l’arrêter.\n\nLe bouton Cadran montre ouvre un accueil natif installé, sans changer le bureau Android par défaut. Pour changer un cadran natif, effectue ensuite un appui long sur son écran ; le sélecteur dépend du fabricant.\n\nLes compteurs indiquent des mesures réelles de la montre. Le terminal est une interface de lancement et d’outils locaux.\n\nLe bureau modifie l’accueil. Les applications et les menus Android gardent leurs propres interfaces.\n\nPour utiliser PRISME avec le bouton Accueil, choisis-le dans les bureaux Android disponibles. Certains firmwares de montre imposent leur propre accueil. Un bouton permet toujours de retrouver le cadran d’origine.\n\nApplication personnelle hors ligne, sans publicité ni compte. Aucun accès Internet, aux messages, aux contacts ou à l’historique des autres applications. Les favoris et les lancements depuis PRISME restent sur la montre.",16,INK));
         dialog("Guide PRISME",scroll,null,null);
