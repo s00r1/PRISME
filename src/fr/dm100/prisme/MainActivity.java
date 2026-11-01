@@ -860,12 +860,12 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         });
         section(b,"12 styles de lecteur");
         settingChoice(b,"Design du mini-lecteur",MusicPrefs.STYLES,musicPrefs.number("style",0),
-                n->{musicPrefs.number("style",n);changed.run();});
+                n->{musicPrefs.putInt("style",n);changed.run();});
         section(b,"Taille et position");
-        slider(b,"Taille (%)",50,180,musicPrefs.number("size",85),n->{musicPrefs.number("size",n);changed.run();});
-        slider(b,"Position horizontale (%)",0,100,musicPrefs.number("x",50),n->{musicPrefs.number("x",n);changed.run();});
-        slider(b,"Position verticale (%)",0,100,musicPrefs.number("y",87),n->{musicPrefs.number("y",n);changed.run();});
-        slider(b,"Opacité (%)",30,100,musicPrefs.number("opacity",100),n->{musicPrefs.number("opacity",n);changed.run();});
+        slider(b,"Taille (%)",50,180,musicPrefs.number("size",85),n->{musicPrefs.putInt("size",n);changed.run();});
+        slider(b,"Position horizontale (%)",0,100,musicPrefs.number("x",50),n->{musicPrefs.putInt("x",n);changed.run();});
+        slider(b,"Position verticale (%)",0,100,musicPrefs.number("y",87),n->{musicPrefs.putInt("y",n);changed.run();});
+        slider(b,"Opacité (%)",30,100,musicPrefs.number("opacity",100),n->{musicPrefs.putInt("opacity",n);changed.run();});
         musicOption(b,"Afficher titre et artiste","title",true,changed);
         musicOption(b,"Afficher le fond du lecteur","background",true,changed);
         section(b,"Tester les commandes");
@@ -877,7 +877,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         }
         b.addView(row);
         addButton(b,"Replacer le lecteur en bas au centre",()->{
-            musicPrefs.number("x",50);musicPrefs.number("y",87);musicPrefs.number("size",85);
+            musicPrefs.putInt("x",50);musicPrefs.putInt("y",87);musicPrefs.putInt("size",85);
             changed.run();toast("Position musique restaurée");
         });
     }
@@ -885,7 +885,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         CheckBox box=new CheckBox(this);box.setText(label);box.setTextColor(INK);
         box.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);box.setMinHeight(48);
         box.setChecked(musicPrefs.flag(key,fallback));
-        box.setOnCheckedChangeListener((view,value)->{musicPrefs.flag(key,value);changed.run();});
+        box.setOnCheckedChangeListener((view,value)->{musicPrefs.putBoolean(key,value);changed.run();});
         b.addView(box);
     }
     private void showFloatingVolumeSettings(){
