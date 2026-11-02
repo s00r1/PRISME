@@ -13,15 +13,22 @@ import android.view.View;
 public final class BatteryIndicatorView extends View {
     private final BatteryIndicatorPrefs prefs;
     private final Paint p=new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final RectF cachedRect=new RectF();
+    private final Path cachedPath=new Path();
+    private boolean surfaceKnown;
+    private int surfaceColor;
     private int level=-1;
     private boolean charging;
-    public BatteryIndicatorView(Context c,BatteryIndicatorPrefs prefs){super(c);this.prefs=prefs;setLayerType(View.LAYER_TYPE_SOFTWARE,null);}
+    public BatteryIndicatorView(Context c,BatteryIndicatorPrefs prefs){super(c);this.prefs=prefs;}
+    /** Actual PRISME theme only; never claims to sample pixels inside other apps. */
+    public void setBackgroundHint(int color){surfaceKnown=true;surfaceColor=color;invalidate();}
     public void update(int percent,boolean onCharge){level=percent<0?-1:Math.min(100,percent);charging=onCharge;invalidate();}
     public int desiredWidth(){return Math.round(156*prefs.integer("size",60)/100f);}
     public int desiredHeight(){return Math.round(56*prefs.integer("size",60)/100f);}
     @Override protected void onMeasure(int w,int h){setMeasuredDimension(desiredWidth(),desiredHeight());}
+    private RectF bounds(float l,float t,float r,float b){cachedRect.set(l,t,r,b);return cachedRect;}
     private void rect(Canvas c,float l,float t,float r,float b,float radius,int color){
-        p.setStyle(Paint.Style.FILL);p.setColor(color);c.drawRoundRect(new RectF(l,t,r,b),radius,radius,p);
+        p.setStyle(Paint.Style.FILL);p.setColor(color);c.drawRoundRect(bounds(l,t,r,b),radius,radius,p);
     }
     private void outline(Canvas c,float l,float t,float r,float b,float radius,int color,float stroke){
         p.setStyle(Paint.Style.STROKE);p.setStrokeWidth(stroke);p.setColor(color);c.drawRoundRect(new RectF(l,t,r,b),radius,radius,p);p.setStyle(Paint.Style.FILL);
@@ -35,14 +42,14 @@ public final class BatteryIndicatorView extends View {
     }
     private void ring(Canvas c,float x,float y,float r,float stroke,float start,float sweep,int color){
         p.setColor(color);p.setStyle(Paint.Style.STROKE);p.setStrokeWidth(stroke);p.setStrokeCap(Paint.Cap.ROUND);
-        c.drawArc(new RectF(x-r,y-r,x+r,y+r),start,sweep,false,p);p.setStyle(Paint.Style.FILL);
+        c.drawArc(bounds(x-r,y-r,x+r,y+r),start,sweep,false,p);p.setStyle(Paint.Style.FILL);
     }
     private void line(Canvas c,float x1,float y1,float x2,float y2,float stroke,int color){
         p.setColor(color);p.setStrokeWidth(stroke);p.setStrokeCap(Paint.Cap.ROUND);p.setStyle(Paint.Style.STROKE);
         c.drawLine(x1,y1,x2,y2,p);p.setStyle(Paint.Style.FILL);
     }
     private void polygon(Canvas c,float[] points,int color,boolean stroke){
-        Path path=new Path();path.moveTo(points[0],points[1]);
+        Path path=cachedPath;path.reset();path.moveTo(points[0],points[1]);
         for(int i=2;i<points.length;i+=2)path.lineTo(points[i],points[i+1]);path.close();
         p.setColor(color);p.setStyle(stroke?Paint.Style.STROKE:Paint.Style.FILL);p.setStrokeWidth(3);
         c.drawPath(path,p);p.setStyle(Paint.Style.FILL);
@@ -51,13 +58,24 @@ public final class BatteryIndicatorView extends View {
         super.onDraw(original);
         Canvas c=original;
         int col=prefs.color(level,charging),soft=0x663b4c62,ink=0xffedf8ff;
+        boolean adaptive=surfaceKnown&&prefs.bool("adaptiveContrast",false);
+        if(adaptive){
+            int rgb=surfaceColor;
+            double luma=(0.2126*((rgb>>16)&255)+0.7152*((rgb>>8)&255)+0.0722*(rgb&255));
+            boolean light=luma>=145;
+            int scheme=prefs.integer("contrastMode",0);
+            if(scheme==1)light=true; else if(scheme==2)light=false;
+            col=light?0xff15202c:0xfff5f9ff;
+            ink=col;soft=light?0x44334455:0x55e0eaf4;
+        }
+        if(prefs.bool("transparentEmpty",true))soft=soft&0x77ffffff;
         float ratio=Math.max(0,level)/100f;
         int style=prefs.integer("style",0);
         boolean percent=prefs.bool("percent",true);
         String digits=level<0?"--":String.valueOf(level);
         String label=percent?digits+"%":"";
         c.save();c.scale(getWidth()/156f,getHeight()/56f);
-        if(prefs.bool("backdrop",true))rect(c,0,1,155,55,16,0xc9151b2b);
+        if(prefs.bool("backdrop",true)&&!adaptive)rect(c,0,1,155,55,16,0xc9151b2b);
         switch(style){
             case 0: // horizontal system icon
                 outline(c,12,13,84,43,6,col,3);rect(c,85,22,92,34,2,col);

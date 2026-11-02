@@ -1,12 +1,13 @@
-name: PRISME 5.4.1 compile
+name: PRISME 6 compile
 
 on:
   push:
-    branches: [main]
+    branches: [main, feature/prisme-v6-watch]
     paths:
       - 'AndroidManifest.xml'
       - 'src/fr/dm100/prisme/**'
       - '.github/workflows/build-5-4.yml'
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -21,12 +22,12 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - name: Compile PRISME 5.4.1
+      - name: Compile PRISME 6 RC
         shell: pwsh
-        run: ./build.ps1 -Unsigned -OutputFile PRISME-5.4.1.apk
+        run: ./build.ps1 -Unsigned -OutputFile PRISME-6.0.0-rc1.apk
       - name: Upload unsigned APK for local signing
         uses: actions/upload-artifact@v4
         with:
-          name: PRISME-5.4.1-unsigned
+          name: PRISME-6.0.0-rc1-unsigned
           path: PRISME-5.4.1-unsigned.apk
           if-no-files-found: error

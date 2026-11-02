@@ -280,6 +280,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         BatteryIndicatorPrefs bp=new BatteryIndicatorPrefs(this);
         if(bp.displayMode()==1){
             dashboardBattery=new BatteryIndicatorView(this,bp);
+            dashboardBattery.setBackgroundHint(ThemeSpec.get(prefs.getInt("theme",0)).bg);
             BatteryLevelReader.Reading state=BatteryLevelReader.read(this,null);
             dashboardBattery.update(state.level,state.charging);
             int width=Math.min(screenSize.x,dashboardBattery.desiredWidth());
@@ -825,6 +826,9 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         batteryOption(b,"Afficher le pourcentage","percent",true,battery,changed);
         batteryOption(b,"Fond sombre derrière l'indicateur","backdrop",true,battery,changed);
         batteryOption(b,"Couleur différente pendant la recharge","chargingColor",true,battery,changed);
+        batteryOption(b,"Contraste automatique sur les 22 styles PRISME","adaptiveContrast",false,battery,changed);
+        batteryOption(b,"Zones vides translucides","transparentEmpty",true,battery,changed);
+        settingChoice(b,"Contraste forcé",new String[]{"Automatique","Encre sombre","Encre claire"},battery.integer("contrastMode",0),n->{battery.putInt("contrastMode",n);changed.run();});
         batteryOption(b,"Afficher l'éclair de recharge","chargingMark",true,battery,changed);
         addButton(b,"Diagnostic : comparer les sources de batterie",()->{
             BatteryLevelReader.Reading result=BatteryLevelReader.read(this,null);

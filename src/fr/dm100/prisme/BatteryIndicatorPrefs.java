@@ -50,14 +50,16 @@ public final class BatteryIndicatorPrefs {
         else if("opacity".equals(key)){min=25;max=100;}
         else if("low".equals(key)){min=5;max=40;}
         else if("high".equals(key)){min=45;max=90;}
+        else if("contrastMode".equals(key)){max=2;}
         return Math.max(min,Math.min(max,value));
     }
     public void putInt(String key,int value){
         if(!("style".equals(key)||"palette".equals(key)||"size".equals(key)||
-                "opacity".equals(key)||"x".equals(key)||"y".equals(key)||"low".equals(key)||"high".equals(key)||"scope".equals(key)))return;
+                "opacity".equals(key)||"x".equals(key)||"y".equals(key)||"low".equals(key)||"high".equals(key)||"scope".equals(key)||"contrastMode".equals(key)))return;
         int clamped=Math.max(0,Math.min(200,value));
         if("style".equals(key))clamped=Math.min(STYLES.length-1,clamped);
         if("scope".equals(key))clamped=Math.min(2,clamped);
+        if("contrastMode".equals(key))clamped=Math.min(2,clamped);
         if("palette".equals(key))clamped=Math.min(PALETTES.length-1,clamped);
         if("size".equals(key))clamped=Math.max(35,clamped);
         if("opacity".equals(key))clamped=Math.max(25,Math.min(100,clamped));
@@ -78,6 +80,7 @@ public final class BatteryIndicatorPrefs {
     public boolean enabled(){return displayMode()!=0;}
     public int color(int level,boolean charging){
         int[] colors=COLORS[integer("palette",0)];
+        if(level<0)return colors[2];
         if(charging&&bool("chargingColor",true))return colors[4];
         if(level<=integer("low",20))return colors[0];
         if(level<integer("high",65))return colors[1];

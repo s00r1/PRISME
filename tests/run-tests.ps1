@@ -11,6 +11,7 @@ $sources += @(Get-ChildItem (Join-Path $testRoot 'src') -Recurse -Filter '*.java
 $sources += Join-Path $project 'src\fr\dm100\prisme\SearchIndex.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\ChecklistStore.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\DashboardPrefs.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\V6ProfileCodec.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\ThemeSpec.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\ControlCenterPrefs.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\FloatingVolumePrefs.java'
