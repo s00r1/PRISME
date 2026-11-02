@@ -11,8 +11,8 @@ import java.util.Arrays;
 public final class SafetyBackup {
     private SafetyBackup(){}
     public static void once(Context c,DashboardPrefs prefs) {
-        if(c.getSharedPreferences("prisme_experience",0).getInt("backupVersion",0)>=15)return;
-        try{save(c,prefs);c.getSharedPreferences("prisme_experience",0).edit().putInt("backupVersion",15).apply();}catch(Exception ignored){}
+        if(c.getSharedPreferences("prisme_experience",0).getInt("backupVersion",0)>=16)return;
+        try{save(c,prefs);c.getSharedPreferences("prisme_experience",0).edit().putInt("backupVersion",16).apply();}catch(Exception ignored){}
     }
     public static synchronized void save(Context c,DashboardPrefs prefs)throws Exception {
         File parent=c.getExternalFilesDir(null);if(parent==null)parent=c.getFilesDir();File dir=new File(parent,"sauvegardes");

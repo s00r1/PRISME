@@ -26,6 +26,7 @@ public final class WatchWidgetsOverlay extends FrameLayout {
     private final Handler handler=new Handler(Looper.getMainLooper());
     private final TextView[] cards=new TextView[4];
     private boolean live;
+    private long telemetryAt;
     private final Runnable tick=new Runnable(){@Override public void run(){
         if(!live)return;
         updateTexts();
@@ -38,6 +39,7 @@ public final class WatchWidgetsOverlay extends FrameLayout {
         setClipChildren(false);setClickable(false);setFocusable(false);
     }
     public void refresh(){
+        telemetryAt=0;
         removeAllViews();
         for(int i=0;i<4;i++)cards[i]=null;
         DisplayMetrics metrics=getResources().getDisplayMetrics();
@@ -75,9 +77,10 @@ public final class WatchWidgetsOverlay extends FrameLayout {
             long left=TimerEngine.remaining(getContext());
             cards[2].setText(left>0?"⏱ "+ExperienceController.duration(left):"⏱ Minuteur");
         }
-        if(cards[3]!=null){
+        if(cards[3]!=null&&android.os.SystemClock.uptimeMillis()>=telemetryAt){
             DeviceSnapshot state=DeviceSnapshot.read(getContext());
             cards[3].setText("◈ "+(state.batteryPct<0?"--":state.batteryPct+"%")+" · "+(state.wifiConnected?"Wi-Fi":"Hors ligne"));
+            telemetryAt=android.os.SystemClock.uptimeMillis()+30000;
         }
     }
     public void onHostResume(){live=true;handler.removeCallbacks(tick);handler.post(tick);}

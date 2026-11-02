@@ -340,6 +340,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         if("studio".equals(action)){WatchStudio.open(this,()->{if(watchWidgets!=null)watchWidgets.refresh();});return;}
         if("sense".equals(action)){SenseEngine.open(this,prefs,()->{SenseEngine.apply(this,prefs);refreshBoard();});return;}
         if("edgeDock".equals(action)){EdgeDockService.settings(this,()->EdgeDockService.refresh(this));return;}
+        if("doctor".equals(action)){PrismeDoctor.show(this);return;}
         if("shortcutShelf".equals(action)){showShortcutShelf();return;}
         if("exportStyleGallery".equals(action)){exportStyleGallery();return;}
         if("rotationSettings".equals(action)){showRotationSettings();return;}
@@ -565,6 +566,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
                 settingsAction(b,"PRISME Studio · widgets tactiles",()->onAction("studio"));
                 settingsAction(b,"PRISME Sense · styles automatiques",()->onAction("sense"));
                 settingsAction(b,"Dock universel · raccourcis flottants",()->onAction("edgeDock"));
+                settingsAction(b,"PRISME Doctor · diagnostic et RAM",()->onAction("doctor"));
                 settingsAction(b,"Guide et gestes",()->showHelp());
                 break;
             case 5:renderBatteryTab(b);break;
@@ -807,6 +809,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         BatteryLevelReader.Reading state=BatteryLevelReader.read(this,null);
         b.addView(text("Charge lue : "+(state.level<0?"indisponible":state.level+" %")+" · "+state.source,14,ACCENT));
         BatteryIndicatorView preview=new BatteryIndicatorView(this,battery);
+        preview.setBackgroundHint(ThemeSpec.get(prefs.getInt("theme",0)).bg);
         preview.update(state.level,state.charging);
         LinearLayout.LayoutParams previewLp=new LinearLayout.LayoutParams(preview.desiredWidth(),preview.desiredHeight());
         previewLp.setMargins(4,8,4,8);b.addView(preview,previewLp);
@@ -961,7 +964,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
             }).setNegativeButton("Fermer",null).show();}
         }).setNegativeButton("Fermer",null).show();
     }
-    private void profileImported(){if(I18n.selected(this)!=activityLanguage){dismissOwnedDialogs();recreate();return;}refreshBoard();if(fr.dm100.prisme.volume.FloatingVolumeService.isRunning())fr.dm100.prisme.volume.FloatingVolumeService.refresh(this);ControlCenterService.refresh(this);}
+    private void profileImported(){if(I18n.selected(this)!=activityLanguage){dismissOwnedDialogs();recreate();return;}SenseEngine.apply(this,prefs);refreshBoard();refreshDashboardOverlays();if(fr.dm100.prisme.volume.FloatingVolumeService.isRunning())fr.dm100.prisme.volume.FloatingVolumeService.refresh(this);ControlCenterService.refresh(this);EdgeDockService.refresh(this);}
     private void exportConfig(){saveLocalConfig();}
     private void exportWithAndroid(){
         Intent i=new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("application/json").putExtra(Intent.EXTRA_TITLE,"PRISME-configuration.json");

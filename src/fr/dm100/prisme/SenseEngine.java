@@ -39,6 +39,7 @@ public final class SenseEngine {
     }
     public static void open(Activity activity,DashboardPrefs dashboard,Runnable changed){
         SharedPreferences store=prefs(activity);
+        if(!store.contains("dayTheme"))store.edit().putInt("dayTheme",dashboard.getInt("theme",0)).apply();
         ScrollView scroll=new ScrollView(activity);
         LinearLayout root=new LinearLayout(activity);root.setOrientation(LinearLayout.VERTICAL);root.setPadding(12,12,12,12);
         scroll.addView(root);

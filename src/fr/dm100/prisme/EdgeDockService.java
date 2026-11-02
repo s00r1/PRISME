@@ -64,7 +64,7 @@ public final class EdgeDockService extends Service {
         manager=(WindowManager)getSystemService(WINDOW_SERVICE);
         IntentFilter filter=new IntentFilter();filter.addAction(Intent.ACTION_SCREEN_OFF);filter.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(screen,filter);registered=true;
-        startForeground(NOTICE,notification());
+        try{startForeground(NOTICE,notification());}catch(RuntimeException rejected){stopSelf();}
     }
     @Override public int onStartCommand(Intent intent,int flags,int id){draw();return START_STICKY;}
     private Notification notification(){

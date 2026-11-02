@@ -37,3 +37,9 @@ A dedicated, opt-in foreground service provides one floating handle and five qui
 ## PRISME Link for desktop
 
 `python scripts/prisme-link.py doctor` checks watch API and screen dimensions. Use `--confirm-watch` to enable `push-profile`, `install` and `open`. Profile import remains manual on the watch; there is no companion phone build and no Internet permission.
+
+## PRISME Doctor / Performance Lab
+
+Doctor reports display geometry, Android API, overlay authorization, service state, battery reader diagnostics, system memory, per-process PSS and free storage. It does not claim a measured frame rate or export device IDs. Widgets throttle telemetry to avoid battery/CPU churn. The backup migration creates a new restore point once when entering V6.
+
+**Security:** The edge dock activation and boot permission remain device-local and are intentionally **not** imported from someone else's theme pack. Imported modules include layout, color and size only.

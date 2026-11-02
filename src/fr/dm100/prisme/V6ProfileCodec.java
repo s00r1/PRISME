@@ -26,7 +26,7 @@ public final class V6ProfileCodec {
         {"enabled"},
         {"enabled","batteryRule","chargeRule","powerSaver"},
         {"showClock","showTasks","showTimer","showDevice"},
-        {"enabled","boot"}};
+        {}};
     private static int limit(int group,String key,boolean upper){
         if(key.equals("style"))return upper?(group==0?23:11):0;
         if(key.equals("palette"))return upper?11:0;
@@ -39,7 +39,7 @@ public final class V6ProfileCodec {
         if(key.equals("dayStart")||key.equals("nightStart"))return upper?23:0;
         if(key.equals("position"))return upper?3:0;
         if(key.equals("opacity"))return upper?100:20;
-        if(key.equals("size"))return upper?200:30;
+        if(key.equals("size"))return group==5?(upper?90:30):(upper?200:30);
         return upper?100:0;
     }
     static final class Prepared {
