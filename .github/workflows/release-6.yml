@@ -1,0 +1,90 @@
+name: PRISME V6 signed release (manual and guarded)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tested_on_dm100:
+        description: "Confirm the exact commit was manually tested on a DM100 running Android 7.1.1"
+        required: true
+        type: boolean
+      expected_commit:
+        description: "Full SHA of the tested, approved commit"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  signed-release:
+    if: ${{ github.ref == 'refs/heads/main' && inputs.tested_on_dm100 == true }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify the exact tested revision
+        shell: pwsh
+        env:
+          EXPECTED: ${{ inputs.expected_commit }}
+        run: |
+          if ($env:EXPECTED -ne "${{ github.sha }}") { throw 'The tested commit SHA is not the current main revision.' }
+          if (Select-String -Path AndroidManifest.xml -Pattern 'android:versionName="6.0.0"' -Quiet -CaseSensitive) {
+            Write-Host 'Confirmed release version: 6.0.0'
+          } else { throw 'Manifest version is not marked 6.0.0.' }
+      - run: python scripts/fetch-test-dependency.py
+      - name: All tests
+        shell: pwsh
+        run: ./tests/run-all.ps1
+      - name: Require original release signing credentials
+        shell: pwsh
+        env:
+          PRISME_KEYSTORE_BASE64: ${{ secrets.PRISME_KEYSTORE_BASE64 }}
+          PRISME_STORE_PASSWORD: ${{ secrets.PRISME_STORE_PASSWORD }}
+          PRISME_KEY_PASSWORD: ${{ secrets.PRISME_KEY_PASSWORD }}
+        run: |
+          if (-not $env:PRISME_KEYSTORE_BASE64 -or -not $env:PRISME_STORE_PASSWORD -or -not $env:PRISME_KEY_PASSWORD) {
+            throw 'No original signing credentials; release blocked.'
+          }
+      - name: Build and sign
+        shell: pwsh
+        env:
+          PRISME_KEYSTORE_BASE64: ${{ secrets.PRISME_KEYSTORE_BASE64 }}
+          PRISME_STORE_PASSWORD: ${{ secrets.PRISME_STORE_PASSWORD }}
+          PRISME_KEY_PASSWORD: ${{ secrets.PRISME_KEY_PASSWORD }}
+        run: |
+          $path = Join-Path $env:RUNNER_TEMP 'prisme-release.jks'
+          [IO.File]::WriteAllBytes($path,[Convert]::FromBase64String($env:PRISME_KEYSTORE_BASE64))
+          ./build.ps1 -Keystore $path -OutputFile PRISME-6.0.0.apk
+      - name: Verify original update-compatible certificate
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          New-Item -ItemType Directory -Force -Path old | Out-Null
+          gh release download v5.1.0 --repo ${{ github.repository }} --pattern PRISME.apk --dir old
+          if ($LASTEXITCODE -ne 0) { throw 'Original APK unavailable.' }
+          $sdk = if ($env:ANDROID_SDK_ROOT) { $env:ANDROID_SDK_ROOT } else { $env:ANDROID_HOME }
+          $dir = Get-ChildItem (Join-Path $sdk 'build-tools') -Directory |
+            Where-Object { $_.Name -match '^\d+\.\d+\.\d+$' } |
+            Sort-Object { [version]$_.Name } -Descending | Select-Object -First 1 -ExpandProperty FullName
+          $signer = Join-Path $dir 'lib/apksigner.jar'
+          $old = & java -jar $signer verify --print-certs --min-sdk-version 25 old/PRISME.apk
+          if ($LASTEXITCODE -ne 0) { throw 'Old signature invalid.' }
+          $new = & java -jar $signer verify --print-certs --min-sdk-version 25 PRISME-6.0.0.apk
+          if ($LASTEXITCODE -ne 0) { throw 'New signature invalid.' }
+          $o = @($old | Where-Object { $_ -match '^Signer #1 certificate SHA-256 digest:' })
+          $n = @($new | Where-Object { $_ -match '^Signer #1 certificate SHA-256 digest:' })
+          if ($o.Count -ne 1 -or $n.Count -ne 1 -or $o[0] -ne $n[0]) { throw 'Certificate mismatch; publication blocked.' }
+      - name: Publish verified release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v6.0.0 PRISME-6.0.0.apk --repo ${{ github.repository }} --target ${{ github.sha }} --title "PRISME 6.0 · Watch only" --notes "For rectangular Android watches, DM100 tested. Studio, Sense, Widgets, floating Edge Dock, adaptive dashboard battery, V7 backups, desktop ADB Link and expanded gestures. Same package/signing certificate; no smartphone port."
+          if ($LASTEXITCODE -ne 0) { throw 'Release publishing failed.' }

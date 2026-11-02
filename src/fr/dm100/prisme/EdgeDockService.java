@@ -160,7 +160,8 @@ public final class EdgeDockService extends Service {
         seek(a,content,p,"size","Taille",44,30,90,change);
         seek(a,content,p,"opacity","Opacité",90,20,100,change);
         seek(a,content,p,"position","Position (gauche/droite et hauteur)",1,0,3,change);
-        new AlertDialog.Builder(a).setTitle("◈ Dock flottant V6").setView(content).setPositiveButton("Fermer",null).show();
+        android.widget.ScrollView scroll=new android.widget.ScrollView(a);scroll.addView(content);
+        new AlertDialog.Builder(a).setTitle("◈ Dock flottant V6").setView(scroll).setPositiveButton("Fermer",null).show();
     }
     private static void seek(Activity a,LinearLayout root,SharedPreferences p,String key,String label,int fallback,int min,int max,Runnable changed){
         TextView title=new TextView(a);title.setTextColor(0xfff3ffff);title.setText(label+" : "+p.getInt(key,fallback));root.addView(title);

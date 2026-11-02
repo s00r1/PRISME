@@ -23,7 +23,7 @@ public final class PrismeDoctor {
             Point p=new Point();window.getDefaultDisplay().getRealSize(p);
             out.append("Écran : ").append(p.x).append(" × ").append(p.y).append(" px");
             out.append(p.x!=p.y?" · rectangle":" · format non validé").append("\n");
-            if(p.x!=640&&p.y!=480)out.append("Matériel non certifié : vérifier les marges, gestes et rotation.\n");
+            if(!((p.x==640&&p.y==480)||(p.x==480&&p.y==640)))out.append("Matériel non certifié : vérifier les marges, gestes et rotation.\n");
         }
         out.append("Superposition : ").append(Settings.canDrawOverlays(context)?"autorisée":"non autorisée").append("\n");
         out.append("Centre de contrôle : ").append(ControlCenterService.isShowing()?"visible":"masqué / inactif").append("\n");

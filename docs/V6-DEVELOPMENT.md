@@ -47,3 +47,7 @@ Doctor reports display geometry, Android API, overlay authorization, service sta
 ## Gesture Engine V6 and built-in theme packs
 
 The original upward swipe and empty-space double tap remain backward compatible, with new choices: Studio, Sense, Edge Dock and Doctor. A separately configurable downward swipe is added without overriding the Control Center's edge recognizer or horizontal paging. Studio now ships four watch-native visual packs; they are starting points for user-defined local JSON profiles, not downloaded themes.
+
+## Release process
+
+`.github/workflows/release-6.yml` is intentionally manual. It refuses to publish until an exact main-branch revision has been manually validated on the reference watch, the manifest is marked 6.0.0 (rather than an RC), tests pass, the original signing secrets exist, and the signing certificate matches v5.1. This keeps existing installations update-compatible and avoids distributing an unsigned APK as a final release.

@@ -60,8 +60,10 @@ public final class WatchStudio {
             public void onStartTrackingTouch(SeekBar bar){}
             public void onStopTrackingTouch(SeekBar bar){}
         });root.addView(slider);
+        android.widget.ScrollView scroller=new android.widget.ScrollView(activity);
+        scroller.setFillViewport(false);scroller.addView(root);
         new AlertDialog.Builder(activity).setTitle("◈ PRISME Studio V6")
-            .setView(root).setPositiveButton("Terminer",(d,w)->changed.run())
+            .setView(scroller).setPositiveButton("Terminer",(d,w)->changed.run())
             .setNeutralButton("Réinitialiser",(d,w)->{
                 SharedPreferences.Editor e=layout.edit();
                 for(int i=0;i<4;i++)e.putInt(XS[i],DX[i]).putInt(YS[i],DY[i]);
@@ -100,7 +102,9 @@ public final class WatchStudio {
             int action=event.getActionMasked();
             if(action==MotionEvent.ACTION_DOWN){
                 for(int i=3;i>=0;i--)if(bounds[i].contains(event.getX(),event.getY())){
-                    active=i;ox=event.getX()-bounds[i].left;oy=event.getY()-bounds[i].top;invalidate();return true;
+                    active=i;ox=event.getX()-bounds[i].left;oy=event.getY()-bounds[i].top;
+                    if(getParent()!=null)getParent().requestDisallowInterceptTouchEvent(true);
+                    invalidate();return true;
                 }
                 return false;
             }
@@ -112,10 +116,10 @@ public final class WatchStudio {
                 int y=5*Math.round(Math.max(0,Math.min(100,100*(event.getY()-oy)/rangeY))/5f);
                 layout.edit().putInt(XS[active],x).putInt(YS[active],y).apply();
                 invalidate();changed.run();
-                if(action==MotionEvent.ACTION_UP)active=-1;
+                if(action==MotionEvent.ACTION_UP){active=-1;if(getParent()!=null)getParent().requestDisallowInterceptTouchEvent(false);}
                 return true;
             }
-            if(action==MotionEvent.ACTION_CANCEL){active=-1;invalidate();return true;}
+            if(action==MotionEvent.ACTION_CANCEL){active=-1;if(getParent()!=null)getParent().requestDisallowInterceptTouchEvent(false);invalidate();return true;}
             return true;
         }
     }
