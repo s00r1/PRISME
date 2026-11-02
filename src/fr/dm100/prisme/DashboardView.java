@@ -805,7 +805,11 @@ public final class DashboardView extends View {
                     float horizontal = x - downX, vertical = y - downY;
                     if(gestureInContent&&activeTheme==19&&Math.abs(vertical)>46&&Math.abs(vertical)>Math.abs(horizontal)*1.2f)changePage(vertical<0?1:-1);
                     else if(gestureInContent&&!listMode&&vertical < -64&&Math.abs(vertical)>Math.abs(horizontal)*1.4f){
-                        String[] choices={"","today","search","checklist","deskclock"};String action=choices[prefs.getInt("upGesture",1)];if(!action.isEmpty())listener.onAction(action);
+                        String[] choices={"","today","search","checklist","deskclock","studio","sense","edgeDock","doctor"};String action=choices[prefs.getInt("upGesture",1)];if(!action.isEmpty())listener.onAction(action);
+                    }
+                    else if(gestureInContent&&!listMode&&vertical>64&&Math.abs(vertical)>Math.abs(horizontal)*1.4f){
+                        String[] choices={"","today","search","checklist","deskclock","studio","sense","edgeDock","doctor"};
+                        String action=choices[prefs.getInt("downGesture",0)];if(!action.isEmpty())listener.onAction(action);
                     }
                     else if (gestureInContent && !listMode && Math.abs(horizontal) > 46 && Math.abs(horizontal) > Math.abs(vertical)) changePage((horizontal < 0)!=I18n.rtl()?1:-1);
                 } else if (!longFired && pressed != null && pressed.r.contains(x, y)) {
@@ -815,7 +819,7 @@ public final class DashboardView extends View {
                 }
                 if(!dragging&&!longFired&&pressed==null&&gestureInContent){
                     long now=event.getEventTime();if(now-blankTapTime<350&&Math.abs(x-blankTapX)<32&&Math.abs(y-blankTapY)<32){
-                        String[] actions={"","today","controlCenter","deskclock","search"};String action=actions[prefs.getInt("blankDoubleTap",1)];if(!action.isEmpty())listener.onAction(action);blankTapTime=0;
+                        String[] actions={"","today","controlCenter","deskclock","search","studio","sense","edgeDock","doctor"};String action=actions[prefs.getInt("blankDoubleTap",1)];if(!action.isEmpty())listener.onAction(action);blankTapTime=0;
                     }else{blankTapTime=now;blankTapX=x;blankTapY=y;}
                 }
                 clearTouch(); return true;

@@ -30,7 +30,7 @@ public final class DashboardPrefs {
     private static final Set<String> SHORTCUT_ACTIONS = new HashSet<String>(Arrays.asList(
             "clock", "styles", "customize", "shortcuts", "apps", "search", "favorites", "tools",
             "notes", "timer", "focus", "stopwatch", "workspaces", "home", "controlCenter", "controlCenterSettings", "floatingVolumeSettings", "today", "checklist", "deskclock", "presets", "device", "displayTest", "settingsSearch", "rotationSettings", "language", "shortcutShelf"));
-    private static final String[] INT_KEYS = { THEME, ICON_SIZE, TEXT_SIZE, COLUMNS, GAP, WALLPAPER, ICON_SHAPE, ORDER, WORKSPACE, FONT, ACCENT_INDEX, STYLE_SCALE, CONTENT_INSET, FIT_MODE, "upGesture", "blankDoubleTap", "language" };
+    private static final String[] INT_KEYS = { THEME, ICON_SIZE, TEXT_SIZE, COLUMNS, GAP, WALLPAPER, ICON_SHAPE, ORDER, WORKSPACE, FONT, ACCENT_INDEX, STYLE_SCALE, CONTENT_INSET, FIT_MODE, "upGesture", "downGesture", "blankDoubleTap", "language" };
     private static final String[] BOOL_KEYS = { LABELS, ANIMATIONS, FAVORITES_ONLY, SHOW_CLOCK, SHOW_BATTERY, SHOW_DOCK, HAPTIC, KEEP_SCREEN_ON, VOLUME_RAIL, "edgeCards", "compactNavigation", "deskKeepAwake", "styleDock" };
     private static final String[] SET_KEYS = { FAVORITES, HIDDEN, "workspace1", "workspace2", "workspace3" };
     private final SharedPreferences prefs;
@@ -372,7 +372,7 @@ public final class DashboardPrefs {
         else if (CONTENT_INSET.equals(key)) max = 24;
         else if (FIT_MODE.equals(key)) max = 2;
         else if ("language".equals(key)) max = 6;
-        else if ("upGesture".equals(key) || "blankDoubleTap".equals(key)) max = 4;
+        else if ("upGesture".equals(key) || "downGesture".equals(key) || "blankDoubleTap".equals(key)) max = 8;
         else if (launchKey(key)) max = Integer.MAX_VALUE;
         return Math.max(min, Math.min(max, value));
     }

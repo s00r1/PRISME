@@ -337,7 +337,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     @Override public void onAction(String action){
         if(action==null)return;
         if("language".equals(action)){showLanguagePicker();return;}
-        if("studio".equals(action)){WatchStudio.open(this,()->{if(watchWidgets!=null)watchWidgets.refresh();});return;}
+        if("studio".equals(action)){WatchStudio.open(this,prefs,()->{if(watchWidgets!=null)watchWidgets.refresh();},()->{refreshBoard();refreshDashboardOverlays();});return;}
         if("sense".equals(action)){SenseEngine.open(this,prefs,()->{SenseEngine.apply(this,prefs);refreshBoard();});return;}
         if("edgeDock".equals(action)){EdgeDockService.settings(this,()->EdgeDockService.refresh(this));return;}
         if("doctor".equals(action)){PrismeDoctor.show(this);return;}
@@ -560,8 +560,9 @@ public final class MainActivity extends Activity implements DashboardView.Listen
                 settingsAction(b,"Liste de tâches",()->onAction("checklist"));settingsAction(b,"Horloge de table",()->onAction("deskclock"));
                 settingsAction(b,"Réglages rapides de confort",()->onAction("presets"));settingsAction(b,"État de la montre",()->onAction("device"));
                 settingsAction(b,"Orientation globale des applications",()->showRotationSettings());
-                settingChoice(b,"Balayage vers le haut (hors listes)",new String[]{"Désactivé","Aujourd’hui","Recherche","Liste de tâches","Horloge de table"},prefs.getInt("upGesture",1),n->prefs.putInt("upGesture",n));
-                settingChoice(b,"Double appui sur une zone vide",new String[]{"Désactivé","Aujourd’hui","Centre de contrôle","Horloge de table","Recherche"},prefs.getInt("blankDoubleTap",1),n->prefs.putInt("blankDoubleTap",n));
+                settingChoice(b,"Balayage vers le haut (hors listes)",new String[]{"Désactivé","Aujourd’hui","Recherche","Liste de tâches","Horloge de table","Studio","Sense","Dock","Doctor"},prefs.getInt("upGesture",1),n->prefs.putInt("upGesture",n));
+                settingChoice(b,"Balayage vers le bas (hors listes)",new String[]{"Désactivé","Aujourd’hui","Recherche","Liste de tâches","Horloge de table","Studio","Sense","Dock","Doctor"},prefs.getInt("downGesture",0),n->prefs.putInt("downGesture",n));
+                settingChoice(b,"Double appui sur une zone vide",new String[]{"Désactivé","Aujourd’hui","Centre de contrôle","Horloge de table","Recherche","Studio","Sense","Dock","Doctor"},prefs.getInt("blankDoubleTap",1),n->prefs.putInt("blankDoubleTap",n));
                 toggle(b,"Garder l’horloge de table allumée","deskKeepAwake",false);
                 settingsAction(b,"PRISME Studio · widgets tactiles",()->onAction("studio"));
                 settingsAction(b,"PRISME Sense · styles automatiques",()->onAction("sense"));

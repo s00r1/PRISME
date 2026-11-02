@@ -24,7 +24,7 @@ public final class WatchStudio {
     private static final String[] XS={"clockX","tasksX","timerX","infoX"};
     private static final String[] YS={"clockY","tasksY","timerY","infoY"};
     private static final int[] DX={3,57,3,57},DY={10,10,75,75};
-    public static void open(Activity activity,Runnable changed){
+    public static void open(Activity activity,DashboardPrefs dashboard,Runnable changed,Runnable themeChanged){
         SharedPreferences shown=activity.getSharedPreferences("prisme_widgets",Context.MODE_PRIVATE);
         SharedPreferences layout=activity.getSharedPreferences("prisme_studio",Context.MODE_PRIVATE);
         LinearLayout root=new LinearLayout(activity);root.setOrientation(LinearLayout.VERTICAL);root.setPadding(8,8,8,8);
@@ -40,6 +40,19 @@ public final class WatchStudio {
             c.setOnCheckedChangeListener((v,checked)->{shown.edit().putBoolean(SHOW[n],checked).apply();canvas.invalidate();changed.run();});
             root.addView(c);
         }
+        android.widget.Button pack=new android.widget.Button(activity);pack.setText("Packs de style et widgets");
+        pack.setOnClickListener(v->{
+            String[] names={"Minimal OLED","Console cyber","Quotidien Nova","Tablette et infos"};
+            int[] themes={21,5,20,1};
+            new AlertDialog.Builder(activity).setTitle("Packs PRISME").setItems(names,(dialog,selected)->{
+                int id=themes[selected];dashboard.putInt("theme",id);
+                android.content.SharedPreferences.Editor e=shown.edit();
+                e.putBoolean("showClock",selected!=0).putBoolean("showTasks",selected>=2)
+                    .putBoolean("showTimer",selected==1||selected==2).putBoolean("showDevice",selected==1||selected==3);
+                e.putInt("size",selected==0?60:75).apply();
+                changed.run();themeChanged.run();canvas.invalidate();
+            }).setNegativeButton("Annuler",null).show();
+        });root.addView(pack);
         TextView size=new TextView(activity);size.setText("Taille des widgets");size.setTextColor(0xffe8ffff);root.addView(size);
         SeekBar slider=new SeekBar(activity);slider.setMax(170);slider.setProgress(Math.max(0,shown.getInt("size",75)-30));
         slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){

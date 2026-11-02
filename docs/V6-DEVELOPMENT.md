@@ -43,3 +43,7 @@ A dedicated, opt-in foreground service provides one floating handle and five qui
 Doctor reports display geometry, Android API, overlay authorization, service state, battery reader diagnostics, system memory, per-process PSS and free storage. It does not claim a measured frame rate or export device IDs. Widgets throttle telemetry to avoid battery/CPU churn. The backup migration creates a new restore point once when entering V6.
 
 **Security:** The edge dock activation and boot permission remain device-local and are intentionally **not** imported from someone else's theme pack. Imported modules include layout, color and size only.
+
+## Gesture Engine V6 and built-in theme packs
+
+The original upward swipe and empty-space double tap remain backward compatible, with new choices: Studio, Sense, Edge Dock and Doctor. A separately configurable downward swipe is added without overriding the Control Center's edge recognizer or horizontal paging. Studio now ships four watch-native visual packs; they are starting points for user-defined local JSON profiles, not downloaded themes.
