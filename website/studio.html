@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PRISME Studio V6 · Éditeur de profils pour montres Android</title>
+<meta name="description" content="Éditeur local de styles et widgets PRISME pour montres Android rectangulaires. Aucun envoi de données.">
+<link rel="stylesheet" href="style.css">
+<style>
+.studio-page{max-width:1350px;margin:auto;padding:32px 5% 90px}
+.studio-page h1{font-size:clamp(34px,5vw,58px);line-height:1.1;letter-spacing:-2px}
+.studio-page h2{font-size:23px;letter-spacing:-.5px;margin:12px 0}
+.studio-page p{color:#b7c4d2}
+.studio-layout{display:grid;grid-template-columns:minmax(320px,.9fr) minmax(460px,1.35fr);gap:32px;align-items:start}
+.studio-tools{border:1px solid #344752;border-radius:18px;padding:20px;background:#121e28}
+.studio-tools label{display:block;font-size:14px;margin:16px 0 8px;color:#e4f7fc}
+.studio-tools select,.studio-tools input[type=range]{width:100%}
+.studio-tools input[type=checkbox]{width:auto;display:inline-block;vertical-align:middle;margin:0 8px 0 0}
+.studio-tools input[type=file]{width:100%;padding:10px}
+.studio-tools button{border:1px solid #7df1c8;padding:12px 14px;background:#183a39;color:#ecfff9;border-radius:12px;cursor:pointer}
+.studio-tools button:disabled{opacity:.4;cursor:not-allowed}
+.studio-tools .actions{display:flex;flex-wrap:wrap;gap:10px}
+.studio-tools .actions button{flex:1}
+#previewShell{border:10px solid #293842;border-radius:30px;padding:12px;background:#020609;box-shadow:0 22px 50px #0009;max-width:750px}
+#preview{width:100%;aspect-ratio:4/3;position:relative;border-radius:8px;overflow:hidden;touch-action:none;user-select:none;background:linear-gradient(125deg,var(--watch-a),var(--watch-b));color:white}
+#preview .clock{position:absolute;left:4%;top:4%;font-size:clamp(16px,2vw,28px);font-weight:bold;opacity:.72;pointer-events:none}
+#preview .version{position:absolute;right:4%;top:4%;font:11px monospace;opacity:.65;pointer-events:none}
+.widget-card{position:absolute;display:flex;align-items:center;justify-content:center;border-radius:11px;background:#132332db;border:2px solid var(--watch-accent);color:#f7fffe;font-weight:700;cursor:grab;box-shadow:0 5px 12px #0005;white-space:nowrap;padding:4px;touch-action:none;text-align:center;overflow:hidden}
+.widget-card:active{cursor:grabbing;border-color:white}
+.widget-card[hidden]{display:none}
+#preview .caption{position:absolute;bottom:5%;left:3%;right:3%;display:flex;justify-content:space-between;opacity:.75;font-size:12px;pointer-events:none}
+#preview:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.15;background:linear-gradient(90deg,transparent 24.9%,white 25%,transparent 25.1%,transparent 49.9%,white 50%,transparent 50.1%,transparent 74.9%,white 75%,transparent 75.1%),linear-gradient(0deg,transparent 24.9%,white 25%,transparent 25.1%,transparent 49.9%,white 50%,transparent 50.1%,transparent 74.9%,white 75%,transparent 75.1%)}
+.status{font-size:13px;min-height:34px;padding:9px 0;color:#b9ef73}
+.smallnote{font-size:13px;line-height:1.6}
+.widgets label{display:block;margin:8px 0}
+@media(max-width:900px){.studio-layout{grid-template-columns:1fr}#previewShell{max-width:750px}}
+</style>
+</head>
+<body>
+<header><a class="brand" href="index.html">◈ PRISME</a><nav><a href="index.html">Site officiel</a><a href="https://github.com/s00r1/PRISME">Sources GitHub</a></nav></header>
+<div class="studio-page">
+<p class="eyebrow">PRISME V6 · PRÉVISUALISATION EN DÉVELOPPEMENT · MONTRES UNIQUEMENT</p>
+<h1>Studio. Ton bureau, tes règles.</h1>
+<p>Édite un profil exporté depuis PRISME, organise quatre widgets au glisser-déposer, puis importe le JSON sur ta montre. Aucune donnée de profil n’est envoyée sur un serveur.</p>
+<div class="studio-layout">
+<div class="studio-tools">
+<h2>1. Ton profil</h2>
+<label for="profileInput">Ouvrir une sauvegarde JSON PRISME (schéma V6 ou V7)</label>
+<input id="profileInput" type="file" accept=".json,application/json">
+<p class="smallnote">Charge d’abord un export depuis PRISME. Sans profil, tu peux tester l’aperçu, mais l’export est désactivé pour éviter une sauvegarde incomplète.</p>
+<h2>2. Personnaliser</h2>
+<label for="theme">Style PRISME (22 compositions conservées)</label>
+<select id="theme"></select>
+<div class="widgets">
+<label><input type="checkbox" data-show="showClock" checked>Horloge</label>
+<label><input type="checkbox" data-show="showTasks" checked>Tâches</label>
+<label><input type="checkbox" data-show="showTimer" checked>Minuteur</label>
+<label><input type="checkbox" data-show="showDevice" checked>État de la montre</label>
+</div>
+<label for="size">Taille des cartes : <span id="sizeValue">75</span> %</label>
+<input type="range" id="size" min="30" max="200" value="75">
+<label for="opacity">Opacité : <span id="opacityValue">88</span> %</label>
+<input type="range" id="opacity" min="20" max="100" value="88">
+<div class="actions"><button id="reset">Replacer les widgets</button><button id="export" disabled>Exporter le profil modifié</button></div>
+<p class="status" id="status" role="status" aria-live="polite">Charge un profil, ou commence par déplacer les cartes.</p>
+</div>
+<div>
+<h2>3. Prévisualisation DM100</h2>
+<div id="previewShell"><div id="preview" aria-label="Aperçu interactif de la montre Android">
+<div class="clock">PRISME ◈</div><div class="version">640 × 480 · 22 STYLES</div>
+<div class="widget-card" data-widget="0" tabindex="0">12:42</div>
+<div class="widget-card" data-widget="1" tabindex="0">✓ 3 tâches</div>
+<div class="widget-card" data-widget="2" tabindex="0">⏱ 03:25</div>
+<div class="widget-card" data-widget="3" tabindex="0">◈ 86% · Wi-Fi</div>
+<div class="caption"><span id="themeName"></span><span>ÉDITEUR DE WIDGETS V6</span></div>
+</div></div>
+<p class="smallnote">Les couleurs représentent le style sélectionné, mais ce n’est pas une capture fidèle de son moteur de rendu Android. Les 22 compositions natives demeurent inchangées sur la montre.</p>
+<p class="smallnote">Import sur DM100 : Réglages PRISME → Profils → Importer une configuration. La V6 signée et testée n’est pas encore publiée.</p>
+</div>
+</div>
+</div>
+<script src="studio.js"></script>
+</body></html>

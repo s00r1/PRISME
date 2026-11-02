@@ -51,3 +51,7 @@ The original upward swipe and empty-space double tap remain backward compatible,
 ## Release process
 
 `.github/workflows/release-6.yml` is intentionally manual. It refuses to publish until an exact main-branch revision has been manually validated on the reference watch, the manifest is marked 6.0.0 (rather than an RC), tests pass, the original signing secrets exist, and the signing certificate matches v5.1. This keeps existing installations update-compatible and avoids distributing an unsigned APK as a final release.
+
+## Desktop Studio (browser, not a phone launcher)
+
+`website/studio.html` and `website/studio.js` provide a self-contained visual editor for the 22 watch themes and four widgets. Load a local V5.4/V6 JSON export (schema 6 or 7), drag widgets, and export a schema-7 profile for watch-side import. Without a real export, the page offers preview only. No profile contents are uploaded or logged.

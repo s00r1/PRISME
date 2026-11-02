@@ -18,5 +18,6 @@ jobs:
           python-version: '3.12'
       - run: python scripts/fetch-test-dependency.py
       - run: python -m py_compile scripts/prisme-link.py
+      - run: node --check website/studio.js
       - shell: pwsh
         run: ./tests/run-all.ps1
