@@ -55,3 +55,7 @@ The original upward swipe and empty-space double tap remain backward compatible,
 ## Desktop Studio (browser, not a phone launcher)
 
 `website/studio.html` and `website/studio.js` provide a self-contained visual editor for the 22 watch themes and four widgets. Load a local V5.4/V6 JSON export (schema 6 or 7), drag widgets, and export a schema-7 profile for watch-side import. Without a real export, the page offers preview only. No profile contents are uploaded or logged.
+
+## Optional signed V6 watch-test artifact
+
+The RC compilation workflow may also create `PRISME-6.0.0-rc1-signed-watch-test` on push to the dedicated V6 branch, but **only if** the repository already has the original three signing secrets. GitHub compares the new APK's signing certificate to the official v5.1 APK and blocks the artifact on mismatch. This is a **test artifact**, not a GitHub Release, and must be tested on a DM100 with Play Protect enabled before any stable publication.

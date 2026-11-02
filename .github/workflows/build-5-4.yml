@@ -31,3 +31,48 @@ jobs:
           name: PRISME-6.0.0-rc1-unsigned
           path: PRISME-6.0.0-rc1-unsigned.apk
           if-no-files-found: error
+      - name: Sign update-compatible watch test APK when original key is available
+        id: signed_test
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/feature/prisme-v6-watch' }}
+        shell: pwsh
+        env:
+          PRISME_KEYSTORE_BASE64: ${{ secrets.PRISME_KEYSTORE_BASE64 }}
+          PRISME_STORE_PASSWORD: ${{ secrets.PRISME_STORE_PASSWORD }}
+          PRISME_KEY_PASSWORD: ${{ secrets.PRISME_KEY_PASSWORD }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if (-not $env:PRISME_KEYSTORE_BASE64 -or -not $env:PRISME_STORE_PASSWORD -or -not $env:PRISME_KEY_PASSWORD) {
+            Write-Output 'Original signing key not configured: unsigned artifact only.'
+            "ready=false" >> $env:GITHUB_OUTPUT
+            exit 0
+          }
+          $keyPath = Join-Path $env:RUNNER_TEMP 'prisme-v6-test-signing.jks'
+          [IO.File]::WriteAllBytes($keyPath,[Convert]::FromBase64String($env:PRISME_KEYSTORE_BASE64))
+          ./build.ps1 -Keystore $keyPath -OutputFile PRISME-6.0.0-rc1-signed.apk
+          if ($LASTEXITCODE -ne 0) { throw 'Signed V6 build failed.' }
+          New-Item -ItemType Directory -Force -Path old | Out-Null
+          gh release download v5.1.0 --repo ${{ github.repository }} --pattern PRISME.apk --dir old
+          if ($LASTEXITCODE -ne 0) { throw 'Could not retrieve original released APK.' }
+          $sdk = if ($env:ANDROID_SDK_ROOT) { $env:ANDROID_SDK_ROOT } else { $env:ANDROID_HOME }
+          $buildTools = Get-ChildItem (Join-Path $sdk 'build-tools') -Directory |
+            Where-Object { $_.Name -match '^\d+\.\d+\.\d+$' } |
+            Sort-Object { [version]$_.Name } -Descending | Select-Object -First 1 -ExpandProperty FullName
+          $signer = Join-Path $buildTools 'lib/apksigner.jar'
+          $oldCert = & java -jar $signer verify --print-certs --min-sdk-version 25 old/PRISME.apk
+          if ($LASTEXITCODE -ne 0) { throw 'Original APK signature verification failed.' }
+          $newCert = & java -jar $signer verify --print-certs --min-sdk-version 25 PRISME-6.0.0-rc1-signed.apk
+          if ($LASTEXITCODE -ne 0) { throw 'V6 test APK signature verification failed.' }
+          $oldHash = @($oldCert | Where-Object { $_ -match '^Signer #1 certificate SHA-256 digest:' })
+          $newHash = @($newCert | Where-Object { $_ -match '^Signer #1 certificate SHA-256 digest:' })
+          if ($oldHash.Count -ne 1 -or $newHash.Count -ne 1 -or $oldHash[0] -ne $newHash[0]) {
+            throw 'V6 cert mismatch: cannot update existing PRISME installations.'
+          }
+          Write-Output 'Signed test APK verified against original PRISME certificate.'
+          "ready=true" >> $env:GITHUB_OUTPUT
+      - name: Upload signed APK for physical DM100 validation (not a public Release)
+        if: ${{ steps.signed_test.outputs.ready == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: PRISME-6.0.0-rc1-signed-watch-test
+          path: PRISME-6.0.0-rc1-signed.apk
+          if-no-files-found: error
