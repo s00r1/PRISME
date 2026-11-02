@@ -21,6 +21,10 @@ public final class SenseEngine {
     private static SharedPreferences prefs(Context c){return c.getSharedPreferences("prisme_sense",Context.MODE_PRIVATE);}
     public static boolean apply(Context c,DashboardPrefs dashboard){
         SharedPreferences state=prefs(c);
+        if(!state.getBoolean("enabled",false)&&!state.getBoolean("powerSaver",false)){
+            if(state.getBoolean("powerSaveActive",false))state.edit().putBoolean("powerSaveActive",false).apply();
+            return false;
+        }
         BatteryLevelReader.Reading battery=BatteryLevelReader.read(c,null);
         int threshold=state.getInt("lowThreshold",20);
         boolean low=battery.level>=0&&battery.level<=threshold;

@@ -111,7 +111,7 @@ public final class EdgeDockService extends Service {
                     else if("rotation".equals(action))GlobalRotationService.apply(this,GlobalRotationService.oppositeMode(this));
                     else{
                         Intent launch=new Intent(this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                        launch.putExtra("utilityAction",action.equals("home")?"today":action);
+                        if(!"home".equals(action))launch.putExtra("utilityAction",action);
                         try{startActivity(launch);}catch(RuntimeException ignored){}
                     }
                     draw();
