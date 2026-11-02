@@ -8,7 +8,7 @@ public final class DisplayProfileTest {
         DashboardPrefs source=new DashboardPrefs(new DashboardPrefsTest.MemoryContext());
         source.putInt("theme",12);source.putString("notes","Conserver cette note");
         source.getFloatingVolume().setEnabled(true);source.getFloatingVolume().putBoolean("boot",true);
-        JSONObject legacy=source.exportJSONObject();legacy.put("schemaVersion",4);legacy.remove("organizer");
+        JSONObject legacy=source.exportJSONObject();legacy.put("schemaVersion",4);legacy.remove("organizer");legacy.remove("v6");
         legacy.getJSONObject("settings").remove("edgeCards");legacy.getJSONObject("settings").remove("compactNavigation");
         JSONObject cc=legacy.getJSONObject("controlCenter").getJSONObject("settings");
         for(String key:new String[]{"tileOpacity","scrimOpacity","closeDistance"})cc.remove(key);

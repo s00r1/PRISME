@@ -29,3 +29,11 @@ See [Build instructions](BUILD.md). Use `./build.ps1 -Unsigned` and run all the 
 - **Sense:** optional clock/charge/low-battery style rules and a low-battery animation saver. User must enable it explicitly.
 
 These features require an Android device test before being marketed as stable.
+
+## Universal Edge Dock
+
+A dedicated, opt-in foreground service provides one floating handle and five quick actions over other apps. Overlay permission is mandatory, and reboot activation is separately chosen by the user. It does not bypass OEM background restrictions.
+
+## PRISME Link for desktop
+
+`python scripts/prisme-link.py doctor` checks watch API and screen dimensions. Use `--confirm-watch` to enable `push-profile`, `install` and `open`. Profile import remains manual on the watch; there is no companion phone build and no Internet permission.

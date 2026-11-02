@@ -15,6 +15,7 @@ public final class VolumeBootReceiver extends BroadcastReceiver {
         if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()))fr.dm100.prisme.GlobalRotationService.boot(context);
         else if(fr.dm100.prisme.GlobalRotationService.mode(context)>0)fr.dm100.prisme.GlobalRotationService.apply(context,fr.dm100.prisme.GlobalRotationService.mode(context));
         ControlCenterService.refresh(context);
+        if(context.getSharedPreferences("prisme_edge",0).getBoolean("boot",false))fr.dm100.prisme.EdgeDockService.refresh(context);
         FloatingVolumePrefs prefs = new FloatingVolumePrefs(context);
         if (!prefs.getBoolean("enabled", false) || !prefs.getBoolean("boot", false)) return;
         try { if (Settings.canDrawOverlays(context)) FloatingVolumeService.begin(context); }

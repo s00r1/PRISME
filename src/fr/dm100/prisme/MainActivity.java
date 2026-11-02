@@ -229,6 +229,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         if(GlobalRotationService.mode(this)>0&&!GlobalRotationService.isRunning())GlobalRotationService.apply(this,GlobalRotationService.mode(this));
         if(floatingPrefs!=null&&(fr.dm100.prisme.volume.FloatingVolumeService.isRunning()||floatingPrefs.mayResume(currentBoot())))fr.dm100.prisme.volume.FloatingVolumeService.refresh(this);
         ControlCenterService.refresh(this);
+        EdgeDockService.refresh(this);
     }
     @Override protected void onPause(){
         main.removeCallbacks(mediaTick);
@@ -338,6 +339,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         if("language".equals(action)){showLanguagePicker();return;}
         if("studio".equals(action)){WatchStudio.open(this,()->{if(watchWidgets!=null)watchWidgets.refresh();});return;}
         if("sense".equals(action)){SenseEngine.open(this,prefs,()->{SenseEngine.apply(this,prefs);refreshBoard();});return;}
+        if("edgeDock".equals(action)){EdgeDockService.settings(this,()->EdgeDockService.refresh(this));return;}
         if("shortcutShelf".equals(action)){showShortcutShelf();return;}
         if("exportStyleGallery".equals(action)){exportStyleGallery();return;}
         if("rotationSettings".equals(action)){showRotationSettings();return;}
@@ -562,6 +564,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
                 toggle(b,"Garder l’horloge de table allumée","deskKeepAwake",false);
                 settingsAction(b,"PRISME Studio · widgets tactiles",()->onAction("studio"));
                 settingsAction(b,"PRISME Sense · styles automatiques",()->onAction("sense"));
+                settingsAction(b,"Dock universel · raccourcis flottants",()->onAction("edgeDock"));
                 settingsAction(b,"Guide et gestes",()->showHelp());
                 break;
             case 5:renderBatteryTab(b);break;
