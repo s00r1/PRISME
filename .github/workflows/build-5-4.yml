@@ -29,5 +29,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: PRISME-6.0.0-rc1-unsigned
-          path: PRISME-5.4.1-unsigned.apk
+          path: PRISME-6.0.0-rc1-unsigned.apk
           if-no-files-found: error
