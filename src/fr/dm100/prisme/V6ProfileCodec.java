@@ -24,7 +24,7 @@ public final class V6ProfileCodec {
         {"enabled","percent","backdrop","chargingColor","chargingMark","adaptiveContrast","transparentEmpty"},
         {"enabled","title","background","preserve"},
         {"enabled"},
-        {"enabled","batteryRule","chargeRule"},
+        {"enabled","batteryRule","chargeRule","powerSaver"},
         {"showClock","showTasks","showTimer","showDevice"},
         {"enabled","boot"}};
     private static int limit(int group,String key,boolean upper){

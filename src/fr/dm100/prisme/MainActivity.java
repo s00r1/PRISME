@@ -72,6 +72,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     private ControlCenterSettings controlSettings;
     private BatteryIndicatorView dashboardBattery;
     private MiniMusicPlayer dashboardPlayer;
+    private WatchWidgetsOverlay watchWidgets;
     private MusicPrefs musicPrefs;
     private FloatingVolumePrefs floatingPrefs;
     private FloatingVolumeSettings floatingSettings;
@@ -108,6 +109,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     private final Runnable tick = new Runnable(){ public void run(){
         if(!visible)return;
         updateSnapshot();
+        if(SenseEngine.apply(MainActivity.this,prefs))refreshBoard();
         checkTimer();
         main.postDelayed(this,60000-System.currentTimeMillis()%60000);
     }};
@@ -158,12 +160,15 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         board=new DashboardView(this,prefs,this);
         mainLayer=new FrameLayout(this);
         mainLayer.addView(board,new FrameLayout.LayoutParams(-1,-1));
+        watchWidgets=new WatchWidgetsOverlay(this,action->onAction(action));
+        mainLayer.addView(watchWidgets,new FrameLayout.LayoutParams(-1,-1));
         controlPanel=new ControlCenterPanel(this,controlPrefs,controlController,new ControlCenterPanel.Listener(){
             public void onCustomize(){showControlCenterSettings();}
             public void onClosed(){board.requestFocus();}
         });
         mainLayer.addView(controlPanel,new FrameLayout.LayoutParams(-1,-1));
         setContentView(mainLayer);I18n.bind(mainLayer);
+        watchWidgets.refresh();
         applyWindowPrefs();
         refreshDashboardOverlays();
         requestVolumeSettings(getIntent());requestUtilityAction(getIntent());requestControlCenterAction(getIntent());
@@ -207,7 +212,8 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         refreshBoard();
     }
     @Override protected void onResume(){
-        super.onResume();visible=true;if(experience!=null)experience.resume();timerDeadline=TimerEngine.deadline(this);board.onHostResume();
+        super.onResume();visible=true;if(experience!=null)experience.resume();timerDeadline=TimerEngine.deadline(this);
+        SenseEngine.apply(this,prefs);board.onHostResume();if(watchWidgets!=null)watchWidgets.onHostResume();
         if(!registered){
             IntentFilter common=new IntentFilter();common.addAction(Intent.ACTION_TIME_CHANGED);common.addAction(Intent.ACTION_TIMEZONE_CHANGED);common.addAction(Intent.ACTION_BATTERY_CHANGED);
             registerReceiver(changes,common);
@@ -226,7 +232,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     }
     @Override protected void onPause(){
         main.removeCallbacks(mediaTick);
-        visible=false;if(experience!=null)experience.pause();closeScreenLamp();if(controlPanel!=null)controlPanel.onHostPause();if(controlController!=null)controlController.onHostPause();board.onHostPause();main.removeCallbacks(tick);main.removeCallbacks(timerTick);main.removeCallbacks(stopwatchTick);
+        visible=false;if(watchWidgets!=null)watchWidgets.onHostPause();if(experience!=null)experience.pause();closeScreenLamp();if(controlPanel!=null)controlPanel.onHostPause();if(controlController!=null)controlController.onHostPause();board.onHostPause();main.removeCallbacks(tick);main.removeCallbacks(timerTick);main.removeCallbacks(stopwatchTick);
         if(registered){unregisterReceiver(changes);registered=false;}
         saveUtilities();super.onPause();
     }
@@ -235,7 +241,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         ownedDialogs.clear();if(experience!=null)experience.shutdown();closeControlExtras();repository.close();main.removeCallbacksAndMessages(null);super.onDestroy();
     }
     @Override public void onConfigurationChanged(Configuration c){
-        super.onConfigurationChanged(c);board.refresh();refreshDashboardOverlays();if(controlPanel!=null)controlPanel.refresh();if(controlSettings!=null&&controlSettings.isShowing())controlSettings.refit();if(floatingSettings!=null&&floatingSettings.isShowing())floatingSettings.refit();
+        super.onConfigurationChanged(c);board.refresh();if(watchWidgets!=null)watchWidgets.refresh();refreshDashboardOverlays();if(controlPanel!=null)controlPanel.refresh();if(controlSettings!=null&&controlSettings.isShowing())controlSettings.refit();if(floatingSettings!=null&&floatingSettings.isShowing())floatingSettings.refit();
         for(java.lang.ref.WeakReference<AlertDialog> ref:ownedDialogs){
             AlertDialog d=ref.get();if(d instanceof OwnedDialog&&d.isShowing())((OwnedDialog)d).fitWindow();
         }
@@ -261,7 +267,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         List<AppEntry> visibleApps=new ArrayList<>();int workspace=prefs.getInt("workspace",0);
         Set<String> selected=workspace>0?prefs.getSet("workspace"+workspace):Collections.<String>emptySet();
         for(AppEntry a:apps)if(workspace==0||selected.contains(a.id))visibleApps.add(a);
-        board.setShortcutCatalog(apps);board.setApps(visibleApps);board.refresh();updateSnapshot();applyWindowPrefs();
+        board.setShortcutCatalog(apps);board.setApps(visibleApps);board.refresh();if(watchWidgets!=null)watchWidgets.refresh();updateSnapshot();applyWindowPrefs();
     }
     private void updateSnapshot(){
         if(board!=null)board.setSnapshot(DeviceSnapshot.read(this));
@@ -330,6 +336,8 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     @Override public void onAction(String action){
         if(action==null)return;
         if("language".equals(action)){showLanguagePicker();return;}
+        if("studio".equals(action)){WatchStudio.open(this,()->{if(watchWidgets!=null)watchWidgets.refresh();});return;}
+        if("sense".equals(action)){SenseEngine.open(this,prefs,()->{SenseEngine.apply(this,prefs);refreshBoard();});return;}
         if("shortcutShelf".equals(action)){showShortcutShelf();return;}
         if("exportStyleGallery".equals(action)){exportStyleGallery();return;}
         if("rotationSettings".equals(action)){showRotationSettings();return;}
@@ -552,6 +560,8 @@ public final class MainActivity extends Activity implements DashboardView.Listen
                 settingChoice(b,"Balayage vers le haut (hors listes)",new String[]{"Désactivé","Aujourd’hui","Recherche","Liste de tâches","Horloge de table"},prefs.getInt("upGesture",1),n->prefs.putInt("upGesture",n));
                 settingChoice(b,"Double appui sur une zone vide",new String[]{"Désactivé","Aujourd’hui","Centre de contrôle","Horloge de table","Recherche"},prefs.getInt("blankDoubleTap",1),n->prefs.putInt("blankDoubleTap",n));
                 toggle(b,"Garder l’horloge de table allumée","deskKeepAwake",false);
+                settingsAction(b,"PRISME Studio · widgets tactiles",()->onAction("studio"));
+                settingsAction(b,"PRISME Sense · styles automatiques",()->onAction("sense"));
                 settingsAction(b,"Guide et gestes",()->showHelp());
                 break;
             case 5:renderBatteryTab(b);break;

@@ -21,3 +21,11 @@ Studio, Sense, widgets, dock, and desktop ADB Link are being implemented on the 
 ## Builds
 
 See [Build instructions](BUILD.md). Use `./build.ps1 -Unsigned` and run all the tests. Do not disable Play Protect to force an older APK.
+
+## Watch-native modules
+
+- **Studio:** touch-drag positions for four on-watch cards (clock, tasks, timer, device), with independent visibility and size, no image capture.
+- **Widgets Engine:** four lightweight cards, refreshed only while the dashboard is visible, shared across the 22 themes.
+- **Sense:** optional clock/charge/low-battery style rules and a low-battery animation saver. User must enable it explicitly.
+
+These features require an Android device test before being marketed as stable.

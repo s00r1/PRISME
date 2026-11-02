@@ -249,7 +249,9 @@ public final class DashboardView extends View {
         c.scale(viewport.scale, viewport.scale);
         drawingStyle=true;
         background(c);
-        boolean transition = transitionStarted > 0 && prefs.getBoolean("animations", true) && activeTheme != 11;
+        boolean transition = transitionStarted > 0 && prefs.getBoolean("animations", true)
+                && !getContext().getSharedPreferences("prisme_sense",0).getBoolean("powerSaveActive",false)
+                && activeTheme != 11;
         int alpha = transition ? Math.min(255, 150 + (int)((System.currentTimeMillis() - transitionStarted) * .7f)) : 255;
         if (transition && alpha < 255) c.saveLayerAlpha(0, 0, w, h, alpha, Canvas.ALL_SAVE_FLAG);
         else transition = false;
