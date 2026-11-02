@@ -59,3 +59,5 @@ The original upward swipe and empty-space double tap remain backward compatible,
 ## Optional signed V6 watch-test artifact
 
 The RC compilation workflow may also create `PRISME-6.0.0-rc1-signed-watch-test` on push to the dedicated V6 branch, but **only if** the repository already has the original three signing secrets. GitHub compares the new APK's signing certificate to the official v5.1 APK and blocks the artifact on mismatch. This is a **test artifact**, not a GitHub Release, and must be tested on a DM100 with Play Protect enabled before any stable publication.
+
+If the original signing secrets are configured later, manually rerun **Actions → PRISME 6 compile → Run workflow** on the `feature/prisme-v6-watch` branch. The signed test artifact will be produced only after certificate verification, while the public Release remains unchanged.

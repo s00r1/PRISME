@@ -33,7 +33,7 @@ jobs:
           if-no-files-found: error
       - name: Sign update-compatible watch test APK when original key is available
         id: signed_test
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/feature/prisme-v6-watch' }}
+        if: ${{ github.ref == 'refs/heads/feature/prisme-v6-watch' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
         shell: pwsh
         env:
           PRISME_KEYSTORE_BASE64: ${{ secrets.PRISME_KEYSTORE_BASE64 }}
