@@ -19,3 +19,7 @@ jobs:
       - run: python scripts/fetch-test-dependency.py
       - shell: pwsh
         run: ./tests/run-all.ps1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/website.cjs

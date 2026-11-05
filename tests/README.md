@@ -9,3 +9,9 @@ api25_audit.py vérifie les références publiques du DEX final contre l’histo
 Les rapports de la livraison et la galerie générée sur la montre complètent ces contrôles.
 
 La version 5.1 ajoute dix assertions de compatibilité et dédoublonnage du bouton Rotation : 242 assertions du centre de contrôle sur sept scénarios.
+
+## Audit du 5 novembre 2026
+
+104 assertions supplémentaires couvrent les limites, types corrompus, palettes et portées des préférences Batterie/Musique. `run-all.ps1` les exécute également.
+
+`node tests/website.cjs` vérifie le chargement de la galerie, les changements de langue concurrents, les réponses HTTP en erreur, les données invalides, la reprise et la navigation dans la fenêtre d’image. Ce test isolé ne remplace pas une vérification visuelle dans un navigateur.

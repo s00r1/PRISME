@@ -6,6 +6,15 @@ on:
     paths:
       - 'AndroidManifest.xml'
       - 'src/fr/dm100/prisme/**'
+      - 'res/**'
+      - 'build.ps1'
+      - '.github/workflows/build-5-4.yml'
+  pull_request:
+    paths:
+      - 'AndroidManifest.xml'
+      - 'src/**'
+      - 'res/**'
+      - 'build.ps1'
       - '.github/workflows/build-5-4.yml'
   workflow_dispatch:
 

@@ -469,6 +469,15 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         for(int i=0;i<settingsTabs.size();i++){
             Button tab=settingsTabs.get(i);boolean active=i==settingsTab;
             tab.setTextColor(active?BG:INK);tab.setBackgroundTintList(android.content.res.ColorStateList.valueOf(active?ACCENT:SURFACE));
+            if(active)tab.post(()->{
+                if(tab.isAttachedToWindow()&&tab.getParent() instanceof View){
+                    android.view.ViewParent parent=((View)tab.getParent()).getParent();
+                    if(parent instanceof android.widget.HorizontalScrollView){
+                        android.widget.HorizontalScrollView strip=(android.widget.HorizontalScrollView)parent;
+                        strip.scrollTo(Math.max(0,tab.getLeft()-(strip.getWidth()-tab.getWidth())/2),0);
+                    }
+                }
+            });
             tab.setSelected(active);tab.setContentDescription(SETTINGS_TABS[i]+(active?" · catégorie active":" · ouvrir la catégorie"));
         }
         LinearLayout b=settingsBody;

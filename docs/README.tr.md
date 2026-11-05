@@ -171,3 +171,6 @@ Java kaynakları, kaynak dosyaları, dil katalogları, testler ve isteğe bağl�
 
 
 [◈ PRISME — Website / Site web](https://s00r1.github.io/PRISME/) · [Community / Testers](https://github.com/s00r1/PRISME/discussions/1)
+
+
+[DM100 hardware audit · 2026-11-05 (FR), current source/release status and real screenshots](AUDIT-2026-11-05.md)

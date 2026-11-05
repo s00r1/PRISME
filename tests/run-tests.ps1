@@ -14,6 +14,8 @@ $sources += Join-Path $project 'src\fr\dm100\prisme\DashboardPrefs.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\ThemeSpec.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\ControlCenterPrefs.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\FloatingVolumePrefs.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\BatteryIndicatorPrefs.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\MusicPrefs.java'
 & (Join-Path $JavaHome 'bin\javac.exe') --release 8 -encoding UTF-8 -classpath $json -d $classes @sources
 if ($LASTEXITCODE -ne 0) { throw 'Compilation des tests de préférences échouée.' }
 & (Join-Path $JavaHome 'bin\java.exe') -classpath ($classes + ';' + $json) fr.dm100.prisme.DashboardPrefsTest
@@ -29,3 +31,6 @@ if ($LASTEXITCODE -ne 0) { throw "Échec des tests des nouveaux profils d’écr
 
 & (Join-Path $JavaHome 'bin\java.exe') -classpath ($classes + ';' + $json) fr.dm100.prisme.ExperienceTest
 if ($LASTEXITCODE -ne 0) { throw 'Échec des tests des nouveaux outils et des sauvegardes.' }
+
+& (Join-Path $JavaHome 'bin\java.exe') -classpath ($classes + ';' + $json) fr.dm100.prisme.MediaBatteryPrefsTest
+if ($LASTEXITCODE -ne 0) { throw 'Battery/music preference tests failed.' }

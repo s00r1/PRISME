@@ -30,6 +30,21 @@ Photos produit externes : annonce DM100. Elles illustrent le matériel, pas PRIS
 </table>
 
 
+
+## Vérification sur DM100 · 5 novembre 2026
+
+La montre USB testée utilise PRISME **5.4.1**, Android 7.1.1 et une surface paysage de 640 × 480. Les écrans ci-dessous sont de vraies captures de cette montre, distinctes de la galerie de démonstration. La Release téléchargeable reste **5.4** : le code 5.4.1 et ses corrections ne constituent pas une nouvelle Release publiée.
+
+| Réglages Batterie | Réglages Musique |
+| --- | --- |
+| ![Batterie sur DM100](assets/device/2026-11-05/battery.png) | ![Musique sur DM100](assets/device/2026-11-05/music.png) |
+
+Les écrans dédiés s’ouvrent sur la montre. Le mini-lecteur n’affiche pas les titres sans accès aux notifications ; aucune session musicale active n’était disponible pour valider les pistes précédente/suivante. La valeur de batterie affichée provient d’Android et n’a pas été comparée à une mesure physique.
+
+Corrections du code : l’onglet actif des réglages est ramené dans la zone visible ; la galerie du site ignore les anciennes réponses après un changement de langue et propose de réessayer si le chargement échoue. La compilation automatique couvre désormais les ressources, le script de compilation et les pull requests.
+
+[Résultats et limites de l’audit](docs/AUDIT-2026-11-05.md).
+
 ## Télécharger
 
 **[Télécharger PRISME 5.4 — APK publié](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Versions et sommes de contrôle](https://github.com/s00r1/PRISME/releases)
