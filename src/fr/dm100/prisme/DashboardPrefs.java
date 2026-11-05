@@ -30,15 +30,17 @@ public final class DashboardPrefs {
     private static final Set<String> SHORTCUT_ACTIONS = new HashSet<String>(Arrays.asList(
             "clock", "styles", "customize", "shortcuts", "apps", "search", "favorites", "tools",
             "notes", "timer", "focus", "stopwatch", "workspaces", "home", "controlCenter", "controlCenterSettings", "floatingVolumeSettings", "today", "checklist", "deskclock", "presets", "device", "displayTest", "settingsSearch", "rotationSettings", "language", "shortcutShelf"));
-    private static final String[] INT_KEYS = { THEME, ICON_SIZE, TEXT_SIZE, COLUMNS, GAP, WALLPAPER, ICON_SHAPE, ORDER, WORKSPACE, FONT, ACCENT_INDEX, STYLE_SCALE, CONTENT_INSET, FIT_MODE, "upGesture", "blankDoubleTap", "language" };
+    private static final String[] INT_KEYS = { THEME, ICON_SIZE, TEXT_SIZE, COLUMNS, GAP, WALLPAPER, ICON_SHAPE, ORDER, WORKSPACE, FONT, ACCENT_INDEX, STYLE_SCALE, CONTENT_INSET, FIT_MODE, "upGesture", "downGesture", "blankDoubleTap", "language" };
     private static final String[] BOOL_KEYS = { LABELS, ANIMATIONS, FAVORITES_ONLY, SHOW_CLOCK, SHOW_BATTERY, SHOW_DOCK, HAPTIC, KEEP_SCREEN_ON, VOLUME_RAIL, "edgeCards", "compactNavigation", "deskKeepAwake", "styleDock" };
     private static final String[] SET_KEYS = { FAVORITES, HIDDEN, "workspace1", "workspace2", "workspace3" };
     private final SharedPreferences prefs;
+    private final Context appContext;
     private final ControlCenterPrefs controlCenter;
     private final ChecklistStore checklist;
     private final FloatingVolumePrefs floatingVolume;
 
     public DashboardPrefs(Context context) {
+        appContext = context.getApplicationContext();
         prefs = context.getApplicationContext().getSharedPreferences("prisme_dashboard", Context.MODE_PRIVATE);
         controlCenter = new ControlCenterPrefs(context);
         checklist = new ChecklistStore(context);
@@ -166,7 +168,7 @@ public final class DashboardPrefs {
 
     public JSONObject exportJSONObject() throws JSONException {
         JSONObject root = new JSONObject(), settings = new JSONObject(), labels = new JSONObject(), launches = new JSONObject(), shortcuts = new JSONObject();
-        root.put("schemaVersion", 6);
+        root.put("schemaVersion", 7);
         root.put("organizer", checklist.read());
         for (String key : INT_KEYS) settings.put(key, getInt(key, defaultInt(key)));
         for (String key : BOOL_KEYS) settings.put(key, getBoolean(key, defaultBoolean(key)));
@@ -190,6 +192,7 @@ public final class DashboardPrefs {
         root.put("controlCenter", controlCenter.exportJSONObject());
         root.put("floatingVolume", floatingVolume.exportJSONObject());
         root.put("notes", getString("notes", ""));
+        root.put("v6", V6ProfileCodec.exportJSONObject(appContext));
         if (root.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8).length > 65536)
             throw new JSONException("Sauvegarde trop volumineuse (maximum 64 Ko)");
         return root;
@@ -201,7 +204,7 @@ public final class DashboardPrefs {
         if (root.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8).length > 65536)
             throw new JSONException("Sauvegarde trop volumineuse (maximum 64 Ko)");
         Object version = root.opt("schemaVersion");
-        if (!(version instanceof Number) || (((Number) version).doubleValue() != 1 && ((Number) version).doubleValue() != 2 && ((Number) version).doubleValue() != 3 && ((Number) version).doubleValue() != 4 && ((Number) version).doubleValue() != 5 && ((Number) version).doubleValue() != 6))
+        if (!(version instanceof Number) || (((Number) version).doubleValue() != 1 && ((Number) version).doubleValue() != 2 && ((Number) version).doubleValue() != 3 && ((Number) version).doubleValue() != 4 && ((Number) version).doubleValue() != 5 && ((Number) version).doubleValue() != 6 && ((Number) version).doubleValue() != 7))
             throw new JSONException("Version de sauvegarde inconnue");
         int schema = ((Number) version).intValue();
         Set<String> allowedRoot = new HashSet<String>(Arrays.asList("schemaVersion", "settings", "customLabels", "launches", "notes"));
@@ -209,6 +212,7 @@ public final class DashboardPrefs {
         if (schema >= 3) allowedRoot.add("controlCenter");
         if (schema >= 4) allowedRoot.add("floatingVolume");
         if (schema >= 6) allowedRoot.add("organizer");
+        if (schema >= 7) allowedRoot.add("v6");
         allowedRoot.addAll(Arrays.asList(SET_KEYS));
         checkKeys(root, allowedRoot);
         JSONObject settings = root.getJSONObject("settings");
@@ -296,6 +300,7 @@ public final class DashboardPrefs {
                 ? ControlCenterPrefs.prepareImport(root.getJSONObject("controlCenter")) : null;
         FloatingVolumePrefs.Prepared volume = schema >= 4
                 ? FloatingVolumePrefs.prepareImport(root.getJSONObject("floatingVolume")) : null;
+        V6ProfileCodec.Prepared newModules = schema >= 7 ? V6ProfileCodec.prepareImport(root.getJSONObject("v6")) : null;
         // Explicitly imported legacy settings, including volumeRail, remain exact. Mark the
         // import migrated so a later activity recreation never changes an applied profile.
         SharedPreferences.Editor editor = prefs.edit().clear().putInt(FORMAT_VERSION, 2).putBoolean(VOLUME_RAIL, false);
@@ -309,6 +314,7 @@ public final class DashboardPrefs {
         if (center != null) controlCenter.applyPrepared(center);
         if (volume != null) floatingVolume.applyPrepared(volume);
         if (organizer != null) checklist.replace(organizer);
+        if (newModules != null) V6ProfileCodec.applyPrepared(appContext, newModules);
     }
 
     public void reset() { int language=getInt("language",0);prefs.edit().clear().putInt(FORMAT_VERSION, 2).putBoolean(VOLUME_RAIL, false).putInt("language",language).apply(); }
@@ -366,7 +372,7 @@ public final class DashboardPrefs {
         else if (CONTENT_INSET.equals(key)) max = 24;
         else if (FIT_MODE.equals(key)) max = 2;
         else if ("language".equals(key)) max = 6;
-        else if ("upGesture".equals(key) || "blankDoubleTap".equals(key)) max = 4;
+        else if ("upGesture".equals(key) || "downGesture".equals(key) || "blankDoubleTap".equals(key)) max = 8;
         else if (launchKey(key)) max = Integer.MAX_VALUE;
         return Math.max(min, Math.min(max, value));
     }

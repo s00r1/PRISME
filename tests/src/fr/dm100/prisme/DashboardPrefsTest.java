@@ -23,7 +23,8 @@ public final class DashboardPrefsTest {
         shortcutRoundTripAndReset();
         invalidImportsNeverWrite();
         setsAndNamesRemainDefensive();
-        System.out.println("PASS: " + checks + " assertions across 6 preference scenarios.");
+        v6ModuleRoundtripAndSafety();
+        System.out.println("PASS: " + checks + " assertions across 7 preference scenarios.");
     }
 
     private static void migrationIsNarrowAndIdempotent() throws Exception {
@@ -86,7 +87,7 @@ public final class DashboardPrefsTest {
         check(new DashboardPrefs(context).getBoolean("volumeRail", false), "Imported profile is not changed on recreation");
         check(p.getShortcut(0, "clock").equals("clock") && p.getShortcut(0, "styles").equals("styles"), "Schema1 has no forced replacement of style shortcuts");
         JSONObject saved = p.exportJSONObject();
-        check(saved.getInt("schemaVersion") == 6 && saved.getJSONObject("shortcuts").length() == 0, "Legacy profile exports as schema4 without invented overrides");
+        check(saved.getInt("schemaVersion") == 7 && saved.getJSONObject("shortcuts").length() == 0, "Legacy profile exports as schema4 without invented overrides");
         p.importJSONObject(new JSONObject("{\"schemaVersion\":1,\"settings\":{}}"));
         check(!p.getBoolean("volumeRail", true), "An omitted legacy rail uses the new full-screen default");
     }
@@ -129,7 +130,7 @@ public final class DashboardPrefsTest {
         for (Object shortcuts : new Object[]{new JSONArray().put("clock"), true, JSONObject.NULL, new JSONObject().put("0", 7)}) {
             JSONObject bad = copy(original);bad.put("shortcuts", shortcuts);reject(p, context, bad);
         }
-        JSONObject bad = copy(original);bad.put("schemaVersion", 7);reject(p, context, bad);
+        JSONObject bad = copy(original);bad.put("schemaVersion", 8);reject(p, context, bad);
         bad = copy(original);bad.put("schemaVersion", true);reject(p, context, bad);
         bad = copy(original);bad.put("schemaVersion", 1);reject(p, context, bad); // version1 cannot smuggle version2 fields
         bad = copy(original);bad.put("unknownRoot", true);reject(p, context, bad);
@@ -138,6 +139,28 @@ public final class DashboardPrefsTest {
         bad = copy(original);bad.put("launches", new JSONObject().put(ID, -1));reject(p, context, bad);
         bad = copy(original);bad.put("notes", repeat(2001));reject(p, context, bad);
         bad = copy(original);bad.put("notes", repeat(65537));reject(p, context, bad);
+    }
+
+
+    private static void v6ModuleRoundtripAndSafety() throws Exception {
+        MemoryContext c=new MemoryContext();DashboardPrefs p=new DashboardPrefs(c);
+        c.store("prisme_battery_overlay").edit().putBoolean("adaptiveContrast",true).putInt("style",23).apply();
+        c.store("prisme_music").edit().putInt("size",125).apply();
+        c.store("prisme_sense").edit().putBoolean("enabled",true).putInt("nightTheme",21).apply();
+        JSONObject all=p.exportJSONObject();
+        check(all.getInt("schemaVersion")==7 && all.getJSONObject("v6").getJSONObject("battery").getBoolean("adaptiveContrast"),
+              "New watch modules are portable with validation");
+        c.store("prisme_battery_overlay").edit().putBoolean("adaptiveContrast",false).apply();
+        p.importJSONObject(new JSONObject(all.toString()));
+        check(c.store("prisme_battery_overlay").getBoolean("adaptiveContrast",false)
+              && c.store("prisme_music").getInt("size",0)==125
+              && c.store("prisme_sense").getBoolean("enabled",false),"V6 state round trips");
+        JSONObject bad=new JSONObject(all.toString());
+        bad.getJSONObject("v6").getJSONObject("battery").put("style",1000);
+        reject(p,c,bad);
+        bad=new JSONObject(all.toString());
+        bad.getJSONObject("v6").getJSONObject("sense").put("secretUntrusted",true);
+        reject(p,c,bad);
     }
 
     private static void setsAndNamesRemainDefensive() throws Exception {

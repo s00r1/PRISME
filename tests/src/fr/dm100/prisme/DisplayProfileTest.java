@@ -8,7 +8,7 @@ public final class DisplayProfileTest {
         DashboardPrefs source=new DashboardPrefs(new DashboardPrefsTest.MemoryContext());
         source.putInt("theme",12);source.putString("notes","Conserver cette note");
         source.getFloatingVolume().setEnabled(true);source.getFloatingVolume().putBoolean("boot",true);
-        JSONObject legacy=source.exportJSONObject();legacy.put("schemaVersion",4);legacy.remove("organizer");
+        JSONObject legacy=source.exportJSONObject();legacy.put("schemaVersion",4);legacy.remove("organizer");legacy.remove("v6");
         legacy.getJSONObject("settings").remove("edgeCards");legacy.getJSONObject("settings").remove("compactNavigation");
         JSONObject cc=legacy.getJSONObject("controlCenter").getJSONObject("settings");
         for(String key:new String[]{"tileOpacity","scrimOpacity","closeDistance"})cc.remove(key);
@@ -18,7 +18,7 @@ public final class DisplayProfileTest {
         check(!target.getFloatingVolume().getBoolean("enabled",true),"import does not activate the global overlay");
         target.putBoolean("edgeCards",false);target.putBoolean("compactNavigation",true);target.putInt("styleScale",125);
         target.getControlCenter().putInt("tileOpacity",0);target.getControlCenter().putInt("scrimOpacity",0);target.getControlCenter().putInt("closeDistance",24);
-        JSONObject saved=target.exportJSONObject();check(saved.getInt("schemaVersion")==6,"new display schema is explicit");
+        JSONObject saved=target.exportJSONObject();check(saved.getInt("schemaVersion")==7,"new display schema is explicit");
         DashboardPrefs restored=new DashboardPrefs(new DashboardPrefsTest.MemoryContext());restored.importJSONObject(saved);
         check(!restored.getBoolean("edgeCards",true)&&restored.getBoolean("compactNavigation",false)&&restored.getInt("styleScale",0)==125,"global size and edge options survive backup");
         check(restored.getControlCenter().getInt("tileOpacity",-1)==0&&restored.getControlCenter().getInt("scrimOpacity",-1)==0,"fully transparent tile and scrim choices survive");

@@ -25,7 +25,7 @@ public final class ExperienceTest {
         check(restored.getInt("upGesture",0)==4&&restored.getInt("blankDoubleTap",0)==3,"Gesture choices survive export/import");
         check(restored.getFloatingVolume().getBoolean("idleFade",false)&&restored.getFloatingVolume().getInt("idleDelay",0)==20,"Idle appearance portable");
         check(restored.getControlCenter().getTiles().size()==6,"New centre tiles portable");
-        JSONObject legacy=new JSONObject(modern.toString());legacy.put("schemaVersion",5);legacy.remove("organizer");legacy.getJSONObject("settings").remove("language");restored.importJSONObject(legacy);
+        JSONObject legacy=new JSONObject(modern.toString());legacy.put("schemaVersion",5);legacy.remove("organizer");legacy.remove("v6");legacy.getJSONObject("settings").remove("language");restored.importJSONObject(legacy);
         check(restored.getInt("language",0)==6,"Old profiles preserve the chosen UI language");
         check(restored.getChecklist().remaining()==1,"Old profiles preserve new personal task data");
         String before=restored.exportJSONObject().toString();

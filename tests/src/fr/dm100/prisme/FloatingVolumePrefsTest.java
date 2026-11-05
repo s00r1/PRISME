@@ -104,7 +104,7 @@ public final class FloatingVolumePrefsTest {
         dash.putInt("theme",7);dash.putString("notes","Mon bureau");cc.putInt("style",1);cc.setTiles(Arrays.asList("wifi","volumepill"));
         p.setEnabled(true);p.putBoolean("boot",true);p.markActiveBoot(42);p.putInt("style",3);p.putInt("size",72);
         JSONObject original=dash.exportJSONObject();
-        check(original.getInt("schemaVersion")==6&&original.has("floatingVolume"),"Schema4 includes floating appearance");
+        check(original.getInt("schemaVersion")==7&&original.has("floatingVolume"),"Schema4 includes floating appearance");
         JSONObject bad=copy(original);bad.getJSONObject("settings").put("theme",15);bad.getJSONObject("controlCenter").getJSONObject("settings").put("opacity",90);bad.getJSONObject("floatingVolume").getJSONObject("settings").put("style",6);rejectCombined(dash,context,bad);
         bad=copy(original);bad.getJSONObject("settings").put("styleScale",141);bad.getJSONObject("floatingVolume").getJSONObject("settings").put("size",64);rejectCombined(dash,context,bad);
         bad=copy(original);bad.getJSONObject("controlCenter").getJSONObject("settings").put("opacity",19);bad.getJSONObject("floatingVolume").getJSONObject("settings").put("size",64);rejectCombined(dash,context,bad);

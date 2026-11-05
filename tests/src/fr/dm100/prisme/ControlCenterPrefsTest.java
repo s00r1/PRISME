@@ -119,7 +119,7 @@ public final class ControlCenterPrefsTest {
         dash.putInt("theme",7);dash.putString("notes","Mon bureau");dash.setShortcut(0,"controlCenter");dash.setShortcut(1,"controlCenterSettings");
         center.putInt("style",1);center.putInt("opacity",88);center.setTiles(Arrays.asList("notes","camera"));
         JSONObject original=dash.exportJSONObject();
-        check(original.getInt("schemaVersion")==6 && original.has("controlCenter"),"Dashboard schema4 includes centre configuration");
+        check(original.getInt("schemaVersion")==7 && original.has("controlCenter"),"Dashboard schema4 includes centre configuration");
         JSONObject bad=copy(original);bad.getJSONObject("settings").put("theme",15);bad.getJSONObject("controlCenter").getJSONObject("settings").put("opacity",19);rejectCombined(dash,context,bad);
         bad=copy(original);bad.getJSONObject("settings").put("styleScale",141);bad.getJSONObject("controlCenter").getJSONObject("settings").put("opacity",90);rejectCombined(dash,context,bad);
         bad=copy(original);bad.getJSONObject("controlCenter").put("tiles",new JSONArray().put("bad-action"));rejectCombined(dash,context,bad);

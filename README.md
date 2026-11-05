@@ -20,6 +20,8 @@ Photos produit externes : annonce DM100. Elles illustrent le matériel, pas PRIS
 
 [Français](docs/README.fr.md) · [English](docs/README.en.md) · [Deutsch](docs/README.de.md) · [中文](docs/README.zh.md) · [Türkçe](docs/README.tr.md) · [Русский](docs/README.ru.md) · [العربية](docs/README.ar.md)
 
+**Développement V6 :** [Studio, Sense, Widgets, Dock et Link PC sur la branche de validation](docs/V6-DEVELOPMENT.md). Le téléchargement public reste en V5.4 tant qu’une V6 signée et validée sur la DM100 n’est pas publiée. PRISME reste exclusivement destiné aux montres Android rectangulaires.
+
 **Un bureau personnalisable pour les montres sous Android complet**, avec 22 compositions, un centre de contrôle et des outils quotidiens. Hors ligne, sans compte, publicité ni télémétrie.
 
 
