@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+<title>PRISME — official announcements</title><id>https://s00r1.github.io/PRISME/</id>
+<link rel="self" href="https://s00r1.github.io/PRISME/feed.xml"/><link href="https://s00r1.github.io/PRISME/en.html"/>
+<updated>2026-11-05T18:08:28Z</updated><author><name>PRISME</name><uri>https://github.com/s00r1/PRISME</uri></author>
+<entry><title>Discover PRISME 6.0.1 for the DM100</title><id>https://github.com/s00r1/PRISME/issues/5</id><link href="https://github.com/s00r1/PRISME/issues/5"/><updated>2026-11-05T18:08:28Z</updated>
+<summary>22 desktop styles, 13 widget types and floating controls for large rectangular full-Android watches. Free and MIT-licensed. Tested reference: DM100, Android 7.1.1, 640 x 480. No root required. Feedback welcome.</summary></entry>
+</feed>

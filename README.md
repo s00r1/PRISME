@@ -8,6 +8,15 @@
 
 > **Version stable publiée : 6.0.1 · versionCode 25 · Android complet 7.1 / API 25 minimum.** La DM100 sous Android 7.1.1, avec surface paysage 640 × 480, est la référence testée. Cette distribution cible les montres rectangulaires ; les montres rondes/carrées, Wear OS, watchOS et Tizen ne sont pas des cibles validées. Aucun root ni remplacement du firmware n’est nécessaire.
 
+## Découvrir et rejoindre le projet
+
+[**Site français**](https://s00r1.github.io/PRISME/) · [**English website**](https://s00r1.github.io/PRISME/en.html) · [**Annonce et retours des testeurs / Launch & feedback**](https://github.com/s00r1/PRISME/issues/5) · [**Présentation et visuels / Media kit**](https://s00r1.github.io/PRISME/press.html)
+
+**English:** PRISME is a free, MIT-licensed home screen and toolkit for large rectangular full-Android watches. The tested reference is the DM100 on Android 7.1.1 at 640 × 480 landscape. Explore 22 desktop styles, 13 widget types, floating controls and the browser-based PC editor. No root required. Other watch models need separate validation.
+
+![PRISME 6 : bureau classique et accueil modulaire sur la DM100](website/assets/social/prisme-6.png)
+
+
 ## Télécharger : l’application et son éditeur PC
 
 | Fichier officiel | Utilisation |
@@ -160,3 +169,4 @@ JDK 17+, SDK Android, PowerShell 7+, Python 3 et Node sont documentés dans [BUI
 Pour signaler un problème, indiquer le modèle, l’API Android, l’orientation, la version PRISME et les étapes de reproduction. Éviter les comptes, identifiants, exports personnels et journaux bruts. [Ouvrir une issue](https://github.com/s00r1/PRISME/issues/new/choose).
 
 Code sous [licence MIT](LICENSE). Les noms de marques des styles sont des inspirations visuelles sans affiliation ni compatibilité matérielle implicite. Le compagnon Imou Paysage reste facultatif et possède sa propre signature ; il n’est pas nécessaire à PRISME.
+

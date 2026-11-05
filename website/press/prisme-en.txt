@@ -1,0 +1,22 @@
+PRISME 6.0.1 — A new home screen for your DM100
+
+PRISME is a free, MIT-licensed home screen and toolkit for large rectangular full-Android watches.
+
+22 desktop styles, 13 widget types, optional weather, two control centers, floating volume and local notes, tasks and timers. Its browser-based PC editor lets you arrange a profile and import it on your watch.
+
+Tested reference: DM100, Android 7.1.1, 640 x 480 landscape.
+Minimum: full Android 7.1 / API 25.
+No root or firmware replacement required.
+Other models require separate validation. Wear OS, watchOS, Tizen and smartphones are not validated targets.
+
+No advertising, account or telemetry. Notes, tasks and settings remain local. Optional weather uses Open-Meteo after explicit consent and manual city selection.
+PC Studio and some detailed V6 screens are in French; English documentation is available.
+
+Website: https://s00r1.github.io/PRISME/en.html
+Signed APK and sources: https://github.com/s00r1/PRISME/releases/tag/v6.0.1
+PC editor: https://s00r1.github.io/PRISME/home-studio.html
+Screenshots and project facts: https://s00r1.github.io/PRISME/press.html
+Launch and feedback: https://github.com/s00r1/PRISME/issues/5
+
+Permissions and watch firmware can limit features. No quantified battery-life improvement or Play Protect certification is claimed.
+Independent project, without affiliation to the brands referenced.

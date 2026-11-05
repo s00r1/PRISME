@@ -1,0 +1,21 @@
+PRISME 6.0.1 — Un nouveau bureau pour votre DM100
+
+PRISME est un bureau personnalisable gratuit et sous licence MIT, conçu pour les grandes montres Android rectangulaires.
+
+22 styles de bureau, 13 types de widgets, météo facultative, deux centres de contrôle, volume flottant, notes, tâches et minuteurs locaux. Son éditeur PC s’utilise dans un navigateur et permet d’importer sa disposition sur la montre.
+
+Référence testée : DM100, Android 7.1.1, 640 × 480 paysage.
+Minimum : Android complet 7.1 / API 25.
+Aucun root ni remplacement du firmware.
+Les autres modèles demandent une validation spécifique ; Wear OS, watchOS, Tizen et smartphones ne sont pas des cibles validées.
+
+Gratuit, sans publicité, compte ou télémétrie. Notes, tâches et réglages restent locaux. La météo contacte Open-Meteo après consentement et choix manuel d’une ville.
+
+Site : https://s00r1.github.io/PRISME/
+APK signé et sources : https://github.com/s00r1/PRISME/releases/tag/v6.0.1
+Éditeur PC : https://s00r1.github.io/PRISME/home-studio.html
+Captures et présentation : https://s00r1.github.io/PRISME/press.html
+Annonce et retours : https://github.com/s00r1/PRISME/issues/5
+
+Les permissions et le firmware peuvent limiter les fonctions. Aucun gain chiffré d’autonomie ni certification Play Protect n’est revendiqué.
+Projet indépendant, sans affiliation aux marques citées.
