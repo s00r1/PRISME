@@ -6,7 +6,7 @@
 
 [Français](README.fr.md) · [English](README.en.md) · [Deutsch](README.de.md) · [中文](README.zh.md) · [Türkçe](README.tr.md) · [Русский](README.ru.md) · [العربية](README.ar.md)
 
-> **Prepared for PR: 6.0.0 · versionCode 24 · full Android 7.1 / API 25 minimum.** The reference device is a DM100 running Android 7.1.1 at 640 × 480 in landscape. Round/square watches, Wear OS, watchOS and Tizen are not validated targets. No root or firmware replacement is required.
+> **Published stable version: 6.0.0 · versionCode 24 · full Android 7.1 / API 25 minimum.** The reference device is a DM100 running Android 7.1.1 at 640 × 480 in landscape. Round/square watches, Wear OS, watchOS and Tizen are not validated targets. No root or firmware replacement is required.
 
 ## Downloads
 
@@ -14,10 +14,10 @@
 | --- | --- |
 | [PRISME-6.0.0.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0.apk) | Signed Android application; install over the existing PRISME application. |
 | [PRISME-PC-Studio-6.0.0.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-PC-Studio-6.0.0.zip) | Complete offline PC editors; extract the ZIP and open index.html. |
-| [PRISME-6.0.0-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | Watch application, web editors, documentation and tests. |
+| [PRISME-6.0.0-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | Validated watch application sources, web editors, documentation and tests, packaged as a Release asset. |
 | [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.0/SHA256SUMS.txt) | Checksums for the distributed files. |
 
-These files are planned for the `v6.0.0` Release after PR review. The PC editor also runs [online](https://s00r1.github.io/PRISME/home-studio.html). The offline package needs a modern browser, not a development server or an account. Unsigned workflow artifacts are for developers; use the signed Release APK for installation.
+These files are available in the stable `v6.0.0` Release. Download the [validated V6 sources](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) from the archive attached to that Release. The PC editor also runs [online](https://s00r1.github.io/PRISME/home-studio.html). The offline package needs a modern browser, not a development server or an account. Unsigned workflow artifacts are for developers; use the signed Release APK for installation.
 
 ## See PRISME 6
 

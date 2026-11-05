@@ -1,15 +1,15 @@
 # PRISME 6.0.0
 
-Version stable préparée pour revue et publication après fusion de la PR. **VersionCode 24 · Android complet 7.1 / API 25 minimum.** PRISME 6 conserve les 22 bureaux comme écran principal et ajoute un système commun de widgets, une météo facultative, deux centres de contrôle repensés, des cartes facultatives et l’éditeur PC officiel.
+Version stable publiée. **VersionCode 24 · Android complet 7.1 / API 25 minimum.** PRISME 6 conserve les 22 bureaux comme écran principal et ajoute un système commun de widgets, une météo facultative, deux centres de contrôle repensés, des cartes facultatives et l’éditeur PC officiel.
 
-## Fichiers à joindre à la Release
+## Fichiers disponibles dans la Release
 
 - **PRISME-6.0.0.apk** : application signée avec le certificat d’origine, versionCode 24.
 - **PRISME-PC-Studio-6.0.0.zip** : éditeur des 13 widgets et des cartes, Studio classique, 22 aperçus locaux, guide, licence, empreintes et lanceur Windows. Extraire puis ouvrir `index.html` ; aucun serveur requis.
-- **PRISME-6.0.0-sources.zip** : sources de l’application, des éditeurs, des tests et de la documentation.
+- [**PRISME-6.0.0-sources.zip**](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) : sources validées de l’application, des éditeurs, des tests et de la documentation.
 - **SHA256SUMS.txt** : empreintes des trois fichiers distribués.
 
-Le nom de version est **6.0.0**, sans suffixe beta. Les liens de téléchargement `v6.0.0` sont prêts pour la publication ; préparer cette PR ne publie pas la Release.
+La version **6.0.0** est disponible dans la [Release stable v6.0.0](https://github.com/s00r1/PRISME/releases/tag/v6.0.0), avec les quatre fichiers ci-dessus.
 
 ## Les 22 styles, avec vos widgets
 

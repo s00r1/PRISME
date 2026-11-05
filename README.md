@@ -6,7 +6,7 @@
 
 [Français](docs/README.fr.md) · [English](docs/README.en.md) · [Deutsch](docs/README.de.md) · [中文](docs/README.zh.md) · [Türkçe](docs/README.tr.md) · [Русский](docs/README.ru.md) · [العربية](docs/README.ar.md)
 
-> **Version préparée pour la PR : 6.0.0 · versionCode 24 · Android complet 7.1 / API 25 minimum.** La DM100 sous Android 7.1.1, avec surface paysage 640 × 480, est la référence testée. Cette distribution cible les montres rectangulaires ; les montres rondes/carrées, Wear OS, watchOS et Tizen ne sont pas des cibles validées. Aucun root ni remplacement du firmware n’est nécessaire.
+> **Version stable publiée : 6.0.0 · versionCode 24 · Android complet 7.1 / API 25 minimum.** La DM100 sous Android 7.1.1, avec surface paysage 640 × 480, est la référence testée. Cette distribution cible les montres rectangulaires ; les montres rondes/carrées, Wear OS, watchOS et Tizen ne sont pas des cibles validées. Aucun root ni remplacement du firmware n’est nécessaire.
 
 ## Télécharger : l’application et son éditeur PC
 
@@ -14,10 +14,10 @@
 | --- | --- |
 | [**PRISME-6.0.0.apk**](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0.apk) | Application Android signée ; mise à jour de PRISME sur la montre. |
 | [**PRISME-PC-Studio-6.0.0.zip**](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-PC-Studio-6.0.0.zip) | Éditeurs PC complets, utilisables hors ligne en ouvrant un fichier HTML. |
-| [**PRISME-6.0.0-sources.zip**](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | Sources de l’application, des éditeurs, tests et documentation. |
+| [**PRISME-6.0.0-sources.zip**](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | Sources validées de l’application, des éditeurs, tests et documentation, dans l’archive jointe à la Release. |
 | [**SHA256SUMS.txt**](https://github.com/s00r1/PRISME/releases/download/v6.0.0/SHA256SUMS.txt) | Sommes de contrôle des trois fichiers distribués. |
 
-Ces fichiers sont prévus pour la Release `v6.0.0`, à publier après revue de la PR. L’éditeur existe aussi [directement dans le navigateur](https://s00r1.github.io/PRISME/home-studio.html). Le ZIP PC est un outil local : aucune installation, inscription ou connexion permanente n’est nécessaire. Les artefacts non signés des workflows GitHub sont destinés au développement ; pour installer PRISME, utiliser l’APK signé.
+Ces fichiers sont disponibles dans la Release stable `v6.0.0`. Les [sources validées de la V6](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) sont fournies dans l’archive jointe à cette Release. L’éditeur existe aussi [directement dans le navigateur](https://s00r1.github.io/PRISME/home-studio.html). Le ZIP PC est un outil local : aucune installation, inscription ou connexion permanente n’est nécessaire. Les artefacts non signés des workflows GitHub sont destinés au développement ; pour installer PRISME, utiliser l’APK signé.
 
 ## La V6 sur la montre
 

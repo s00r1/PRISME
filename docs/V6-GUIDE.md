@@ -1,6 +1,6 @@
 # PRISME 6.0.0 — Guide
 
-PRISME 6 cible la DM100 rectangulaire sous Android complet 7.1.1 / API 25, en 640 × 480. La livraison préparée pour la PR utilise le **versionCode 24**. Aucun root ni remplacement de firmware n’est nécessaire.
+PRISME 6 cible la DM100 rectangulaire sous Android complet 7.1.1 / API 25, en 640 × 480. La version stable publiée utilise le **versionCode 24**. Aucun root ni remplacement de firmware n’est nécessaire.
 
 ## Installer et migrer
 
@@ -9,7 +9,7 @@ PRISME 6 cible la DM100 rectangulaire sous Android complet 7.1.1 / API 25, en 64
 3. Le **bureau classique sélectionné reste affiché par défaut**. Les cartes sont facultatives. Les premières configurations V6 qui ouvraient automatiquement les cartes sont ramenées une fois au bureau choisi sans perdre leurs pages.
 4. Ouvrir **Styles** sur le bureau ou le bouton permanent **22 styles** des réglages pour choisir une composition. Dans les cartes, **Bureau**, **22 styles** ou Retour Android ramènent au bureau choisi.
 
-Les profils JSON antérieurs restent acceptés. Les exports V6 utilisent le **schéma 7**, qui désigne un format de fichier. Garder un export V5 pour le retour arrière : une ancienne application peut refuser un profil V6 et Android peut refuser un numéro de version inférieur. La publication de la Release intervient après revue de la PR.
+Les profils JSON antérieurs restent acceptés. Les exports V6 utilisent le **schéma 7**, qui désigne un format de fichier. Garder un export V5 pour le retour arrière : une ancienne application peut refuser un profil V6 et Android peut refuser un numéro de version inférieur. La [Release stable v6.0.0](https://github.com/s00r1/PRISME/releases/tag/v6.0.0) est disponible avec l’APK signé, l’éditeur PC, les sources validées et leurs sommes de contrôle.
 
 ## Choisir parmi les 22 bureaux
 
