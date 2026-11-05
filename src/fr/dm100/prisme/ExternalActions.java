@@ -9,7 +9,7 @@ public final class ExternalActions {
   private static final Set<String> OPEN =
       new HashSet<>(
           Arrays.asList(
-              "notes",
+              "weather","widgetsSettings","notes",
               "timer",
               "multiTimers",
               "mediaPanel",

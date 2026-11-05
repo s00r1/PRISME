@@ -1,8 +1,12 @@
-# Les 22 styles / All 22 styles
+# PRISME 6 — Les 22 styles / All 22 styles
 
 [Français](README.fr.md) · [English](README.en.md) · [Deutsch](README.de.md) · [中文](README.zh.md) · [Türkçe](README.tr.md) · [Русский](README.ru.md) · [العربية](README.ar.md)
 
 Aperçus produits par le moteur PRISME sur Android, avec un catalogue fictif. / Rendered on Android with PRISME’s actual layout engine and a fictional app catalog.
+
+Le bureau sélectionné reste l’écran principal. Ouvrir **Styles** ou **Réglages → 22 styles** pour rechercher un style, puis choisir **Voir les aperçus** pour la galerie. Les cartes facultatives ont un bouton **Bureau** qui revient au style choisi. Les six palettes de cartes ne remplacent pas ces 22 styles.
+
+La V6 ajoute une zone de widgets indépendante aux 22 bureaux : météo, musique, horloges et outils. La zone réserve sa place au lieu de recouvrir les applications ; ses couleurs suivent chaque style. Choisir les widgets et leurs styles dans **Réglages → Widgets**. Les aperçus historiques ci-dessous présentent le dessin propre de chaque bureau ; [captures et nouveautés V6](V6-GUIDE.md).
 
 ## Prisme Touch
 

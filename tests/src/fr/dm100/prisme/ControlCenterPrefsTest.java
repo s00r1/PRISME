@@ -38,7 +38,12 @@ public final class ControlCenterPrefsTest {
             p.putInt(KEYS[i],Integer.MAX_VALUE);check(p.getInt(KEYS[i],-999)==MAX[i],KEYS[i]+" clamps maximum");
         }
         p.resetAll();
-        for (String key:new String[]{"enabled","dark","labels","status","volume","brightness"}) check(p.getBoolean(key,false),key+" defaults enabled");
+        for (String key:new String[]{"enabled","dark","labels","status","volume","brightness","media"}) check(p.getBoolean(key,false),key+" defaults enabled");
+        JSONObject legacy=p.exportJSONObject();legacy.getJSONObject("settings").remove("media");
+        ControlCenterPrefs restored=new ControlCenterPrefs(new DashboardPrefsTest.MemoryContext());
+        restored.importJSONObject(legacy);
+        check(restored.getBoolean("media",false),"Older center backups gain the media module without losing their tiles");
+        check(restored.getTiles().equals(p.getTiles()),"Adding the media module preserves the exact previous tile order");
         check(!p.getBoolean("customAccent",true),"Custom color is initially opt-in");
         check(p.getTiles().equals(Arrays.asList("wifi","bluetooth","sound","airplane","location","rotateGlobal","screenlamp","settings","timer","clock")),"Default tile order is exact");
         p.putInt("unknown",42);p.putBoolean("unknownFlag",true);
@@ -71,7 +76,7 @@ public final class ControlCenterPrefsTest {
     private static void exactRoundTripAndResets() throws Exception {
         DashboardPrefsTest.MemoryContext context = new DashboardPrefsTest.MemoryContext();ControlCenterPrefs p = new ControlCenterPrefs(context);
         for(int i=0;i<KEYS.length;i++)p.putInt(KEYS[i],MAX[i]);
-        for(String key:new String[]{"enabled","dark","labels","status","volume","brightness"})p.putBoolean(key,false);
+        for(String key:new String[]{"enabled","dark","labels","status","volume","brightness","media"})p.putBoolean(key,false);
         p.putBoolean("customAccent",true);p.setTiles(Arrays.asList("capture","notes","app:fr.demo/.Main","wifi"));
         JSONObject exported=p.exportJSONObject();ControlCenterPrefs q=new ControlCenterPrefs(new DashboardPrefsTest.MemoryContext());q.importJSONObject(new JSONObject(exported.toString()));
         check(q.exportJSONObject().toString().equals(exported.toString()),"All centre preferences and tile order round-trip through real JSON");

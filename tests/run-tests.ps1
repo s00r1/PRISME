@@ -16,6 +16,9 @@ $sources += Join-Path $project 'src\fr\dm100\prisme\HomeLayout.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\HomeStore.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\ProfileJournal.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\Countdown.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\DashboardWidgets.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\WidgetStore.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\WeatherData.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\UtilityMath.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\PrefValues.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\ExternalActions.java'
@@ -46,3 +49,9 @@ if ($LASTEXITCODE -ne 0) { throw 'Battery/music preference tests failed.' }
 
 & (Join-Path $JavaHome 'bin\java.exe') -classpath ($classes + ';' + $json) fr.dm100.prisme.V6CoreTest
 if ($LASTEXITCODE -ne 0) { throw 'V6 core tests failed.' }
+
+& (Join-Path $JavaHome 'bin\java.exe') -classpath ($classes + ';' + $json) fr.dm100.prisme.WeatherWidgetTest
+if ($LASTEXITCODE -ne 0) { throw 'Weather/widget model tests failed.' }
+
+& (Join-Path $JavaHome 'bin\java.exe') -classpath ($classes + ';' + $json) fr.dm100.prisme.WidgetStoreMutationTest
+if ($LASTEXITCODE -ne 0) { throw 'Widget identity/undo mutation tests failed.' }

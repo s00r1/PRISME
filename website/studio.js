@@ -6,7 +6,7 @@ const KEYS_X=['clockX','tasksX','timerX','infoX'],KEYS_Y=['clockY','tasksY','tim
 const SHOW=['showClock','showTasks','showTimer','showDevice'];
 const $ = id=>document.getElementById(id);
 const preview=$('preview'), nodes=[...document.querySelectorAll('[data-widget]')];
-let profile=null;
+let profile=null,loadToken=0;
 let model={theme:0,size:75,opacity:88,shown:[true,true,true,true],x:[...DEFAULT_X],y:[...DEFAULT_Y]};
 const clamp=(n,lo,hi)=>Math.min(hi,Math.max(lo,n));
 const asNumber=(n,defaultValue)=>Number.isFinite(Number(n))?Number(n):defaultValue;
@@ -47,18 +47,15 @@ for(let i=0;i<4;i++)document.querySelector('[data-show="'+SHOW[i]+'"]').addEvent
 for(const key of ['size','opacity'])$(key).addEventListener('input',e=>{model[key]=Number(e.target.value);paint();});
 $('reset').addEventListener('click',()=>{model.x=[...DEFAULT_X];model.y=[...DEFAULT_Y];paint();report('Positions réinitialisées sur l’aperçu.');});
 $('profileInput').addEventListener('change',async e=>{
+  const token=++loadToken;profile=null;$('export').disabled=true;
   const file=e.target.files&&e.target.files[0];if(!file)return;
   if(file.size>65536){report('Fichier trop volumineux, maximum 64 Ko.');return;}
   try {
-    const data=JSON.parse(await file.text());
-    if(!data||!Number.isInteger(data.schemaVersion)||![6,7].includes(data.schemaVersion)||
-        !data.settings||!data.controlCenter||!data.floatingVolume||!Array.isArray(data.organizer)){
-      throw Error('Un export PRISME récent (schéma 6 ou 7) est nécessaire.');
-    }
+    const data=PrismeProfileModel.validateComplete(JSON.parse(await file.text()));if(token!==loadToken)return;
     profile=data;
     loadModel(data);paint();
     $('export').disabled=false;report('Profil chargé localement : prêt pour les modifications et l’export.');
-  }catch(err){profile=null;$('export').disabled=true;report('Import refusé : '+(err?.message||'JSON invalide'));}
+  }catch(err){if(token!==loadToken)return;profile=null;$('export').disabled=true;report('Import refusé : '+(err?.message||'JSON invalide'));}
 });
 for(let i=0;i<4;i++){
   const card=nodes[i];let grip=null;
@@ -101,7 +98,8 @@ $('export').addEventListener('click',()=>{
     data.v6.widgets[SHOW[i]]=model.shown[i];
   }
   // Do not move any secret profile data to a server.
-  const body=JSON.stringify(data,null,2);
+  try{PrismeProfileModel.validateComplete(data);}catch(error){report(error.message);return;}
+  const body=JSON.stringify(data);
   if(new TextEncoder().encode(JSON.stringify(data)).length>65536){report('Export supérieur à 64 Ko, refusé.');return;}
   const blob=new Blob([body],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download='PRISME-V6-Studio.json';a.click();

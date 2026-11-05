@@ -33,14 +33,17 @@ public final class ControlCenterIcon extends View {
     public void setInk(int color){if(ink!=color){ink=color;invalidate();}}
     @Override protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
+        int contentWidth=Math.max(1,getWidth()-getPaddingLeft()-getPaddingRight());
+        int contentHeight=Math.max(1,getHeight()-getPaddingTop()-getPaddingBottom());
+        float centerX=getPaddingLeft()+contentWidth/2f,centerY=getPaddingTop()+contentHeight/2f;
         if(drawable!=null){
-            int size=Math.max(1,Math.min(getWidth(),getHeight())-2),left=(getWidth()-size)/2,top=(getHeight()-size)/2;
+            int size=Math.max(1,Math.min(contentWidth,contentHeight)-2),left=Math.round(centerX-size/2f),top=Math.round(centerY-size/2f);
             drawable.setBounds(left,top,left+size,top+size);
             if(!id.startsWith("app:"))drawable.setColorFilter(ink,PorterDuff.Mode.SRC_IN);
             drawable.draw(canvas);return;
         }
-        canvas.save();canvas.translate(getWidth()/2f,getHeight()/2f);
-        float scale=Math.min(getWidth(),getHeight())/32f;canvas.scale(scale,scale);
+        canvas.save();canvas.translate(centerX,centerY);
+        float scale=Math.min(contentWidth,contentHeight)/32f;canvas.scale(scale,scale);
         p.setColor(ink);p.setStyle(Paint.Style.STROKE);p.setStrokeWidth(2.2f);p.setStrokeCap(Paint.Cap.ROUND);p.setStrokeJoin(Paint.Join.ROUND);
         switch(id){
             case "wifi":case "hotspot":

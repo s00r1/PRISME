@@ -1,179 +1,110 @@
-# PRISME — للساعات المستطيلة فقط
+<div dir="rtl">
 
-## المرجع: شاشة كبيرة 2.86 بوصة · عرض أفقي 640 × 480 بنسبة 4:3 · Android الكامل 7.1+ / API 25+
+# PRISME 6
 
-> **ليس للساعات الدائرية أو المربعة. يستهدف هذا الإصدار الشكل المستطيل لـ DM100. الأحجام والدقات المستطيلة الأخرى غير معتمدة بعد.**
-
-## 🌐 [افتح موقع PRISME الرسمي](https://s00r1.github.io/PRISME/)
-
-**https://s00r1.github.io/PRISME/**
-
-
-<table>
-<tr><td align="center" valign="top"><a href="https://www.ebay.nl/itm/185939246016"><img src="https://i.ebayimg.com/images/g/WZgAAOSwAUlkiEmk/s-l1600.jpg" width="270" alt="DM100 2.86 rectangular watch"></a></td><td align="center" valign="top"><a href="https://www.ebay.nl/itm/185939246016"><img src="https://i.ebayimg.com/images/g/5EcAAOSwrulkiEmS/s-l1600.jpg" width="270" alt="DM100 2.86 rectangular watch"></a></td></tr>
-</table>
-
-**Domiwear / Domino DM100 — الطراز المرجعي المختبَر، صورتان للطراز نفسه**
-
-صور منتجات خارجية من صفحة DM100، لعرض الجهاز وليست صوراً لـ PRISME. [Source](https://www.ebay.nl/itm/185939246016) · [Specifications](https://www.domino-china.com/news/19.html)
-
+واجهة رئيسية قابلة للتخصيص لساعة DM100 والساعات المستطيلة الكبيرة التي تعمل بنظام Android الكامل. يبقى نمط المكتب المختار من بين 22 نمطاً هو الأساسي، وتُفتح البطاقات الجديدة اختيارياً.
 
 [Français](README.fr.md) · [English](README.en.md) · [Deutsch](README.de.md) · [中文](README.zh.md) · [Türkçe](README.tr.md) · [Русский](README.ru.md) · [العربية](README.ar.md)
 
-**شاشة رئيسية قابلة للتخصيص للساعات التي تعمل بنظام Android الكامل.** تعمل دون اتصال، ولا تحتاج إلى حساب ولا تحتوي على إعلانات أو تتبّع.
+> الإصدار الحالي: **6.0.0 · versionCode 24 · Android كامل 7.1 / API 25 على الأقل**. الجهاز المرجعي DM100 بنظام Android 7.1.1 ودقة أفقية 640 × 480. الساعات الدائرية والمربعة وWear OS وwatchOS وTizen ليست أهدافاً معتمدة بالاختبار. لا حاجة إلى root أو تبديل البرنامج الثابت.
 
+## التنزيل
 
-**[⬇ تنزيل APK](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
+| التنزيل | PRISME 6 |
+| --- | --- |
+| [PRISME-6.0.0.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0.apk) | تطبيق Android موقع للساعة، يُثبّت فوق PRISME الحالي. |
+| [PRISME-PC-Studio-6.0.0.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-PC-Studio-6.0.0.zip) | محررات كمبيوتر كاملة دون اتصال؛ فك الأرشيف وافتح index.html. |
+| [PRISME-6.0.0-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | مصادر التطبيق والمحررات والاختبارات والوثائق. |
+| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.0/SHA256SUMS.txt) | قيم التحقق من ملفات الإصدار. |
 
-<table>
-<tr><td align="center" valign="top"><b>Control Center</b><br><a href="../assets/localized/ar/screenshots/control-center-ios.png"><img src="../assets/localized/ar/screenshots/control-center-ios.png" width="410" alt="Control Center"></a></td><td align="center" valign="top"><b>Volume</b><br><a href="../assets/localized/ar/screenshots/volume-live-circle-open.png"><img src="../assets/localized/ar/screenshots/volume-live-circle-open.png" width="410" alt="Volume"></a></td></tr>
-</table>
+[PRISME · Web](https://s00r1.github.io/PRISME/) · [PC Studio · Web](https://s00r1.github.io/PRISME/home-studio.html) · [GitHub · v6.0.0](https://github.com/s00r1/PRISME/releases/tag/v6.0.0)
 
+## صور V6 الحقيقية
 
-## التثبيت
+| PRISME 6 | PRISME 6 |
+| --- | --- |
+| ![DM100](../assets/device/v6/home-graphite.png) | ![DM100](../assets/device/v6/home-paper.png) |
+| ![DM100](../assets/device/v6/page-media.png) | ![DM100](../assets/device/v6/editor.png) |
 
-**[تنزيل PRISME 5.4 APK](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [الإصدارات وبصمات التحقق](https://github.com/s00r1/PRISME/releases)
+صور حقيقية لواجهة V6 على DM100 باللغة الفرنسية. يستخدم معرض الأنماط الكلاسيكية بيانات عرض خيالية، وليس قائمة تطبيقات شخصية.
 
-تحتاج الساعة إلى **Android الكامل 7.1 أو أحدث، بحد أدنى API 25** وإمكانية تثبيت ملفات Android APK العادية. نزّل الملف من متصفح الساعة وافتحه بمثبّت Android، واسمح بمصدر التثبيت عند الطلب. افتح PRISME واختره كشاشة رئيسية إذا سمح النظام، أو شغّله كتطبيق عادي. زر الصوت العائم والاتجاه العام يحتاجان إلى إذن الظهور فوق التطبيقات. اختر اللغة من **الإعدادات ← المظهر ← اللغة**. ثبّت التحديثات الرسمية فوق النسخة الموجودة.
+## المكتب والصفحات والمظهر
 
-من الكمبيوتر: `adb install -r PRISME-5.4.apk`. لا يتطلب التثبيت root أو تغيير البرنامج الثابت أو خدمات Google.
+**الأنماط الكلاسيكية الـ22 محفوظة ويظل النمط المختار معروضاً افتراضياً.** يفتح زر «22 styles» في الإعدادات اختيار الأنماط مباشرة. البطاقات لوحة اختيارية في الأدوات؛ يعيد زر «Bureau» وزر رجوع Android المكتب المختار. اختيار نمط يغلق البطاقات ويعرض النمط فوراً.
 
-## ✨ الجديد في PRISME 5.4
+تتوفر ثلاث صفحات مبدئية، وبحد أقصى **خمس صفحات وثماني بطاقات لكل صفحة على شبكة 4 × 4**. الأنواع: الساعة، المهام، المؤقت، الموسيقى، الملاحظات، المفضلة وحالة الجهاز. يمكن تحريك البطاقات وتغيير حجمها، ويُرفض التداخل والخروج من الحدود. الضغط المطول يفتح الموضع والأبعاد؛ يوفر المحرر السحب وخطوة واحدة للتراجع والإعادة.
 
-- **🔋 تبويب مستقل للبطارية**: 24 شكلاً للمؤشر و12 مجموعة ألوان، وتغيّر اللون حسب الشحن، مع تعديل النسبة والحجم والموقع والشفافية وحدود الشحن. يمكن عرضه **على لوحة PRISME فقط** أو **فوق التطبيقات الأخرى** (بإذن Android). تفحص أداة التشخيص عدة مصادر للقراءة، لكن بعض الأجهزة قد تعرض نسبة غير صحيحة.
-- **🎵 تبويب مستقل للموسيقى**: مشغّل مصغّر يعمل مع **أنماط لوحة التحكم الـ22** ويضم **تشغيل/إيقاف مؤقت، السابق والتالي**، مع 12 تصميماً وحجم وموقع وشفافية قابلة للتعديل. يحتاج إلى تطبيق وسائط نشط.
-- **🔄 تدوير الشاشة**: التحويل بين العمودي والأفقي من مركز التحكم العائم **دون الرجوع عمداً إلى لوحة PRISME**. تتوقف النتيجة على نظام الساعة والتطبيق المفتوح.
-- **🎧 العودة إلى الواجهة الرئيسية**: انتقالات دون إعادة ضبط مهام التطبيقات عمداً. استمرار الصوت أو الفيديو في الخلفية يعتمد على Android وتطبيق الوسائط، وهو **غير مضمون**.
+ست لوحات ألوان: الغرافيت والزجاج والورق والأجهزة والنيون والبسيط، مع خيار نص كبير. ألوان البطاقات مستقلة عن نمط المكتب. تشترك الصفحات في الملاحظات والمهام نفسها، ولا تعرض بطاقات البداية نص الملاحظات.
 
-**تنبيه:** تم الإبلاغ عن منع تثبيت APK الإصدار 5.4 بواسطة Play Protect. لا تعطّل حماية الجهاز؛ راجع [الإصدارات](https://github.com/s00r1/PRISME/releases) لمعرفة الإصلاحات المتاحة. قد تتضمن الصور إصدارات أقدم.
+## عناصر مصغرة للأنماط الـ22
 
-## المزايا
+إلى جانب صفحات البطاقات الاختيارية، توجد منطقة عناصر مصغرة مشتركة بين **الأنماط الكلاسيكية الـ22**. يتضمن الكتالوج **13 نوعاً**: الطقس، الساعة، الموسيقى، البطارية، المهام، دفتر الملاحظات، المؤقتات، التقويم، الساعة العالمية، النظام، التركيز، الاختصارات وساعة الإيقاف. يظهر الطقس والموسيقى والمهام افتراضياً. يمكن الإضافة والإزالة والإخفاء وإعادة الترتيب، حتى 16 عنصراً. إزالة عنصر أو إخفاؤه لا يغير نمط المكتب المختار.
 
-- **22 تصميماً مختلفاً**: تقويم، سطح مكتب، معرض، طرفية، ألعاب كلاسيكية، كوكبة، دليل نصي، فسيفساء، خلايا، عدادات، دفتر ملاحظات وشاشة مبسطة.
-- تنقل دائم إلى واجهة الساعة الأصلية والأنماط واليوم والإعدادات. الضغط المطوّل على «اليوم» يفتح خمسة اختصارات قابلة للتخصيص.
-- **مركز تحكم بأسلوب iOS أو Android** مع تخصيص الأزرار وترتيبها والألوان والشفافية والحجم والموقع والإيماءات. بعض الأوامر تفتح إعداد Android المقابل.
-- **عمودي / أفقي**: لمسة للتدوير، وضغطة طويلة للاتجاهات المعكوسة ووضع النظام. تتوفر أوامر أيضاً في الإشعار أثناء استخدام تطبيق آخر. اختُبرت على DM100 وقد تقيّدها أنظمة أخرى.
-- **صوت عائم** بأنماط وأشكال وحجم وعتامة وموقع قابل للتعديل، وأزرار قابلة للتوسيع وتلاشي أثناء الخمول.
-- بحث في التطبيقات والإعدادات، ومفضلة وتطبيقات أخيرة ومساحات عمل وأسماء مخصصة.
-- اليوم، وملاحظات تُحفظ تلقائياً، ومهام، ومؤقت بتنبيه Android، وساعة إيقاف بجولات وساعة مكتبية.
-- مقياس عام وهوامش وأحجام نصوص وأيقونات وألوان وملفات إعداد ونسخ محلية.
-- **الفرنسية والإنجليزية والألمانية والصينية المبسطة والتركية والروسية والعربية**، مع دعم العرض من اليمين إلى اليسار.
+من **الإعدادات ← Widgets** أو بالضغط المطول على العنصر، يمكن ضبط المظهر والكثافة ولون التمييز والشفافية والزوايا وحجم النص والعنوان الخاص والأنماط التي يظهر فيها. توجد ستة مظاهر: طابع المكتب والزجاج والبطاقة الممتلئة والإطار والبسيط والنيون. تدعم الساعة العرض بالعقارب، وتتيح الساعة العالمية اختيار المنطقة الزمنية. تظهر المنطقة يميناً أو يساراً أفقياً وتصبح شريطاً علوياً رأسياً، مع مساحة مستقلة للمكتب. يمكن إخفاء المنطقة كلها والتراجع عن آخر تعديل وإعادته.
 
-<!-- PRISME-VISUAL-SHOWCASE -->
-<a id="control-center"></a>
-## مركز التحكم بالطريقة التي تفضلها
+### طقس Open-Meteo الاختياري
 
-واجهة iOS أو Android مع تخصيص الاختصارات والترتيب والشفافية والألوان والحجم والموقع والإيماءات. المس عمودي / أفقي للتدوير واضغط مطولاً للخيارات.
+اتصال الطقس **معطل افتراضياً**. فعّله في إعدادات الطقس ثم ابحث عن المدينة واخترها يدوياً؛ لا حاجة إلى GPS أو إذن الموقع. يتلقى Open-Meteo عنوان IP ونص البحث أو إحداثيات المدينة المختارة. تعرض التفاصيل الحرارة والمحسوسة والرطوبة والرياح والساعات القادمة وخمسة أيام. يمكن اختيار Celsius/Fahrenheit وفترة التحديث أثناء ظهور التطبيق. تعرض البيانات المخزنة محلياً وقت التحديث وتقادمها، ولا ينتج انقطاع الشبكة قياسات وهمية. إيقاف اتصال الطقس يوقف الطلبات ويحفظ الذاكرة المؤقتة. [مصدر البيانات: Open-Meteo](https://open-meteo.com/).
 
-<table>
-<tr><td align="center" valign="top"><b>iOS</b><br><a href="../assets/localized/ar/screenshots/control-center-ios.png"><img src="../assets/localized/ar/screenshots/control-center-ios.png" width="410" alt="iOS"></a></td><td align="center" valign="top"><b>Android</b><br><a href="../assets/localized/ar/screenshots/control-center-android.png"><img src="../assets/localized/ar/screenshots/control-center-android.png" width="410" alt="Android"></a></td></tr>
-</table>
+### مركزا تحكم مختلفان فعلاً
 
-<details><summary>عرض خيارات التخصيص</summary>
+**iOS:** أول أربعة أوامر مختارة في وحدة بأزرار دائرية، مع مشغل صغير ومنظمي سطوع وصوت رأسيين. **Android:** ساعة كبيرة وبلاطات Material عريضة بعمودين ومنظمات أفقية ومشغل بعرض المنطقة. يتكيف التخطيط مع المساحة الضيقة. تُحفظ الأوامر المختارة وترتيبها والضغط المطول، ويمكن إخفاء المشغل والمنظمات بشكل منفصل. تأتي الحالات من Android وتفتح الوظائف المحمية إعدادات النظام. يبقى الإغلاق ورجوع Android والإيماءات المختارة متاحاً.
 
-<table>
-<tr><td align="center" valign="top"><b>Center Options Appearance</b><br><a href="../assets/localized/ar/screenshots/center-options-appearance.png"><img src="../assets/localized/ar/screenshots/center-options-appearance.png" width="270" alt="Center Options Appearance"></a></td><td align="center" valign="top"><b>Center Options Content</b><br><a href="../assets/localized/ar/screenshots/center-options-content.png"><img src="../assets/localized/ar/screenshots/center-options-content.png" width="270" alt="Center Options Content"></a></td><td align="center" valign="top"><b>Center Options Gestures</b><br><a href="../assets/localized/ar/screenshots/center-options-gestures.png"><img src="../assets/localized/ar/screenshots/center-options-gestures.png" width="270" alt="Center Options Gestures"></a></td></tr>
-<tr><td align="center" valign="top"><b>Center Options Layout</b><br><a href="../assets/localized/ar/screenshots/center-options-layout.png"><img src="../assets/localized/ar/screenshots/center-options-layout.png" width="270" alt="Center Options Layout"></a></td><td align="center" valign="top"><b>Center Ios Transparent</b><br><a href="../assets/localized/ar/screenshots/center-ios-transparent.png"><img src="../assets/localized/ar/screenshots/center-ios-transparent.png" width="270" alt="Center Ios Transparent"></a></td><td align="center" valign="top"><b>Center Ios Opaque</b><br><a href="../assets/localized/ar/screenshots/center-ios-opaque.png"><img src="../assets/localized/ar/screenshots/center-ios-opaque.png" width="270" alt="Center Ios Opaque"></a></td></tr>
-</table>
+## الأدوات اليومية
 
-</details>
+| PRISME | الأدوات اليومية |
+| --- | --- |
+| المؤقتات المسماة | ثمانية عدادات مستقلة مع إيقاف مؤقت واستئناف وإعادة بدء وحذف؛ المدة الأولية 1–1440 دقيقة. |
+| الموسيقى | أزرار وسائط بسيطة أو عنوان وفنان واختيار جلسة تشغيل اختيارياً. |
+| الحساب والتحويل | أربع عمليات عشرية؛ تحويل الطول والكتلة والحرارة والمدة دون شبكة. |
+| الملاحظات والمهام | حفظ تلقائي محلي وقائمة مهام وبحث ووصول عبر البطاقات. |
+| أدوات الوقت | ساعة إيقاف بجولات ومؤقت تركيز وساعة مكتب. |
+| مركز التحكم | مظهرا iOS وAndroid وترتيب وألوان وأحجام وإيماءات وتدوير؛ بعض الأزرار تفتح إعدادات Android. |
+| الصوت والبطارية | صوت عائم؛ 24 عرضاً للبطارية و12 لوحة ألوان وتشخيص قراءات النظام. |
+| Studio / Sense / Dock / Doctor | عناصر كلاسيكية وقواعد محلية للوقت والشحن ولوحة عائمة اختيارية وتشخيص محلي. |
 
-<a id="floating-volume"></a>
-## صوت عائم صغير وقابل للتوسيع والتخصيص
+## التثبيت والتحديث من V5
 
-يمكن توسيع الزر إلى + و−. الشكل والنمط والحجم والموقع والعتامة إعدادات مستقلة. هذه مكونات Android الحقيقية، عن قرب وعلى الشاشة الرئيسية.
+1. صدّر الإعدادات الحالية من الإعدادات ← الملفات الشخصية واحتفظ بالأصل.
+2. نزّل PRISME-6.0.0.apk الموقع وثبته فوق PRISME. لا يتطلب التحديث المعتاد إزالة التطبيق.
+3. شهادة التوقيع الأصلية محفوظة، وتبقى الملاحظات والمهام والإعدادات.
+4. اختر PRISME كتطبيق رئيسي إذا سمح النظام، أو افتحه كتطبيق عادي.
+5. امنح أذونات العناصر العائمة عند الحاجة بشكل منفصل. لا يتطلب المكتب والبطاقات وصولاً إلى الإشعارات.
 
-<table>
-<tr><td align="center" valign="top"><b>دائرة مغلقة</b><br><img src="../assets/localized/ar/screenshots/widget-circle-closed.png" width="155" height="155" alt="دائرة مغلقة"></td><td align="center" valign="top"><b>دائرة موسعة</b><br><img src="../assets/localized/ar/screenshots/widget-circle-open.png" width="155" height="52" alt="دائرة موسعة"></td><td align="center" valign="top"><b>Android</b><br><img src="../assets/localized/ar/screenshots/widget-android.png" width="54" height="155" alt="Android"></td><td align="center" valign="top"><b>نيون</b><br><img src="../assets/localized/ar/screenshots/widget-neon.png" width="155" height="52" alt="نيون"></td></tr>
-<tr><td align="center" valign="top"><b>بسيط</b><br><img src="../assets/localized/ar/screenshots/widget-minimal.png" width="155" height="52" alt="بسيط"></td><td align="center" valign="top"><b>تيتانيوم</b><br><img src="../assets/localized/ar/screenshots/widget-titanium.png" width="54" height="155" alt="تيتانيوم"></td><td align="center" valign="top"><b>فاتح</b><br><img src="../assets/localized/ar/screenshots/widget-light.png" width="155" height="54" alt="فاتح"></td><td align="center" valign="top"></td></tr>
-</table>
+```text
+adb install -r PRISME-6.0.0.apk
+```
 
-<table>
-<tr><td align="center" valign="top"><b>دائرة موسعة</b><br><a href="../assets/localized/ar/screenshots/volume-live-circle-open.png"><img src="../assets/localized/ar/screenshots/volume-live-circle-open.png" width="410" alt="دائرة موسعة"></a></td><td align="center" valign="top"><b>Android</b><br><a href="../assets/localized/ar/screenshots/volume-live-android.png"><img src="../assets/localized/ar/screenshots/volume-live-android.png" width="410" alt="Android"></a></td></tr>
-</table>
+تُقبل ملفات JSON القديمة. يستخدم تصدير V6 **المخطط 7**، وهو رقم تنسيق الملف وليس تطبيق PRISME 7. احتفظ بتصدير V5 للعودة؛ قد يرفض Android تثبيت versionCode أقل، ولا يحذف التطبيق بياناتك تلقائياً للرجوع.
 
-<details><summary>عرض خيارات التخصيص</summary>
+## محرر الكمبيوتر: التصميم والنقل
 
-<table>
-<tr><td align="center" valign="top"><b>Volume Options Style</b><br><a href="../assets/localized/ar/screenshots/volume-options-style.png"><img src="../assets/localized/ar/screenshots/volume-options-style.png" width="410" alt="Volume Options Style"></a></td><td align="center" valign="top"><b>Volume Options Shape</b><br><a href="../assets/localized/ar/screenshots/volume-options-shape.png"><img src="../assets/localized/ar/screenshots/volume-options-shape.png" width="410" alt="Volume Options Shape"></a></td></tr>
-<tr><td align="center" valign="top"><b>Volume Options Position</b><br><a href="../assets/localized/ar/screenshots/volume-options-position.png"><img src="../assets/localized/ar/screenshots/volume-options-position.png" width="410" alt="Volume Options Position"></a></td><td align="center" valign="top"><b>Volume Options Advanced</b><br><a href="../assets/localized/ar/screenshots/volume-options-advanced.png"><img src="../assets/localized/ar/screenshots/volume-options-advanced.png" width="410" alt="Volume Options Advanced"></a></td></tr>
-</table>
+1. افتح المحرر على الويب أو فك ZIP بالكامل وافتح index.html. يتوفر LANCER-EDITEUR.cmd لنظام Windows.
+2. حمّل تصدير JSON كاملاً من PRISME؛ دون ملف حقيقي تتوفر معاينة فقط.
+3. اختر عناصر الأنماط الـ22 أو صفحات الشبكة الاختيارية. اضبط ترتيب العناصر ومظهرها أو موضع البطاقات وحجمها وألوانها والنص الكبير؛ يُرفض التداخل في الشبكة.
+4. صدّر PRISME-6-Studio.json وانقله إلى الساعة عبر USB.
+5. من الإعدادات ← الملفات الشخصية ← استيراد إعدادات، افتح منتقي ملفات Android واختر الملف وأكد.
 
-</details>
+تُعالج البيانات في ذاكرة المتصفح ولا تُرفع إلى خادم. تبقى أقسام الملف الأخرى ولا يتغير وضع المكتب النشط. افتح البطاقات اختيارياً من الأدوات. معاينة الطقس على الكمبيوتر مثال موضح؛ تُختار المدينة وموافقة الشبكة على الساعة، ويمكن نقل الوحدة وفترة التحديث. يواصل classic-studio.html تحرير الأنماط الكلاسيكية الـ22 وعناصرها الأربعة السابقة. واجهة الكمبيوتر والدليل التفصيلي بالفرنسية حالياً. لا يلزم خادم أو حساب أو أدوات تطوير.
 
-<a id="styles-showcase"></a>
-## أنماط مختلفة فعلاً
+## الأذونات والخصوصية والاسترداد
 
-تقويم وطرفية وألعاب كلاسيكية وكوكبة ودليل نصي وخلايا ولوحة يومية بتخطيطات مختلفة. افتح الصور بالحجم الكامل.
+لا إعلانات أو حساب أو قياس استخدام. يعلن PRISME 6 إذن **INTERNET** للطقس الاختياري، لكن طلبات الطقس معطلة افتراضياً. لا تُرسل الملاحظات أو المهام أو المفضلة أو بيانات الملف الأخرى إلى المزود. تبقى موافقة الشبكة والمدينة والإحداثيات محلياً على الساعة ولا تُستورد من قالب. تصدير JSON العادي نص غير مشفر وقد يحتوي ملاحظات ومهام ومفضلة شخصية؛ لا تنشره.
 
-أسماء Apple وSamsung وGarmin في الأنماط تعني الإلهام البصري وليست طرازات ساعات متوافقة.
+الوصول الموسيقي الموسع معطل افتراضياً. يطلب Android إذن إشعارات حساساً؛ يستخدم PRISME جلسات الوسائط دون قراءة نصوص الرسائل أو حفظها. للعناصر العائمة وإعدادات النظام وعدم الإزعاج أذونات منفصلة.
 
-<table>
-<tr><td align="center" valign="top"><b>Prisme Touch</b><br><a href="../assets/localized/ar/styles/style_00.png"><img src="../assets/localized/ar/styles/style_00.png" width="270" alt="Prisme Touch"></a></td><td align="center" valign="top"><b>Tablette</b><br><a href="../assets/localized/ar/styles/style_01.png"><img src="../assets/localized/ar/styles/style_01.png" width="270" alt="Tablette"></a></td><td align="center" valign="top"><b>Ghost Terminal</b><br><a href="../assets/localized/ar/styles/style_05.png"><img src="../assets/localized/ar/styles/style_05.png" width="270" alt="Ghost Terminal"></a></td></tr>
-<tr><td align="center" valign="top"><b>Arcade 1986</b><br><a href="../assets/localized/ar/styles/style_06.png"><img src="../assets/localized/ar/styles/style_06.png" width="270" alt="Arcade 1986"></a></td><td align="center" valign="top"><b>Orbit</b><br><a href="../assets/localized/ar/styles/style_08.png"><img src="../assets/localized/ar/styles/style_08.png" width="270" alt="Orbit"></a></td><td align="center" valign="top"><b>Papier</b><br><a href="../assets/localized/ar/styles/style_09.png"><img src="../assets/localized/ar/styles/style_09.png" width="270" alt="Papier"></a></td></tr>
-<tr><td align="center" valign="top"><b>Samsung Galaxy</b><br><a href="../assets/localized/ar/styles/style_13.png"><img src="../assets/localized/ar/styles/style_13.png" width="270" alt="Samsung Galaxy"></a></td><td align="center" valign="top"><b>Nova</b><br><a href="../assets/localized/ar/styles/style_20.png"><img src="../assets/localized/ar/styles/style_20.png" width="270" alt="Nova"></a></td><td align="center" valign="top"><b>Silence</b><br><a href="../assets/localized/ar/styles/style_21.png"><img src="../assets/localized/ar/styles/style_21.png" width="270" alt="Silence"></a></td></tr>
-</table>
+توجد نقاط الاسترداد التلقائية في تخزين التطبيق الخاص مع الاحتفاظ بعشر نقاط. توفر الأدوات نسخ AES-256-GCM قابلة للتصدير بكلمة مرور من عشرة محارف على الأقل، ولا يوجد استرداد عن بعد دونها. يُتحقق من الملف قبل الكتابة ويحمي سجل الاسترداد الاستيراد المنقطع. لا تُستورد المؤقتات النشطة أو أذونات Android أو تفعيل البطاقات من قالب. بعد ثلاثة أعطال متتالية غير معالجة، يتيح وضع الاسترداد إعادة المحاولة أو المكتب الكلاسيكي مع إيقاف العناصر العائمة.
 
-<details><summary>عرض الأنماط الـ22</summary>
+## الاختبارات والحدود المعروفة
 
-<table>
-<tr><td align="center" valign="top"><b>Prisme Touch</b><br><a href="../assets/localized/ar/styles/style_00.png"><img src="../assets/localized/ar/styles/style_00.png" width="270" alt="Prisme Touch"></a></td><td align="center" valign="top"><b>Tablette</b><br><a href="../assets/localized/ar/styles/style_01.png"><img src="../assets/localized/ar/styles/style_01.png" width="270" alt="Tablette"></a></td><td align="center" valign="top"><b>Bureau Windows</b><br><a href="../assets/localized/ar/styles/style_02.png"><img src="../assets/localized/ar/styles/style_02.png" width="270" alt="Bureau Windows"></a></td></tr>
-<tr><td align="center" valign="top"><b>Dock macOS</b><br><a href="../assets/localized/ar/styles/style_03.png"><img src="../assets/localized/ar/styles/style_03.png" width="270" alt="Dock macOS"></a></td><td align="center" valign="top"><b>Kali Workbench</b><br><a href="../assets/localized/ar/styles/style_04.png"><img src="../assets/localized/ar/styles/style_04.png" width="270" alt="Kali Workbench"></a></td><td align="center" valign="top"><b>Ghost Terminal</b><br><a href="../assets/localized/ar/styles/style_05.png"><img src="../assets/localized/ar/styles/style_05.png" width="270" alt="Ghost Terminal"></a></td></tr>
-<tr><td align="center" valign="top"><b>Arcade 1986</b><br><a href="../assets/localized/ar/styles/style_06.png"><img src="../assets/localized/ar/styles/style_06.png" width="270" alt="Arcade 1986"></a></td><td align="center" valign="top"><b>Meca Cockpit</b><br><a href="../assets/localized/ar/styles/style_07.png"><img src="../assets/localized/ar/styles/style_07.png" width="270" alt="Meca Cockpit"></a></td><td align="center" valign="top"><b>Orbit</b><br><a href="../assets/localized/ar/styles/style_08.png"><img src="../assets/localized/ar/styles/style_08.png" width="270" alt="Orbit"></a></td></tr>
-<tr><td align="center" valign="top"><b>Papier</b><br><a href="../assets/localized/ar/styles/style_09.png"><img src="../assets/localized/ar/styles/style_09.png" width="270" alt="Papier"></a></td><td align="center" valign="top"><b>Aurora</b><br><a href="../assets/localized/ar/styles/style_10.png"><img src="../assets/localized/ar/styles/style_10.png" width="270" alt="Aurora"></a></td><td align="center" valign="top"><b>LCD Studio</b><br><a href="../assets/localized/ar/styles/style_11.png"><img src="../assets/localized/ar/styles/style_11.png" width="270" alt="LCD Studio"></a></td></tr>
-<tr><td align="center" valign="top"><b>Apple Ultra</b><br><a href="../assets/localized/ar/styles/style_12.png"><img src="../assets/localized/ar/styles/style_12.png" width="270" alt="Apple Ultra"></a></td><td align="center" valign="top"><b>Samsung Galaxy</b><br><a href="../assets/localized/ar/styles/style_13.png"><img src="../assets/localized/ar/styles/style_13.png" width="270" alt="Samsung Galaxy"></a></td><td align="center" valign="top"><b>Garmin MARQ</b><br><a href="../assets/localized/ar/styles/style_14.png"><img src="../assets/localized/ar/styles/style_14.png" width="270" alt="Garmin MARQ"></a></td></tr>
-<tr><td align="center" valign="top"><b>TAG Racing</b><br><a href="../assets/localized/ar/styles/style_15.png"><img src="../assets/localized/ar/styles/style_15.png" width="270" alt="TAG Racing"></a></td><td align="center" valign="top"><b>Hublot Fusion</b><br><a href="../assets/localized/ar/styles/style_16.png"><img src="../assets/localized/ar/styles/style_16.png" width="270" alt="Hublot Fusion"></a></td><td align="center" valign="top"><b>Tambour Light</b><br><a href="../assets/localized/ar/styles/style_17.png"><img src="../assets/localized/ar/styles/style_17.png" width="270" alt="Tambour Light"></a></td></tr>
-<tr><td align="center" valign="top"><b>Montblanc Summit</b><br><a href="../assets/localized/ar/styles/style_18.png"><img src="../assets/localized/ar/styles/style_18.png" width="270" alt="Montblanc Summit"></a></td><td align="center" valign="top"><b>Ultimate Design</b><br><a href="../assets/localized/ar/styles/style_19.png"><img src="../assets/localized/ar/styles/style_19.png" width="270" alt="Ultimate Design"></a></td><td align="center" valign="top"><b>Nova</b><br><a href="../assets/localized/ar/styles/style_20.png"><img src="../assets/localized/ar/styles/style_20.png" width="270" alt="Nova"></a></td></tr>
-<tr><td align="center" valign="top"><b>Silence</b><br><a href="../assets/localized/ar/styles/style_21.png"><img src="../assets/localized/ar/styles/style_21.png" width="270" alt="Silence"></a></td><td align="center" valign="top"></td><td align="center" valign="top"></td></tr>
-</table>
+يتضمن تقرير V6 السابق **67,407 تحققاً في Java** و**1,775 تحققاً لنموذج الكمبيوتر** واختبارات المعرض ومسارات في Edge، و**16 تحققاً على DM100** للترحيل ورفض الاستيراد غير الصحيح والاسترداد والتشفير والتنبيه وجلسة وسائط مصطنعة. اختُبرت الصفحات والسحب والألوان ووضع الاسترداد اليدوي باللمس. يوضح [تقرير التحقق](V6-VALIDATION.md) حالة فحوص العناصر والطقس ومركزي التحكم الجديدة؛ لا تثبت الأرقام السابقة وحدها اختبار كل المسارات الجديدة.
 
-</details>
+عدد حالات النموذج لا يعني عدد أجهزة فعلية مماثلاً. لا يُدعى اعتماد ساعات أخرى أو عمر بطارية طويل أو جميع المشغلات أو Play Protect. يتحكم Android والبرنامج الثابت في الخلفية والتنبيهات والتدوير. تُحفظ اللغات السبع السابقة؛ تبقى بعض رسائل V6 المفصلة بالفرنسية.
 
-## أدوات يومية
+## الوثائق والدعم
 
-<table>
-<tr><td align="center" valign="top"><b>Today</b><br><a href="../assets/localized/ar/screenshots/today.png"><img src="../assets/localized/ar/screenshots/today.png" width="410" alt="Today"></a></td><td align="center" valign="top"><b>Notes</b><br><a href="../assets/localized/ar/screenshots/notes.png"><img src="../assets/localized/ar/screenshots/notes.png" width="410" alt="Notes"></a></td></tr>
-<tr><td align="center" valign="top"><b>Checklist</b><br><a href="../assets/localized/ar/screenshots/checklist.png"><img src="../assets/localized/ar/screenshots/checklist.png" width="410" alt="Checklist"></a></td><td align="center" valign="top"><b>Timer</b><br><a href="../assets/localized/ar/screenshots/timer.png"><img src="../assets/localized/ar/screenshots/timer.png" width="410" alt="Timer"></a></td></tr>
-</table>
+عند الإبلاغ اذكر الطراز وAndroid API وإصدار PRISME والاتجاه والخطوات الدقيقة. لا تنشر حسابات أو أرقاماً تسلسلية أو صادرات شخصية أو سجلات خاماً. الترخيص MIT؛ أسماء العلامات في الأنماط لا تعني ارتباطاً أو اعتماد أجهزة تلك العلامات.
 
-## إعدادات مرتبة حسب الفئات
+[V6 · FR](V6-GUIDE.md) · [PC Studio · FR](PC-STUDIO.md) · [English guide](README.en.md) · [Compatibility](COMPATIBILITY.md) · [22 styles](STYLES.md) · [Privacy](PRIVACY.md) · [Validation](V6-VALIDATION.md) · [Build](BUILD.md) · [MIT](../LICENSE) · [Issues](https://github.com/s00r1/PRISME/issues/new/choose)
 
-<table>
-<tr><td align="center" valign="top"><b>Settings Style</b><br><a href="../assets/localized/ar/screenshots/settings-style.png"><img src="../assets/localized/ar/screenshots/settings-style.png" width="270" alt="Settings Style"></a></td><td align="center" valign="top"><b>Settings Shortcuts</b><br><a href="../assets/localized/ar/screenshots/settings-shortcuts.png"><img src="../assets/localized/ar/screenshots/settings-shortcuts.png" width="270" alt="Settings Shortcuts"></a></td><td align="center" valign="top"><b>Settings Tools</b><br><a href="../assets/localized/ar/screenshots/settings-tools.png"><img src="../assets/localized/ar/screenshots/settings-tools.png" width="270" alt="Settings Tools"></a></td></tr>
-</table>
-
-
-جميع صور PRISME من تطبيق عرض منفصل بأيقونات عامة وبيانات خيالية، دون حسابات أو قائمة تطبيقات شخصية.
-
-<!-- /PRISME-VISUAL-SHOWCASE -->
-
-## الساعات
-
-| الطراز أو الفئة | الحالة |
-|---|---|
-| Domiwear / Domino DM100 بنظام Android 7.1.1 | **اختُبرت على جهاز فعلي**، والمرجع الأفقي 640 × 480 |
-| طرازات DM100 الأخرى | تحتاج إلى تحقق مستقل؛ الاسم لا يثبت تطابق النظام |
-| ساعات مستطيلة أخرى بقياس 2.86 بوصة / 640 × 480 | غير معتمدة؛ تحتاج إلى اختبار منفصل |
-
-الأسماء غير المختبرة هي **قائمة مرشحين وليست قائمة توافق معتمدة**. تحقق من النظام الحقيقي ومستوى API وتثبيت APK. هذا ليس ملف واجهة Wear OS. لم تُعتمد Pixel Watch أو Galaxy Watch بنظام Wear OS. أنظمة watchOS وTizen والأنظمة المغلقة التي لا تثبّت Android APK خارج الهدف. [المتطلبات والمصادر](COMPATIBILITY.md).
-
-## الصور والخصوصية والقيود
-
-[القوائم والخيارات](SCREENSHOTS.md) · [الأنماط الـ22](STYLES.md)
-
-تعرض الصور الواجهات الحقيقية لنسخة تجريبية منفصلة ببيانات خيالية وأيقونات عامة، دون حساب مستخدم أو قائمة تطبيقاته الشخصية. لا يوجد إذن Internet. تبقى الملاحظات والمهام والمفضلة وسجل التشغيل من PRISME محلياً؛ وقد تتضمنها الملفات التي يختار المستخدم تصديرها. لا تُنشر مفاتيح خاصة أو نسخ مستخدمين أو معرّفات ساعات أو سجلات شخصية.
-
-قد يوقف توفير الطاقة المؤقت والخدمات العائمة. تحتاج الموسيقى إلى مشغّل نشط. يمكن تحسين الترجمات. المناطق السوداء الجانبية المُبلغ عنها على DM100 **ليس لها إصلاح مؤكد**. لا يغيّر PRISME اللوحة أو برنامج تشغيلها، ولا يضمن العرض على كل شاشة.
-
-تتوفر مصادر Java والموارد واللغات والاختبارات ومساعد Imou الاختياري. [البناء والاختبار](BUILD.md) · [الأذونات](PRIVACY.md) · [الإبلاغ عن التوافق](https://github.com/s00r1/PRISME/issues/new/choose). الشفرة الأصلية مرخصة بـ MIT؛ يُسمح بالاستخدام والتعديل وإعادة التوزيع مع الاحتفاظ بإشعار الترخيص. أسماء العلامات تشير إلى إلهام بصري دون علاقة رسمية بتلك العلامات.
-
-![PRISME — ar](../assets/localized/ar/screenshots/language-ar.png)
-
-
-[◈ PRISME — Website / Site web](https://s00r1.github.io/PRISME/) · [Community / Testers](https://github.com/s00r1/PRISME/discussions/1)
-
-
-[DM100 hardware audit · 2026-11-05 (FR), current source/release status and real screenshots](AUDIT-2026-11-05.md)
-
-
-**PRISME 6.0.0-beta1:** [V6 guide (FR)](V6-GUIDE.md) · [Hardware validation](V6-VALIDATION.md) · [Beta download](https://github.com/s00r1/PRISME/releases/tag/v6.0.0-beta1). Stable release: v5.4.
+</div>

@@ -8,13 +8,17 @@ public final class HomeStore {
 
   public HomeStore(Context c) {
     p = c.getSharedPreferences("prisme_home", 0);
+    // V6 must preserve the selected classic desktop. Cards require an explicit choice.
+    if (PrefValues.number(p, "navigationVersion", 0) < 2) {
+      p.edit().putBoolean("enabled", false).putInt("navigationVersion", 2).commit();
+    }
   }
 
   public boolean enabled() {
     try {
-      return p.getBoolean("enabled", true);
+      return p.getBoolean("enabled", false);
     } catch (RuntimeException e) {
-      return true;
+      return false;
     }
   }
 

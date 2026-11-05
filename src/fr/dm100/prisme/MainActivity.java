@@ -63,6 +63,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     private static final int INK=0xffeaf4ff, MUTED=0xffa3b4c8, SURFACE=0xff192638, BG=0xff0b1220, ACCENT=0xff82ead2;
     private static final int EXPORT=71, IMPORT=72, CAPTURE=73;
     private String pendingVaultName;
+    private WidgetHost widgetHost;
     private HomeDeck homeDeck;
     private boolean rescue;
     private DashboardPrefs prefs;
@@ -101,8 +102,8 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     private boolean cancelSettingsRestore;
     private static final String[] SETTINGS_TABS = {"Écran", "Style", "Raccourcis", "Applications", "Outils", "Batterie", "Musique", "Profils"};
     private static final String[] SHORTCUT_DEFAULTS = {"apps", "styles", "search", "tools", "customize"};
-    private static final String[] SHORTCUT_ACTIONS = {"apps", "styles", "search", "favorites", "tools", "notes", "timer", "focus", "stopwatch", "workspaces", "clock", "customize", "controlCenter", "controlCenterSettings", "floatingVolumeSettings", "today", "checklist", "deskclock", "presets", "device", "settingsSearch", "rotationSettings", "language"};
-    private static final String[] SHORTCUT_NAMES = {"Toutes les applications", "Choisir un style PRISME", "Rechercher une application", "Filtrer les favoris", "Centre de contrôle", "Carnet local", "Minuteur", "Concentration", "Chronomètre", "Espaces de travail", "Cadran de la montre", "Réglages PRISME", "Centre de contrôle", "Personnaliser le centre", "Pastille de volume intégrée", "Aujourd’hui", "Liste de tâches", "Horloge de table", "Réglages rapides", "État de la montre", "Trouver un réglage", "Orientation globale", "Langue / Language"};
+    private static final String[] SHORTCUT_ACTIONS = {"apps", "styles", "search", "favorites", "tools", "notes", "timer", "focus", "stopwatch", "workspaces", "clock", "customize", "controlCenter", "controlCenterSettings", "floatingVolumeSettings", "today", "checklist", "deskclock", "presets", "device", "settingsSearch", "rotationSettings", "language", "weather", "widgetsSettings"};
+    private static final String[] SHORTCUT_NAMES = {"Toutes les applications", "Choisir un style PRISME", "Rechercher une application", "Filtrer les favoris", "Centre de contrôle", "Carnet local", "Minuteur", "Concentration", "Chronomètre", "Espaces de travail", "Cadran de la montre", "Réglages PRISME", "Centre de contrôle", "Personnaliser le centre", "Pastille de volume intégrée", "Aujourd’hui", "Liste de tâches", "Horloge de table", "Réglages rapides", "État de la montre", "Trouver un réglage", "Orientation globale", "Langue / Language", "Météo", "Widgets du bureau"};
     private TextView timerDisplay, stopwatchDisplay;
     private final List<java.lang.ref.WeakReference<AlertDialog>> ownedDialogs=new ArrayList<>();
     private final Runnable mediaTick = new Runnable(){@Override public void run(){
@@ -130,8 +131,8 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     private final BroadcastReceiver changes = new BroadcastReceiver(){
         @Override public void onReceive(Context c,Intent i){
             String a=i.getAction();
-            if(Intent.ACTION_SCREEN_OFF.equals(a)){if(homeDeck!=null)homeDeck.pause();board.onHostPause();main.removeCallbacks(mediaTick);main.removeCallbacks(tick);return;}
-            if(Intent.ACTION_SCREEN_ON.equals(a)){if(homeDeck!=null&&new HomeStore(MainActivity.this).enabled())homeDeck.resume();board.onHostResume();main.post(mediaTick);main.post(tick);return;}
+            if(Intent.ACTION_SCREEN_OFF.equals(a)){if(homeDeck!=null)homeDeck.pause();if(widgetHost!=null)widgetHost.pause();board.onHostPause();main.removeCallbacks(mediaTick);main.removeCallbacks(tick);return;}
+            if(Intent.ACTION_SCREEN_ON.equals(a)){if(homeDeck!=null&&new HomeStore(MainActivity.this).enabled())homeDeck.resume();if(widgetHost!=null&&widgetHost.getVisibility()==View.VISIBLE&&!new HomeStore(MainActivity.this).enabled())widgetHost.resume();board.onHostResume();main.post(mediaTick);main.post(tick);return;}
             if(Intent.ACTION_PACKAGE_ADDED.equals(a)||Intent.ACTION_PACKAGE_REMOVED.equals(a)||Intent.ACTION_PACKAGE_CHANGED.equals(a))loadApps();
             else updateSnapshot();
         }
@@ -174,6 +175,8 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         mainLayer.addView(homeDeck,new FrameLayout.LayoutParams(-1,-1));
         watchWidgets=new WatchWidgetsOverlay(this,action->onAction(action));
         mainLayer.addView(watchWidgets,new FrameLayout.LayoutParams(-1,-1));
+        widgetHost=new WidgetHost(this,new WidgetHost.Host(){public void action(String action){onAction(action);}public void changed(){refreshBoard();refreshDashboardOverlays();}});
+        mainLayer.addView(widgetHost,new FrameLayout.LayoutParams(-1,-1));
         controlPanel=new ControlCenterPanel(this,controlPrefs,controlController,new ControlCenterPanel.Listener(){
             public void onCustomize(){showControlCenterSettings();}
             public void onClosed(){board.requestFocus();}
@@ -224,9 +227,9 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         refreshBoard();
     }
     @Override protected void onResume(){
-        super.onResume();if(rescue)return;visible=true;OverlayPolicy.homeVisible=new HomeStore(this).enabled();
+        super.onResume();if(rescue)return;visible=true;
         main.postDelayed(()->RecoveryGuard.clear(this),60000);
-        MultiTimers.restore(this);if(homeDeck!=null&&new HomeStore(this).enabled())homeDeck.resume();if(experience!=null)experience.resume();timerDeadline=TimerEngine.deadline(this);
+        MultiTimers.restore(this);if(widgetHost!=null&&widgetHost.getVisibility()==View.VISIBLE&&!new HomeStore(this).enabled())widgetHost.resume();if(homeDeck!=null&&new HomeStore(this).enabled())homeDeck.resume();if(experience!=null)experience.resume();timerDeadline=TimerEngine.deadline(this);
         SenseEngine.apply(this,prefs);board.onHostResume();if(watchWidgets!=null&&!new HomeStore(this).enabled())watchWidgets.onHostResume();
         if(!registered){
             IntentFilter common=new IntentFilter();common.addAction(Intent.ACTION_SCREEN_OFF);common.addAction(Intent.ACTION_SCREEN_ON);common.addAction(Intent.ACTION_TIME_CHANGED);common.addAction(Intent.ACTION_TIMEZONE_CHANGED);common.addAction(Intent.ACTION_BATTERY_CHANGED);
@@ -247,7 +250,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     }
     @Override protected void onPause(){
         if(rescue){super.onPause();return;}
-        if(homeDeck!=null)homeDeck.pause();
+        if(homeDeck!=null)homeDeck.pause();if(widgetHost!=null)widgetHost.pause();
         OverlayPolicy.homeVisible=false;
         ControlCenterService.refresh(this);EdgeDockService.refresh(this);fr.dm100.prisme.volume.FloatingVolumeService.refresh(this);
         main.removeCallbacks(mediaTick);
@@ -258,12 +261,12 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     @Override protected void onDestroy(){
         if(rescue){V6Ui.closeAll(this);super.onDestroy();return;}
         V6Ui.closeAll(this);
-        if(homeDeck!=null)homeDeck.pause();
+        if(homeDeck!=null)homeDeck.pause();if(widgetHost!=null)widgetHost.pause();
         for(java.lang.ref.WeakReference<AlertDialog> ref:ownedDialogs){AlertDialog d=ref.get();if(d!=null&&d.isShowing())d.dismiss();}
         ownedDialogs.clear();if(experience!=null)experience.shutdown();closeControlExtras();repository.close();main.removeCallbacksAndMessages(null);super.onDestroy();
     }
     @Override public void onConfigurationChanged(Configuration c){
-        super.onConfigurationChanged(c);if(rescue)return;if(homeDeck!=null)homeDeck.refresh();board.refresh();if(watchWidgets!=null)watchWidgets.refresh();refreshDashboardOverlays();if(controlPanel!=null)controlPanel.refresh();if(controlSettings!=null&&controlSettings.isShowing())controlSettings.refit();if(floatingSettings!=null&&floatingSettings.isShowing())floatingSettings.refit();
+        super.onConfigurationChanged(c);if(rescue)return;if(homeDeck!=null)homeDeck.refresh();layoutDashboardWidgets();board.refresh();if(watchWidgets!=null)watchWidgets.refresh();refreshDashboardOverlays();if(controlPanel!=null)controlPanel.refresh();if(controlSettings!=null&&controlSettings.isShowing())controlSettings.refit();if(floatingSettings!=null&&floatingSettings.isShowing())floatingSettings.refit();
         for(java.lang.ref.WeakReference<AlertDialog> ref:ownedDialogs){
             AlertDialog d=ref.get();if(d instanceof OwnedDialog&&d.isShowing())((OwnedDialog)d).fitWindow();
         }
@@ -274,6 +277,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         if(controlPanel!=null&&controlPanel.isOpen()){controlPanel.close();return;}
         if(controlSettings!=null&&controlSettings.isShowing()){controlSettings.dismiss();return;}
         if(floatingSettings!=null&&floatingSettings.isShowing()){floatingSettings.dismiss();return;}
+        if(new HomeStore(this).enabled()){returnToSelectedDesktop();return;}
         if(prefs.getBoolean("favoritesOnly",false)||prefs.getInt("workspace",0)!=0){prefs.putBoolean("favoritesOnly",false);prefs.putInt("workspace",0);refreshBoard();}
         else originalClock();
     }
@@ -291,10 +295,9 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         Set<String> selected=workspace>0?prefs.getSet("workspace"+workspace):Collections.<String>emptySet();
         for(AppEntry a:apps)if(workspace==0||selected.contains(a.id))visibleApps.add(a);
         boolean modular=new HomeStore(this).enabled();
-        OverlayPolicy.homeVisible=visible&&modular;
         if(homeDeck!=null){homeDeck.setVisibility(modular?View.VISIBLE:View.GONE);if(modular){homeDeck.refresh();if(visible)homeDeck.resume();}else homeDeck.pause();}
-        board.setVisibility(modular?View.GONE:View.VISIBLE);
-        board.setShortcutCatalog(apps);board.setApps(visibleApps);board.refresh();if(watchWidgets!=null){watchWidgets.setVisibility(modular?View.GONE:View.VISIBLE);watchWidgets.refresh();if(modular)watchWidgets.onHostPause();}
+        board.setVisibility(modular?View.GONE:View.VISIBLE);layoutDashboardWidgets();
+        board.setShortcutCatalog(apps);board.setApps(visibleApps);board.refresh();if(watchWidgets!=null){boolean hidden=modular||(widgetHost!=null&&widgetHost.getVisibility()==View.VISIBLE);watchWidgets.setVisibility(hidden?View.GONE:View.VISIBLE);watchWidgets.refresh();if(hidden)watchWidgets.onHostPause();else if(visible)watchWidgets.onHostResume();}
         updateSnapshot();applyWindowPrefs();
     }
     private void updateSnapshot(){
@@ -312,7 +315,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         Point screenSize=screen();
         if(screenSize.x<=0||screenSize.y<=0)return;
         BatteryIndicatorPrefs bp=new BatteryIndicatorPrefs(this);
-        if(bp.displayMode()==1&&!new HomeStore(this).enabled()){
+        if(bp.displayMode()==1&&!new HomeStore(this).enabled()&&(widgetHost==null||widgetHost.getVisibility()!=View.VISIBLE)){
             dashboardBattery=new BatteryIndicatorView(this,bp);
             dashboardBattery.setBackgroundHint(ThemeSpec.get(prefs.getInt("theme",0)).bg);
             BatteryLevelReader.Reading state=BatteryLevelReader.read(this,null);
@@ -325,7 +328,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
             dashboardBattery.setAlpha(bp.integer("opacity",100)/100f);
             mainLayer.addView(dashboardBattery,Math.max(1,mainLayer.indexOfChild(controlPanel)),lp);
         }
-        if(musicPrefs.flag("enabled",true)&&!new HomeStore(this).enabled()){
+        if(musicPrefs.flag("enabled",true)&&!new HomeStore(this).enabled()&&(widgetHost==null||widgetHost.getVisibility()!=View.VISIBLE)){
             dashboardPlayer=new MiniMusicPlayer(this,musicPrefs);
             int width=Math.min(screenSize.x,dashboardPlayer.desiredWidth());
             int height=Math.min(screenSize.y,dashboardPlayer.desiredHeight());
@@ -334,6 +337,24 @@ public final class MainActivity extends Activity implements DashboardView.Listen
             lp.topMargin=Math.round((screenSize.y-height)*musicPrefs.number("y",87)/100f);
             mainLayer.addView(dashboardPlayer,Math.max(1,mainLayer.indexOfChild(controlPanel)),lp);
             dashboardPlayer.update();
+        }
+    }
+    private void layoutDashboardWidgets(){
+        if(widgetHost==null||mainLayer==null||board==null)return;
+        boolean cards=new HomeStore(this).enabled();WidgetStore store=new WidgetStore(this);int theme=prefs.getInt("theme",0);org.json.JSONObject config=store.read();Point screen=screen();boolean active=!cards&&config.optInt("side",1)!=2&&store.active(theme).length()>0;
+        FrameLayout.LayoutParams desktop=new FrameLayout.LayoutParams(-1,-1);
+        DashboardWidgets.Bounds area=DashboardWidgets.rail(screen.x,screen.y,config.optInt("width",176));
+        if(area.width<1||area.height<1)active=false;
+        if(active){FrameLayout.LayoutParams lp;
+            if(screen.x<screen.y){lp=new FrameLayout.LayoutParams(-1,area.height,Gravity.TOP);desktop.topMargin=area.height;desktop.height=Math.max(1,screen.y-area.height);}
+            else{lp=new FrameLayout.LayoutParams(area.width,-1,config.optInt("side",1)==0?Gravity.LEFT:Gravity.RIGHT);desktop.width=Math.max(1,screen.x-area.width);desktop.leftMargin=config.optInt("side",1)==0?area.width:0;}
+            widgetHost.setLayoutParams(lp);widgetHost.setVisibility(View.VISIBLE);widgetHost.refresh(theme);if(visible)widgetHost.resume();
+        }else{widgetHost.setVisibility(View.GONE);widgetHost.pause();}
+        board.setLayoutParams(desktop);
+        boolean suppress=visible&&(cards||active);
+        if(OverlayPolicy.homeVisible!=suppress){
+            OverlayPolicy.homeVisible=suppress;
+            ControlCenterService.refresh(this);EdgeDockService.refresh(this);fr.dm100.prisme.volume.FloatingVolumeService.refresh(this);
         }
     }
     private boolean screenInteractive(){android.os.PowerManager pm=(android.os.PowerManager)getSystemService(POWER_SERVICE);return pm==null||pm.isInteractive();}
@@ -366,7 +387,11 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         if(action==null)return;
         if("v6Refresh".equals(action)){profileImported();return;}
         if("v6Edit".equals(action)){homeDeck.editor();return;}
-        if("v6Home".equals(action)){new HomeStore(this).enabled(true);profileImported();return;}
+        if("weather".equals(action)){WeatherPanel.open(this);return;}
+        if("widgetsSettings".equals(action)){WidgetSettings.open(this,()->{refreshBoard();refreshDashboardOverlays();});return;}
+        if("calendarWidget".equals(action)){showLocalCalendar();return;}
+        if("classicHome".equals(action)){returnToSelectedDesktop();return;}
+        if("v6Home".equals(action)){showDesktopMode();return;}
         if("v6Tools".equals(action)){showV6Tools();return;}
         if("calculatorV6".equals(action)){UtilityPanel.calculator(this);return;}
         if("converterV6".equals(action)){UtilityPanel.converter(this);return;}
@@ -440,6 +465,25 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     }
 
     private void showStyles(){
+        dismissOwnedDialogs();
+        LinearLayout root=column();root.addView(text("Bureau actuel · "+ThemeSpec.ALL[prefs.getInt("theme",0)].name,17,ACCENT));
+        EditText query=edit("");query.setSingleLine(true);query.setHint("Rechercher parmi les 22 styles");root.addView(query,new LinearLayout.LayoutParams(-1,44));
+        ScrollView scroll=scroll();LinearLayout list=column();scroll.addView(list);root.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));
+        Runnable render=()->{list.removeAllViews();LinearLayout row=null;int count=0;
+            for(ThemeSpec theme:ThemeSpec.ALL){if(!SearchIndex.matches(theme.name+" "+theme.subtitle,query.getText().toString()))continue;
+                if(count++%2==0){row=new LinearLayout(this);list.addView(row,new LinearLayout.LayoutParams(-1,58));}
+                Button choice=button(theme.name);choice.setTextSize(TypedValue.COMPLEX_UNIT_PX,16);choice.setContentDescription("Choisir le style "+theme.name);choice.setTextColor(theme.id==prefs.getInt("theme",0)?ACCENT:INK);
+                choice.setOnClickListener(v->{applyTheme(theme);if(styleDialog!=null)styleDialog.dismiss();});
+                LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,54,1);lp.setMargins(3,2,3,2);row.addView(choice,lp);
+            }
+            if(count==0)list.addView(text("Aucun style trouvé",17,MUTED));
+        };
+        query.addTextChangedListener(new TextWatcher(){public void beforeTextChanged(CharSequence s,int st,int c,int a){}public void onTextChanged(CharSequence s,int st,int before,int count){render.run();}public void afterTextChanged(Editable e){}});render.run();
+        addButton(root,"Voir les aperçus des 22 styles",()->{if(styleDialog!=null)styleDialog.dismiss();showStyleGallery();});
+        styleDialog=new OwnedBuilder().setTitle("Les 22 styles PRISME").setFixedView(root).setNegativeButton("Mon bureau",(d,w)->returnToSelectedDesktop()).show();
+        styleDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE|WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+    private void showStyleGallery(){
         stylePreviews.clear();
         ScrollView scroll=scroll();LinearLayout body=column();scroll.addView(body);
         body.addView(text(ThemeSpec.ALL.length+" univers, "+ThemeSpec.ALL.length+" façons d’utiliser ta montre",17,INK));
@@ -450,7 +494,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         if(ThemeSpec.ALL.length>12)addButton(body,"Montres premium · "+Math.min(8,ThemeSpec.ALL.length-12)+" styles",()->{if(premiumHeader[0]!=null)scroll.smoothScrollTo(0,premiumHeader[0].getTop());});
         for(int row=0;row<(ThemeSpec.ALL.length+1)/2;row++){
             if(row*2==12){TextView premium=text("MONTRES PREMIUM · COLLECTION SIGNATURE",17,ACCENT);premium.setPadding(4,22,4,12);premiumHeader[0]=premium;body.addView(premium);}
-            if(row*2==20){TextView heading=text("QUOTIDIEN · PRISME 5",18,ACCENT);newHeader[0]=heading;body.addView(heading);}
+            if(row*2==20){TextView heading=text("QUOTIDIEN · NOVA ET SILENCE",18,ACCENT);newHeader[0]=heading;body.addView(heading);}
             LinearLayout line=new LinearLayout(this);line.setOrientation(LinearLayout.HORIZONTAL);
             for(int col=0;col<2;col++){
                 int index=row*2+col;
@@ -471,7 +515,23 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     }
     private AlertDialog styleDialog;
     private final List<ThemePreview> stylePreviews=new ArrayList<>();
+    private void returnToSelectedDesktop(){
+        new HomeStore(this).enabled(false);dismissOwnedDialogs();closeControlExtras();closeSettings();V6Ui.closeAll(this);
+        refreshBoard();refreshDashboardOverlays();
+        if(visible)board.onHostResume();
+        toast(ThemeSpec.ALL[prefs.getInt("theme",0)].name);
+    }
+    private void showDesktopMode(){
+        String selected=ThemeSpec.ALL[prefs.getInt("theme",0)].name;
+        new V6Ui.Builder(this).setTitle("Bureau et cartes")
+            .setMessage("Ton bureau reste "+selected+". Les cartes sont un panneau facultatif. Elles ne remplacent pas les 22 styles.")
+            .setPositiveButton("Ouvrir les cartes",(d,w)->{new HomeStore(this).enabled(true);profileImported();})
+            .setNegativeButton("Mon bureau",(d,w)->returnToSelectedDesktop()).show();
+    }
     private void applyTheme(ThemeSpec t){
+        new HomeStore(this).enabled(false);
+        getSharedPreferences("prisme_sense",0).edit().putBoolean("enabled",false).apply();
+        closeSettings();V6Ui.closeAll(this);
         prefs.putInt("theme",t.id);prefs.putInt("columns",t.recommendedColumns);
         prefs.putInt("iconSize",t.recommendedIconSize);prefs.putInt("textSize",t.recommendedTextSize);
         prefs.putInt("font",0);prefs.putInt("accentIndex",0);prefs.putBoolean("favoritesOnly",false);
@@ -493,7 +553,13 @@ public final class MainActivity extends Activity implements DashboardView.Listen
             line.addView(tabButton,lp);settingsTabs.add(tabButton);
         }
         strip.addView(line);tabs.addView(strip,new LinearLayout.LayoutParams(-1,48));
-        Button find=button("⌕ Trouver un réglage");find.setOnClickListener(v->{closeSettings();experience.search(true);});tabs.addView(find,new LinearLayout.LayoutParams(-1,44));
+        LinearLayout shortcuts=new LinearLayout(this);
+        Button allStyles=button("22 styles");allStyles.setOnClickListener(v->{closeSettings();showStyles();});
+        Button widgets=button("Widgets");widgets.setOnClickListener(v->{closeSettings();onAction("widgetsSettings");});
+        Button desktop=button("Mon bureau");desktop.setOnClickListener(v->returnToSelectedDesktop());
+        Button find=button("⌕ Réglage");find.setOnClickListener(v->{closeSettings();experience.search(true);});
+        for(Button item:new Button[]{allStyles,widgets,desktop,find})shortcuts.addView(item,new LinearLayout.LayoutParams(0,44,1));
+        tabs.addView(shortcuts,new LinearLayout.LayoutParams(-1,44));
         shell.addView(tabs,new LinearLayout.LayoutParams(-1,-2));
         settingsScroll=scroll();settingsScroll.setFillViewport(false);
         settingsBody=column();settingsBody.setPadding(4,4,6,12);settingsScroll.addView(settingsBody);
@@ -974,14 +1040,19 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         }
         super.startActivity(intent);
     }
+    private void showLocalCalendar(){LinearLayout root=V6Ui.column(this);android.widget.CalendarView calendar=new android.widget.CalendarView(this);root.addView(calendar,new LinearLayout.LayoutParams(-1,300));root.addView(text("Calendrier local · aucune lecture de compte ou d’événement",16,MUTED));V6Ui.dialog(this,"Calendrier",root);}
     AlertDialog.Builder v6Builder(){return new OwnedBuilder();}
     private void showV6Tools(){
         LinearLayout root=V6Ui.column(this);
+        V6Ui.add(root,"Widgets des 22 styles",()->onAction("widgetsSettings"));
+        V6Ui.add(root,"Météo et prévisions",()->onAction("weather"));
         V6Ui.add(root,"Calculatrice",()->onAction("calculatorV6"));
         V6Ui.add(root,"Convertisseur hors ligne",()->onAction("converterV6"));
         V6Ui.add(root,"Sauvegardes chiffrées",()->onAction("vault"));
         V6Ui.add(root,OverlayPolicy.suspended(this)?"Réactiver les éléments flottants":"Suspendre tous les éléments flottants",()->{if(OverlayPolicy.suspended(this))OverlayPolicy.resume(this);else OverlayPolicy.suspend(this);toast(OverlayPolicy.suspended(this)?"Éléments flottants suspendus":"Éléments flottants réactivés");});
-        String[] names={"Accueil modulaire","Composer mon accueil","Studio classique","Minuteurs nommés","Musique","Concentration","Tâches","Carnet","Chronomètre","Horloge de table","Centre de contrôle","Dock flottant","Règles Sense","Diagnostic","Sauvegarder / restaurer","Mode de secours"};
+        V6Ui.add(root,"22 styles · choisir mon bureau",()->{dismissOwnedDialogs();showStyles();});
+        V6Ui.add(root,"Revenir à mon bureau sélectionné",()->returnToSelectedDesktop());
+        String[] names={"Bureau et cartes (facultatif)","Modifier mes cartes","Studio classique","Minuteurs nommés","Musique","Concentration","Tâches","Carnet","Chronomètre","Horloge de table","Centre de contrôle","Dock flottant","Règles Sense","Diagnostic","Sauvegarder / restaurer","Mode de secours"};
         String[] ids={"v6Home","v6Edit","studio","multiTimers","mediaPanel","focus","checklist","notes","stopwatch","deskclock","controlCenter","edgeDock","sense","doctor","profilesV6","safeMode"};
         for(int i=0;i<names.length;i++){final String id=ids[i];V6Ui.add(root,names[i],()->{if(id.equals("profilesV6"))showSettings(7);else onAction(id);});}
         V6Ui.dialog(this,"PRISME 6 · Outils",root);
@@ -1250,7 +1321,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
                 try(OutputStream output=new java.io.FileOutputStream(file)){if(!image.compress(Bitmap.CompressFormat.PNG,100,output))throw new java.io.IOException("PNG indisponible");}finally{image.recycle();}
                 JSONObject item=new JSONObject(board.stylePreviewMetrics().toString());item.put("name",ThemeSpec.get(index).name);item.put("description",ThemeSpec.get(index).subtitle);item.put("file",file.getName());exported.put(item);index++;status.setText("Aperçu "+index+" / "+ThemeSpec.ALL.length);
                 if(index<ThemeSpec.ALL.length){main.postDelayed(this,35);return;}
-                JSONObject manifest=new JSONObject().put("version","5.1").put("generatedOnWatch",true).put("styles",exported);try(OutputStream output=new java.io.FileOutputStream(new java.io.File(directory,"STYLES.json"))){output.write(manifest.toString(2).getBytes("UTF-8"));}
+                JSONObject manifest=new JSONObject().put("version","6.0.0").put("generatedOnWatch",true).put("styles",exported);try(OutputStream output=new java.io.FileOutputStream(new java.io.File(directory,"STYLES.json"))){output.write(manifest.toString(2).getBytes("UTF-8"));}
                 progress.dismiss();new OwnedBuilder().setTitle("Galerie exportée").setMessage("22 aperçus générés par PRISME.\n"+directory.getAbsolutePath()).setNegativeButton("Fermer",null).show();
             }catch(Exception error){progress.dismiss();toast("Impossible de terminer la galerie");}
         }});
@@ -1286,9 +1357,9 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     }
     private void showHelp(){
         ScrollView scroll=scroll();LinearLayout b=column();scroll.addView(b);
-        b.addView(text("PRISME 5.4 · "+ThemeSpec.ALL.length+" bureaux pour ta montre",23,INK));
+        b.addView(text("PRISME 6 · "+ThemeSpec.ALL.length+" bureaux pour ta montre",23,INK));
         b.addView(text("Nouveautés : Aujourd’hui rassemble favoris, récents et accès rapides. Recherche retrouve applications et commandes, même sans accents. La liste de tâches se coche et le carnet s’enregistre pendant la saisie. Le minuteur alerte aussi hors de PRISME. Nova et Silence sont accessibles dans Styles.\n\nDans Outils, personnalise le balayage vers le haut et le double appui sur une zone vide, puis retrouve l’horloge de table et les réglages rapides de confort. La pastille peut s’atténuer au repos. Trouver un réglage recherche les paramètres par mot-clé.",17,ACCENT));
-        b.addView(text("Touche une icône pour ouvrir sa vraie application. Maintiens-la pour les favoris, le nom, les espaces ou le masquage.\n\nGlisse horizontalement pour les pages. Les dispositions en liste défilent aussi verticalement.\n\nLa barre du bas reste accessible dans chaque style : Cadrans, Styles, Aujourd’hui et Réglages. Le bouton Fermer des réglages ramène toujours au bureau.\n\nRéglages est organisé en six catégories. Écran règle le zoom global, les marges et l’adaptation ; Style règle les icônes et les couleurs. Raccourcis personnalise cinq emplacements, aussi modifiables par appui long.\n\nGlisse depuis le bord configuré pour ouvrir le centre de contrôle. Ses styles iOS et Android, ses boutons et ses gestes se personnalisent dans Outils. La pastille de volume intégrée s’active dans Outils, avec l’autorisation Android de superposition. Ses styles, formes, taille, transparence, position et mode déployable sont réglables ; sa notification permet de l’arrêter.\n\nLe bouton Cadran montre ouvre un accueil natif installé, sans changer le bureau Android par défaut. Pour changer un cadran natif, effectue ensuite un appui long sur son écran ; le sélecteur dépend du fabricant.\n\nLes compteurs indiquent des mesures réelles de la montre. Le terminal est une interface de lancement et d’outils locaux.\n\nLe bureau modifie l’accueil. Les applications et les menus Android gardent leurs propres interfaces.\n\nPour utiliser PRISME avec le bouton Accueil, choisis-le dans les bureaux Android disponibles. Certains firmwares de montre imposent leur propre accueil. Un bouton permet toujours de retrouver le cadran d’origine.\n\nApplication personnelle hors ligne, sans publicité ni compte. Aucun accès Internet, aux messages, aux contacts ou à l’historique des autres applications. Les favoris et les lancements depuis PRISME restent sur la montre.",16,INK));
+        b.addView(text("Touche une icône pour ouvrir sa vraie application. Maintiens-la pour les favoris, le nom, les espaces ou le masquage.\n\nGlisse horizontalement pour les pages. Les dispositions en liste défilent aussi verticalement.\n\nLa barre du bas reste accessible dans chaque style : Cadrans, Styles, Aujourd’hui et Réglages. Le bouton Fermer des réglages ramène toujours au bureau.\n\nRéglages est organisé en six catégories. Écran règle le zoom global, les marges et l’adaptation ; Style règle les icônes et les couleurs. Raccourcis personnalise cinq emplacements, aussi modifiables par appui long.\n\nGlisse depuis le bord configuré pour ouvrir le centre de contrôle. Ses styles iOS et Android, ses boutons et ses gestes se personnalisent dans Outils. La pastille de volume intégrée s’active dans Outils, avec l’autorisation Android de superposition. Ses styles, formes, taille, transparence, position et mode déployable sont réglables ; sa notification permet de l’arrêter.\n\nLe bouton Cadran montre ouvre un accueil natif installé, sans changer le bureau Android par défaut. Pour changer un cadran natif, effectue ensuite un appui long sur son écran ; le sélecteur dépend du fabricant.\n\nLes compteurs indiquent des mesures réelles de la montre. Le terminal est une interface de lancement et d’outils locaux.\n\nLe bureau modifie l’accueil. Les applications et les menus Android gardent leurs propres interfaces.\n\nPour utiliser PRISME avec le bouton Accueil, choisis-le dans les bureaux Android disponibles. Certains firmwares de montre imposent leur propre accueil. Un bouton permet toujours de retrouver le cadran d’origine.\n\nSans publicité ni compte. Les outils restent locaux. La météo connectée est facultative : après activation, Open-Meteo reçoit la ville recherchée ou ses coordonnées et votre adresse IP. Aucun accès GPS, aux messages, aux contacts ou à l’historique des autres applications. Les widgets se gèrent dans Réglages > Widgets : ajout, retrait, ordre, apparence et sélection par style.",16,INK));
         dialog("Guide PRISME",scroll,null,null);
     }
 

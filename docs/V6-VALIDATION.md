@@ -1,50 +1,79 @@
-# Validation PRISME 6.0.0-beta1 — 5 novembre 2026
+# Validation PRISME 6.0.0 — 5 novembre 2026
 
-## Statut
+## Livrable et appareil
 
-Première bêta, versionCode 22, Android API 25 minimum. Elle intègre la branche V6 préexistante avec les corrections V5 et les nouveaux modules. Elle ne remplace pas la version stable v5.4. Les essais concernent une DM100 réelle sous Android 7.1.1, surface paysage 640 × 480 ; les autres appareils ne sont pas certifiés.
+**6.0.0 · versionCode 24 · Android API 25 minimum**, préparé pour revue dans une pull request. L’APK signé utilise le certificat de l’installation existante et a été installé avec mise à jour, sans désinstallation. La préparation ne publie ni ne fusionne automatiquement une Release.
 
-## Contrôles automatisés locaux
+Appareil physique : DM100, Android 7.1.1/API 25, dalle 480×640, surface paysage 640×480 et portrait 480×640. Les autres modèles ne sont pas certifiés. Le bureau choisi parmi 22 styles reste l’accueil principal ; les cartes sont facultatives.
 
-- **67 407 assertions Java** : préférences historiques, placement sur 378 configurations de modèle, géométrie du volume, gestes, bord à bord, préférences Batterie/Musique et 1 804 assertions du cœur V6.
-- Le cœur V6 vérifie notamment les limites de grille, collisions, types invalides, conservation des données lors d’un import refusé, import/export des pages et modules, annulation/rétablissement, journal de récupération, temps monotone/changement d’heure/redémarrage simulé, pause sous la seconde, opérations décimales et conversions.
-- Chiffrement : aller-retour, mot de passe incorrect, altération de ciphertext, mot de passe trop court et salt/nonce renouvelés.
-- **1 775 assertions JavaScript** sur le modèle de disposition PC, plus les scénarios de galerie (chargement, langues concurrentes, erreurs, reprise et fenêtre de zoom).
-- Compilation complète JDK 25, bytecode Java 8, SDK Android 37 et DEX min-api 25. La compilation n’est pas une preuve d’absence de référence à une API plus récente : les fonctions sensibles ont aussi été exercées sur Android 7.1.
+## Tests automatisés
+
+| Suite | Assertions | Portée |
+| --- | ---: | --- |
+| Java | 67 663 | Préférences, profils, widgets, météo, géométrie, gestes, temps, utilitaires et chiffrement. |
+| Modèle des cartes PC | 1 775 | Grille, taille, limites, collisions et copie indépendante. |
+| Modèle des widgets PC | 123 | Types, bornes, filtres, options, identifiants, texte et import. |
+| Profils complets PC | 314 | Exports V5/V6, champs requis, types et refus d’un profil amputé. |
+| Galerie | Scénarios | Langues concurrentes, erreurs HTTP, données invalides, reprise et zoom. |
+| Audit API 25 | 16 contrôles internes | Résolution de l’historique API, instructions DEX et gardes de versions. |
+
+Les 229 cas météo/widgets Java couvrent notamment conversions °C/°F, horodatages, changement d’heure, cache, mesures manquantes, codes météo inconnus, géométrie réservée et interdiction d’importer ville/consentement/endpoint. Les 21 cas de mutation couvrent les identités après réordre/suppression, les changements atomiques et annulation/rétablissement. Les 1 807 cas du cœur V6 vérifient les imports, collisions, journal, minuteries, conversions et chiffrement.
+
+Le nombre de cas de modèle ne représente pas autant de configurations essayées physiquement. Les 43 817 cas de viewport couvrent 378 configurations ; les 20 162 cas de volume couvrent 720 configurations.
+
+## Compilation, signature et API
+
+Compilation complète JDK 25, Java 8, SDK Android 37, DEX min-api 25 ; APK utilisateur signé et vérifié. L’audit du DEX final n’a trouvé aucune référence publique incompatible non protégée ni référence publique non résolue. Les 7 références API 26 sont confinées aux helpers privés vérifiés : chaque appel source possède une garde de version et les appelants DEX sont contrôlés. Cela reste une analyse statique ciblée, pas une preuve générale du comportement du firmware.
+
+Les clés privées, mots de passe, exports utilisateur et listes d’applications réelles ne font pas partie des sources ou des captures publiques.
 
 ## Tests dans le processus Android réel
 
 Un paquet d’instrumentation séparé, signé avec la même clé, a exécuté **16 assertions** sur la montre :
 
-- Import d’un véritable export V5 de cette montre vers le schéma 7 ; notes et tâches conservées.
+- Import d’un véritable export V5 de cette montre vers le schéma 7, avec notes et tâches conservées.
 - Refus d’un module malformé, sans changement du carnet.
-- Retour à l’état précédent après une restauration interrompue simulée dans le journal.
-- Chiffrement/déchiffrement AES-GCM et PBKDF2 disponibles sur Android 7.1.
-- Programmation AlarmManager, pause, reprise avec moins d’une seconde et réception de fin.
-- Session MediaSession synthétique avec titre de démonstration ; commande Lecture reçue par son callback.
+- Retour à l’état précédent après restauration interrompue simulée dans le journal.
+- Chiffrement/déchiffrement AES-GCM et PBKDF2 sur Android 7.1.
+- Programmation AlarmManager, pause, reprise sous la seconde et livraison de fin.
+- Session MediaSession synthétique et réception d’une commande Lecture.
 
-Les préférences ont été rétablies dans le bloc final du test, les notifications de test retirées et les alarmes existantes reprogrammées. L’autorisation système de notifications temporairement utilisée pour l’essai a été remise exactement à sa valeur initiale. Aucun message de notification n’a été lu ou journalisé.
+Les préférences ont été rétablies dans le bloc final, les notifications de test retirées et les alarmes existantes reprogrammées. L’autorisation de notifications temporairement employée a été remise à sa valeur initiale. Aucun message de notification n’a été lu ou journalisé.
 
-Les premières mesures ont montré qu’une alarme très courte peut être livrée quelques secondes après l’échéance ; le test attend désormais une livraison bornée et l’interface vérifie aussi les expirations. Cela ne garantit pas la ponctualité en veille profonde ou avec un firmware restrictif.
+Le test météo final a exécuté **14 assertions sur Android 25**, avec de vraies requêtes HTTPS de recherche et prévision pour **Paris, ville de démonstration**. Il vérifie résultats, température plausible, cache persistant, désactivation et conservation hors ligne. Deux actualisations lancées simultanément reçoivent chacune un seul callback, des données identiques, la même date de récupération et le cache du résultat partagé. Les trois magasins météo sont rétablis ensuite et les requêtes restantes invalidées.
 
-## Parcours tactiles sur la montre
+Les sources reproductibles du harnais sont dans [tests/device](../tests/device/README.md). Le paquet QA n’est pas un fichier à joindre à la Release utilisateur.
 
-Trois pages d’accueil, changement de palette puis retour à Graphite, ouverture et fermeture des nouvelles fenêtres par la commande Accueil, création d’une page et d’un bloc temporaires, déplacement au doigt avec aimantation, suppression de la page de test, accès aux minuteurs/musique/calculatrice et mode de secours manuel suivi d’une reprise. Aucun enregistrement PRISME dans le tampon de crash consulté à la fin du parcours. Les deux entrées publiques utilityAction et controlCenterAction ont aussi été essayées avec une commande de secours non autorisée : toutes deux la refusent. Les commandes sensibles du centre de contrôle sont réservées aux appels internes du processus.
+## Inspection des 22 bureaux et parcours tactiles
 
-Le test a révélé la limitation de hauteur des dialogues natifs du firmware ; les nouveaux modules utilisent maintenant le cadre plein écran de PRISME. Les services vérifient également la politique de masquage pour empêcher une relance asynchrone de recouvrir l’accueil.
+Chaque style a été ouvert physiquement avec la zone widgets en paysage. Les 22 captures ont été inspectées : identité propre, palette, applications, lisibilité et position des commandes. La navigation Styles et l’accès permanent aux widgets sont présents, contenus dans l’écran et séparés géométriquement. Le catalogue réel installé est utilisé pour les essais privés ; ces captures ne sont pas publiées.
 
-## Éditeur PC et site
+Les nouveaux parcours comprennent : ajout d’une horloge par le catalogue, appui long sur un widget, choix d’une apparence Néon, retrait de l’horloge ajoutée et retour au nombre initial. Le schéma, l’ordre, les filtres par bureau et les options ont en complément une validation de modèle. Le retrait ne supprime pas les données de l’outil.
 
-Essai dans un vrai navigateur Edge sans interface visible : palettes, pages, annulation, refus de collision, import local d’un profil de démonstration, téléchargement du profil modifié avec conservation de la note de test, largeur de 1 280 puis 390 pixels sans débordement, changement de langue de galerie et navigation dans le zoom. Aucune erreur JavaScript de page observée.
+Sur l’appareil, les deux centres ont été inspectés en paysage et portrait : commutateurs ronds, lecteur compact et niveaux verticaux iOS ; grande horloge, tuiles Material et niveaux horizontaux Android. Un essai supplémentaire iOS en portrait, largeur 65% et zoom 125%, vérifie le défilement et l’accès à Fermer. Les réglages de rotation initiaux ont été rétablis.
 
-Les captures V6 sont de vraies images de la DM100. Le carnet n’est pas prévisualisé sur l’accueil, les favoris n’exposent pas leur catalogue et aucune capture de compte n’est publiée.
+Le bureau Prisme Touch a aussi été inspecté en portrait avec sa bande horizontale de widgets et défilement indépendant. Cela ne signifie pas que les 22 styles ont tous une inspection physique exhaustive en portrait.
 
-## Limites et suite
+La revue a corrigé deux chevauchements : la batterie globale et la pastille de volume cèdent leur place à la zone widgets sur l’accueil, sans effacer leurs préférences. Le message vide ne s’affiche plus en double. Les widgets masqués ne reprennent plus leurs rafraîchissements au réveil. Les parcours cartes, retour Bureau, sélection des22 styles, réglages et outils existants restent disponibles.
 
-Pas de certification Play Protect, pas d’audit de sécurité indépendant, pas d’essai d’autonomie prolongé, de comparaison V5/V6 reproductible de fluidité, ni de redémarrage matériel dans cette session. Le calcul après redémarrage est testé en modèle et le replanificateur est implémenté, mais sa validation matérielle reste à faire.
+Les essais précédents des cartes comprennent pages, palettes, annulation, déplacement tactile aimanté, ajout/suppression temporaires et mode de secours manuel. Les commandes externes non autorisées ont été refusées. Aucun plantage PRISME n’a été observé dans le tampon de crash consulté en fin de validation.
 
-La session musicale synthétique ne valide pas Spotify, Deezer, YouTube ou les lecteurs OEM. Les commandes simples/enrichies dépendent de leurs sessions ; leur lecture en arrière-plan reste sous le contrôle d’Android et du firmware. Les sept langues historiques sont conservées, avec principaux libellés V6 traduits ; certains textes détaillés et tous les parcours RTL n’ont pas une validation matérielle exhaustive.
+## Navigateur, site et paquet PC
 
-Les tests utilisent de nombreux cas de modèle : leur nombre ne signifie pas qu’autant de configurations ont été essayées physiquement. Le mode de secours a été ouvert manuellement ; trois plantages réels consécutifs n’ont pas été provoqués sur les données utilisateur.
+Dans Edge réel : widgets 13 types, options, choix des bureaux, apparences, °C/°F, ordre/ajout/retrait, annulation, collisions des cartes, import/export, conservation des autres données et du mode bureau/cartes. Les aperçus météo PC sont explicitement fictifs et aucune donnée n’est envoyée à un service.
 
-[Guide](V6-GUIDE.md) · [Fonctions reportées](V6-DEVELOPMENT.md) · [Confidentialité](PRIVACY.md)
+Le ZIP extrait a été testé directement en `file://`, sans serveur : les 22 images locales, les deux éditeurs, conversion d’un vrai format complet V5 vers V6, téléchargement du profil modifié et conservation des notes. Les exports incomplets ou trop gros sont refusés ; l’ancien bouton Exporter est désactivé après refus. Ce cas empêchait auparavant de garantir la conservation des données. 314 tests ajoutés en régression.
+
+Le site a été vérifié à 390, 768 et 1 280 pixels, avec galerie multilingue, images locales, nouveaux centres de contrôle et zoom. Aucun débordement horizontal ni erreur JavaScript de page observé. Le ZIP n’a déclenché aucune requête HTTP. [Guide PC](PC-STUDIO.md).
+
+## Captures publiques et limites
+
+Les galeries historiques présentent des catalogues et textes fictifs. Les nouvelles captures météo, gestion widgets et centres de contrôle proviennent de la DM100. Paris est un choix de démonstration, pas une position GPS. Les données de session ont été retirées après les essais ; aucune liste d’applications ni contenu personnel n’est publié.
+
+Pas d’essai prolongé d’autonomie, d’audit de sécurité indépendant, de certification Play Protect ni de comparaison V5/V6 reproductible de fluidité. Un redémarrage matériel n’a pas été provoqué dans cette session ; le calcul après redémarrage est testé en modèle. La livraison d’alarme peut être retardée par le firmware, notamment en veille profonde.
+
+La session musicale synthétique ne certifie pas Spotify, Deezer, YouTube ou les lecteurs OEM. Métadonnées, commandes et lecture arrière-plan dépendent de leurs sessions et d’Android. Les sept langues historiques restent présentes ; tous les nouveaux textes détaillés et parcours RTL n’ont pas une validation matérielle exhaustive.
+
+La météo dépend du réseau et d’Open-Meteo ; un cache ancien ou un réseau désactivé sont signalés. L’API gratuite est destinée aux usages non commerciaux. Aucun engagement d’exactitude ou de disponibilité 100% du fournisseur n’est revendiqué.
+
+[Guide V6](V6-GUIDE.md) · [PC](PC-STUDIO.md) · [Architecture](V6-DEVELOPMENT.md) · [Confidentialité](PRIVACY.md)

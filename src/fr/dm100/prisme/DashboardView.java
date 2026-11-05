@@ -61,7 +61,7 @@ public final class DashboardView extends View {
     private DeviceSnapshot snapshot;
     private float w, surfaceWidth, surfaceHeight, h, scroll, maxScroll, downX, downY, lastY;
     private ViewportLayout viewport;
-    private boolean drawingStyle;
+    private boolean drawingStyle, emptyRendered;
     private boolean gestureInContent;
     private static final String[] SHORTCUT_DEFAULTS = {"apps", "styles", "search", "tools", "customize"};
     private int page, pageCount = 1, capacity = 1, activeTheme = -1;
@@ -237,6 +237,7 @@ public final class DashboardView extends View {
     }
     @Override protected void onDraw(Canvas c) {
         super.onDraw(c);
+        emptyRendered = false;
         if (viewport == null || w < 1 || h < 1) return;
         hits.clear(); maxScroll = 0; listMode = false;
         // Fill every physical pixel, including optional safety margins and the volume rail.
@@ -636,7 +637,8 @@ public final class DashboardView extends View {
         page = clamp(page, 0, pageCount - 1);
     }
     private void empty(Canvas c, RectF region) {
-        if (!apps.isEmpty()) return;
+        if (!apps.isEmpty() || emptyRendered) return;
+        emptyRendered = true;
         txt(c, prefs.getBoolean("favoritesOnly", false) ? "Votre sélection commence ici." : "Aucune application visible.", region.centerX(), region.centerY() - 11, 16, theme.text, sans, Paint.Align.CENTER);
         txt(c, "Apps → appui long pour choisir vos favoris", region.centerX(), region.centerY() + 14, 11, theme.muted, sans, Paint.Align.CENTER);
     }
@@ -743,7 +745,7 @@ public final class DashboardView extends View {
         return Math.max(2, Math.min(wanted, (int)(width / 72)));
     }
     private int iconSize() { return clamp(prefs.getInt("iconSize", theme.recommendedIconSize), 52, 100) + (prefs.getInt(DashboardPrefs.FIT_MODE, 0) == 2 ? 12 : 0); }
-    private int textSize() { return clamp(prefs.getInt("textSize", theme.recommendedTextSize), 12, 24) + (prefs.getInt(DashboardPrefs.FIT_MODE, 0) == 2 ? 2 : 0); }
+    private int textSize() { return Math.max(viewport==null?12:Math.min(24,(int)Math.ceil(12/viewport.scale)),clamp(prefs.getInt("textSize", theme.recommendedTextSize), 12, 24) + (prefs.getInt(DashboardPrefs.FIT_MODE, 0) == 2 ? 2 : 0)); }
     private boolean labels() { return prefs.getBoolean("labels", true); }
     private String label(AppEntry app) { String custom = prefs.getCustomLabel(app.id); return custom != null && custom.trim().length() > 0 ? custom.trim() : app.label; }
     private long now() { return snapshot != null && snapshot.deviceTimeMillis > 0 ? snapshot.deviceTimeMillis : System.currentTimeMillis(); }
@@ -850,7 +852,12 @@ public final class DashboardView extends View {
     private int previewTheme=-1;
     private AppEntry studioApp(int offset,int perPage){setCapacity(perPage);int index=page*capacity+offset;return index>=0&&index<apps.size()?apps.get(index):null;}
     private RectF box(float x,float y,float width,float height){return new RectF(x,y,x+Math.max(1,width),y+Math.max(1,height));}
-    private void studioCard(Canvas c,RectF area,int tint,float radius){fill(c,area,tint,radius);stroke(c,area,color(theme.text,.12f),radius,1);}
+    private void studioCard(Canvas c,RectF area,int tint,float radius){
+        fill(c,area,tint,radius);stroke(c,area,color(theme.text,.16f),radius,1);
+        if(area.width()>70&&area.height()>45&&theme.id!=11&&theme.id!=21){
+            float inset=Math.max(2,Math.min(radius,10));line(c,area.left+inset,area.top+1,area.right-inset,area.top+1,color(accent,.25f),1);
+        }
+    }
     private void userTxt(Canvas c,String value,float x,float baseline,float size,int ink,Typeface face,Paint.Align align){textPaint.setColor(ink);textPaint.setTextSize(size);textPaint.setTypeface(selectedFont(face));textPaint.setTextAlign(align);I18n.drawUserText(c,value,x,baseline,textPaint);}
     private void shortUserTxt(Canvas c,String value,float x,float baseline,float maxWidth,float size,int ink,Typeface face,Paint.Align align){
         textPaint.setTextSize(size);textPaint.setTypeface(selectedFont(face));String out=value==null?"":value;
@@ -874,8 +881,8 @@ public final class DashboardView extends View {
         txt(c,(page+1)+" / "+pageCount,w/2,y+height*.65f,16,theme.muted,mono,Paint.Align.CENTER);
     }
     private void studioSlots(Canvas c){if(prefs.getBoolean("styleDock",false))toolbar(c,h-64,activeTheme==5||activeTheme==6||activeTheme==11,false);}
-    private void studioCaption(Canvas c,String title,String subtitle){txt(c,title,22,31,16,accent,bold,Paint.Align.LEFT);if(subtitle!=null)txt(c,subtitle,w-22,31,12,theme.muted,mono,Paint.Align.RIGHT);}
-    private void studioEmpty(Canvas c){if(apps.isEmpty())txt(c,"Aucune application visible",w/2,h*.52f,22,theme.muted,sans,Paint.Align.CENTER);}
+    private void studioCaption(Canvas c,String title,String subtitle){float readable=viewport==null?16:Math.max(16,12/viewport.scale);shortTxt(c,title,22,31,w*.72f,readable,accent,bold,Paint.Align.LEFT);if(subtitle!=null)shortTxt(c,subtitle,w-22,31,w*.24f,readable*.85f,theme.muted,mono,Paint.Align.RIGHT);}
+    private void studioEmpty(Canvas c){if(apps.isEmpty()&&!emptyRendered){emptyRendered=true;txt(c,"Aucune application visible",w/2,h*.52f,22,theme.muted,sans,Paint.Align.CENTER);}}
     private void studioList(Canvas c,RectF area,int mode){
         listMode=true;page=0;pageCount=1;float row=Math.max(mode==0?76:66,46/viewport.scale);maxScroll=Math.max(0,apps.size()*row-area.height());scroll=Math.max(0,Math.min(maxScroll,scroll));
         c.save();c.clipRect(area);int start=Math.max(0,(int)(scroll/row)),end=Math.min(apps.size(),(int)((scroll+area.height())/row)+1);

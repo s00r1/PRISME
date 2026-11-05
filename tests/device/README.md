@@ -17,4 +17,10 @@ Les mots de passe de signature passent par les variables documentées dans BUILD
 
 L’essai multimédia enrichi requiert l’accès Android aux notifications accordé à PRISME. Sans cet accès, le rapport signale ce sous-test comme non vérifié. Rétablissez ensuite le choix d’autorisation initial. Le test ne lit ni ne journalise les messages des notifications.
 
-`INSTRUMENTATION_CODE: -1` correspond à Activity.RESULT_OK ; lire aussi `result=PASS` et `preferences=restored`. Un échec doit conserver la version en bêta jusqu’à résolution.
+`INSTRUMENTATION_CODE: -1` correspond à Activity.RESULT_OK ; lire aussi `result=PASS` et `preferences=restored`. Un échec bloque la validation de la livraison jusqu’à résolution.
+
+## Météo et captures des 22 styles
+
+`adb shell am instrument -w fr.dm100.prisme.qa/.WeatherValidation` teste une recherche de Paris et une prévision HTTPS réelle sur Android, puis le cache et la désactivation. Les trois magasins météo sont rétablis dans `finally`. Ce test active temporairement le réseau et nécessite Internet ; Paris est une fixture de test, pas la position de l’utilisateur.
+
+`VisualFixture` propose `-e action save`, `-e action style -e id 0` (0 à21), `-e action restore`. Créez d’abord le point privé, capturez chaque bureau et terminez toujours par restore. Les captures du catalogue installé sont privées : ne les publiez pas. La restauration réactive le bureau choisi et conserve la disposition des cartes. Ce harnais ne remplace pas les gestes au doigt ni l’inspection des images.

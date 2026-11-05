@@ -11,7 +11,7 @@ sdkmanager "platforms;android-35" "build-tools;35.0.0"
 ./build.ps1 -Unsigned
 ```
 
-This creates `PRISME_DM100-unsigned.apk`, a developer artifact that must be signed before installation. Ordinary users should download the signed `PRISME.apk` from Releases. An APK built with a different signing key cannot update the official installation in place.
+This creates `PRISME_DM100-unsigned.apk`, a developer artifact that must be signed before installation. Ordinary users should download the signed `PRISME-6.0.0.apk` from Releases. An APK built with a different signing key cannot update the official installation in place.
 
 For a locally signed build, create and keep your own keystore, then set `PRISME_KEYSTORE`, `PRISME_STORE_PASSWORD` and `PRISME_KEY_PASSWORD` in your local environment. Never commit them. Run:
 
@@ -30,7 +30,7 @@ python scripts/fetch-test-dependency.py
 ./tests/run-all.ps1
 ```
 
-The suites cover preferences and profile compatibility, checklist/search behavior, screen geometry, Control Center gestures, floating-volume geometry and edge-to-edge layout. They do not require a watch or user data. The published sources passed 623 preference/tool assertions, 43,817 viewport assertions, 784 gesture assertions, 20,162 volume-geometry assertions and 109 edge-to-edge assertions.
+The suites cover preferences and profile compatibility, checklist/search behavior, screen geometry, Control Center gestures, floating-volume geometry and edge-to-edge layout. They do not require a watch or user data. Current V6 checks include 67,663 Java assertions, 1,775 card-layout and 123 widget-model and 314 complete-profile assertions, gallery tests and on-device instrumentation. See [V6 validation](V6-VALIDATION.md) for the exact scope and limits.
 
 An optional static API audit requires the SDK's API history file and a built APK:
 
@@ -48,4 +48,14 @@ The companion is optional and is not required to use PRISME. Its release APK has
 
 ## Screenshots
 
-Documentation captures are rendered on an Android device from an isolated demo application using the same UI code and fictional data. Views belonging to other applications are excluded. The temporary demo package and its signing key are not release assets. App-installation lists, backups and real user text are not used as screenshot fixtures.
+The historical style galleries are rendered on an Android device from an isolated demo application using the same UI code and fictional data. New V6 weather, widget settings and Control Center captures come from the real DM100; Paris is a demonstration city. Views belonging to other applications are excluded. The temporary demo package and its signing key are not release assets. App-installation lists, backups and real user text are not used as screenshot fixtures.
+
+## PC editor distribution
+
+```powershell
+python scripts/package-pc-editor.py --output dist/PRISME-PC-Studio-6.0.0.zip
+```
+
+The archive contains both standalone editors, local scripts/styles, a Windows launcher, instructions, license and a file-integrity manifest. Extract it and open index.html directly; no local server or JavaScript package installation is required by the end user.
+
+V6 keeps the selected classic desktop as the entry point. Optional cards are explicitly opened, and importing their layout does not change the active desktop/card mode.

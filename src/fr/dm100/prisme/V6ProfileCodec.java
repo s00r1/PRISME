@@ -67,6 +67,9 @@ public final class V6ProfileCodec {
         JSONObject h=new JSONObject().put("layout",new HomeStore(context).read());
         h.put("enabled",new HomeStore(context).enabled());
         result.put("home",h);
+        result.put("dashboardWidgets",new WidgetStore(context).read());
+        android.content.SharedPreferences weather=context.getSharedPreferences("prisme_weather",0);
+        result.put("weather",new JSONObject().put("fahrenheit",PrefValues.flag(weather,"fahrenheit",false)).put("interval",Math.max(15,Math.min(180,PrefValues.number(weather,"interval",45)))));
         return result;
     }
     public static Prepared prepareImport(JSONObject root) throws JSONException {
@@ -76,7 +79,7 @@ public final class V6ProfileCodec {
         while(top.hasNext()){
             String key=top.next();boolean known=false;
             for(String g:GROUPS)if(g.equals(key))known=true;
-            if("home".equals(key))known=true;
+            if("home".equals(key)||"dashboardWidgets".equals(key)||"weather".equals(key))known=true;
             if(!known)throw new JSONException("Module V6 non reconnu : "+key);
         }
         for(int group=0;group<GROUPS.length;group++){
@@ -96,17 +99,19 @@ public final class V6ProfileCodec {
                 if(!matched)for(String accepted:BOOLS[group])if(accepted.equals(key)){
                     Object value=values.get(key);
                     if(!(value instanceof Boolean))throw new JSONException("Booléen attendu : "+key);
-                    validated.put(key,value);matched=true;break;
+                    if(!(group==3&&"enabled".equals(key)))validated.put(key,value);matched=true;break;
                 }
                 if(!matched)throw new JSONException("Option V6 inconnue : "+key);
             }
             result.groups.put(STORES[group],validated);
         }
+        if(root.has("dashboardWidgets")){Map<String,Object> values=new HashMap<>();values.put("layout",DashboardWidgets.validate(root.getJSONObject("dashboardWidgets")).toString());result.groups.put("prisme_widget_engine",values);}
+        if(root.has("weather")){JSONObject weather=root.getJSONObject("weather");DashboardWidgets.keys(weather,"fahrenheit","interval");Map<String,Object> values=new HashMap<>();if(weather.has("fahrenheit")){if(!(weather.get("fahrenheit") instanceof Boolean))throw new JSONException("Unité météo invalide");values.put("fahrenheit",weather.getBoolean("fahrenheit"));}if(weather.has("interval"))values.put("interval",HomeLayout.integer(weather,"interval",15,180));result.groups.put("prisme_weather",values);}
         if(root.has("home")){
             JSONObject home=root.getJSONObject("home");
             if(home.length()!=2||!(home.get("enabled") instanceof Boolean))throw new JSONException("Accueil invalide");
             Map<String,Object> values=new HashMap<>();
-            values.put("enabled",home.getBoolean("enabled"));
+            // Keep active desktop/card mode local; importing a layout must not replace the selected desktop.
             values.put("layout",HomeLayout.validate(home.getJSONObject("layout")).toString());
             result.groups.put("prisme_home",values);
         }

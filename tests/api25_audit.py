@@ -17,13 +17,35 @@ PROJECT = Path(__file__).resolve().parents[1]
 _arguments = argparse.ArgumentParser(description=__doc__)
 _arguments.add_argument("--history", default=os.environ.get("ANDROID_API_HISTORY"), help="Android SDK data/api-versions.xml path")
 _arguments.add_argument("--apk", type=Path, default=PROJECT / "PRISME_DM100.apk")
+_arguments.add_argument("--self-test", action="store_true", help="Run audit parser and guard regression checks")
 _options = _arguments.parse_args()
-if not _options.history:
+if not _options.history and not _options.self_test:
     _arguments.error("Provide --history or ANDROID_API_HISTORY")
-HISTORY = Path(_options.history)
+HISTORY = Path(_options.history) if _options.history else None
 APK = _options.apk
 TARGET = 25
-api = {c.attrib["name"]: c for c in ET.parse(HISTORY).getroot().findall("class")}
+# Self-tests have their own tiny metadata fixture. They exercise inheritance,
+# member introduction and instruction/guard parsing without an installed SDK or APK.
+_SELF_TEST_HISTORY = """<api>
+  <class name="android/os/BaseBundle" since="21">
+    <method name="getBoolean(Ljava/lang/String;Z)Z" since="22"/>
+    <method name="putInt(Ljava/lang/String;I)V" since="21"/>
+  </class>
+  <class name="android/os/Bundle" since="1">
+    <extends name="android/os/BaseBundle" since="21"/>
+  </class>
+  <class name="android/view/accessibility/AccessibilityRecord" since="14">
+    <method name="setClassName(Ljava/lang/CharSequence;)V" since="14"/>
+  </class>
+  <class name="android/view/accessibility/AccessibilityEvent" since="4">
+    <extends name="android/view/accessibility/AccessibilityRecord" since="14"/>
+  </class>
+  <class name="android/view/View" since="1">
+    <method name="setTooltipText(Ljava/lang/CharSequence;)V" since="26"/>
+  </class>
+</api>"""
+_history_root = ET.fromstring(_SELF_TEST_HISTORY) if _options.self_test else ET.parse(HISTORY).getroot()
+api = {c.attrib["name"]: c for c in _history_root.findall("class")}
 
 
 def introduced(node, parent_since=1):
@@ -96,7 +118,39 @@ def instructions(data, offset, length):
         i += size
 
 
-if '--self-test' in sys.argv:
+def verify_boundary_source(source):
+    """Verify every helper call, rather than trusting the name Api26 or one guard.
+
+    Only the two supported SDK>=26 branch shapes are recognized. A new unguarded
+    call, a different fallback, or an unknown helper method fails closed.
+    """
+    # A guard in a comment must never satisfy a boundary check. No guard literals
+    # occur in these production files; quoted strings are removed as well.
+    code = re.sub(r'"(?:\\.|[^"\\])*"|/\*.*?\*/|//[^\n]*', '', source, flags=re.S)
+    code = re.sub(r'\s+', '', code)
+    if 'privatestaticfinalclassApi26{' not in code:
+        return False
+    calls = list(re.finditer(r'Api26\.[A-Za-z_$][\w$]*\(', code))
+    if not calls:
+        return False
+    patterns = [
+        r'if\(Build\.VERSION\.SDK_INT>=26\)Api26\.start\((?P<context>[\w$]+),(?P<intent>[\w$]+)\);else(?P=context)\.startService\((?P=intent)\);',
+        r'if\(Build\.VERSION\.SDK_INT>=26\)(?P<var>[\w$]+)=Api26\.builder\((?P<context>[\w$]+)(?:,[\w$]+)?\);else(?P=var)=newNotification\.Builder\((?P=context)\);',
+        r'Build\.VERSION\.SDK_INT>=26\?Api26\.builder\((?P<context>[\w$]+)(?:,[\w$]+)?\):newNotification\.Builder\((?P=context)\)',
+        r'Build\.VERSION\.SDK_INT>=26\?Api26\.windowType\(\):(?:android\.view\.)?WindowManager\.LayoutParams\.TYPE_SYSTEM_ALERT',
+    ]
+    guards = [match.span() for pattern in patterns for match in re.finditer(pattern, code)]
+    return all(any(start <= call.start() < end for start, end in guards) for call in calls)
+
+
+def verify_boundary_dex(helper, callers):
+    """The private helper can only be entered from its verified enclosing class."""
+    enclosing = helper.replace('$Api26;', ';')
+    uses = [owners for ref, owners in callers.items() if ref[0] == helper]
+    return bool(uses) and all(owners and owners.issubset({enclosing}) for owners in uses)
+
+
+if _options.self_test:
     cases = [
         ('android/os/Bundle','getBoolean(Ljava/lang/String;Z)Z','android/os/BaseBundle',22),
         ('android/os/Bundle','putInt(Ljava/lang/String;I)V','android/os/BaseBundle',21),
@@ -111,7 +165,26 @@ if '--self-test' in sys.argv:
     decoded = list(instructions(struct.pack('<'+'H'*len(fixture),*fixture),0,len(fixture)))
     assert [op for op,_ in decoded] == [0x71,0,0x77,0x0e]
     assert decoded[0][1][1]==12 and decoded[2][1][1]==13
-    print('PASS: 6 API history and DEX instruction regression checks.')
+    fixture_source = """private static final class Api26 {}
+        if (Build.VERSION.SDK_INT >= 26) Api26.start(c, i); else c.startService(i);
+        Notification.Builder b = Build.VERSION.SDK_INT >= 26 ? Api26.builder(c,m) : new Notification.Builder(c);
+        return Build.VERSION.SDK_INT >= 26 ? Api26.windowType() : WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+    """
+    assert verify_boundary_source(fixture_source)
+    assert not verify_boundary_source(fixture_source + 'Api26.start(c,i);')
+    assert not verify_boundary_source(fixture_source.replace('SDK_INT >= 26', 'SDK_INT >= 25'))
+    assert not verify_boundary_source(fixture_source.replace('private static final class', 'public static final class'))
+    assert not verify_boundary_source('/*' + fixture_source + '*/ Api26.start(c,i);')
+    assert not verify_boundary_source(fixture_source.replace('else c.startService(i)', 'else other.startService(i)'))
+    assert verify_boundary_source(fixture_source.replace(
+        'Notification.Builder b = Build.VERSION.SDK_INT >= 26 ? Api26.builder(c,m) : new Notification.Builder(c);',
+        'if(Build.VERSION.SDK_INT>=26)b=Api26.builder(c);else b=new Notification.Builder(c);'))
+    helper = 'Ltest/Service$Api26;'
+    ref = (helper, 'method', 'builder()V')
+    assert verify_boundary_dex(helper, {ref: {'Ltest/Service;'}})
+    assert not verify_boundary_dex(helper, {ref: {'Ltest/Other;'}})
+    assert not verify_boundary_dex(helper, {})
+    print('PASS: 16 API history, DEX instruction and API26 boundary regression checks.')
     sys.exit(0)
 
 
@@ -188,50 +261,41 @@ for descriptor, kind, name in sorted(references):
         incompatible.append({"owner": owner, "declared_owner": declared_owner, "kind": kind, "name": name, "since": since, "metadata": dict(member.attrib)})
 
 guarded = []
-service_source = PROJECT / 'src/fr/dm100/prisme/volume/FloatingVolumeService.java'
-if service_source.exists():
-    source = re.sub(r'\s+', ' ', service_source.read_text(encoding='utf-8'))
-    guard_checks = [
-        'if (Build.VERSION.SDK_INT >= 26) Api26.start(context, intent); else context.startService(intent);',
-        'if (Build.VERSION.SDK_INT >= 26) b = Api26.builder(this); else b = new Notification.Builder(this);',
-        'return Build.VERSION.SDK_INT >= 26 ? Api26.windowType() : android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;'
-    ]
-    guard_verified = all(check in source for check in guard_checks)
-    helper = 'Lfr/dm100/prisme/volume/FloatingVolumeService$Api26;'
-    helpers = {helper}
-    timer_source = PROJECT / 'src/fr/dm100/prisme/TimerReceiver.java'
-    timer_guard_verified = False
-    if timer_source.exists():
-        timer_code = re.sub(r'\s+', '', timer_source.read_text(encoding='utf-8'))
-        timer_guard_verified = 'Build.VERSION.SDK_INT>=26?Api26.builder(c,m):newNotification.Builder(c)' in timer_code
-        if timer_guard_verified:
-            helpers.add('Lfr/dm100/prisme/TimerReceiver$Api26;')
-    rotation_source = PROJECT / 'src/fr/dm100/prisme/GlobalRotationService.java'
-    rotation_guard_verified = False
-    if rotation_source.exists():
-        rotation_code = re.sub(r'\s+', '', rotation_source.read_text(encoding='utf-8'))
-        rotation_guard_verified = all(check in rotation_code for check in [
-            'if(Build.VERSION.SDK_INT>=26)Api26.start(c,i);elsec.startService(i);',
-            'Build.VERSION.SDK_INT>=26?Api26.builder(this,m):newNotification.Builder(this)',
-            'Build.VERSION.SDK_INT>=26?Api26.windowType():WindowManager.LayoutParams.TYPE_SYSTEM_ALERT'
-        ])
-        if rotation_guard_verified:
-            helpers.add('Lfr/dm100/prisme/GlobalRotationService$Api26;')
-    allowed = {
-        ('android/content/Context','startForegroundService(Landroid/content/Intent;)Landroid/content/ComponentName;'),
-        ('android/app/Notification$Builder','<init>(Landroid/content/Context;Ljava/lang/String;)V'),
-        ('android/app/NotificationManager','createNotificationChannel(Landroid/app/NotificationChannel;)V'),
-        ('android/app/NotificationChannel','<init>(Ljava/lang/String;Ljava/lang/CharSequence;I)V'),
-        ('android/app/NotificationChannel','setDescription(Ljava/lang/String;)V'),
-        ('android/app/NotificationChannel','setSound(Landroid/net/Uri;Landroid/media/AudioAttributes;)V'),
-        ('android/app/NotificationChannel','enableVibration(Z)V')
+boundaries = {}
+for relative in (
+    'volume/FloatingVolumeService.java',
+    'TimerReceiver.java',
+    'GlobalRotationService.java',
+    'ControlCenterService.java',
+    'EdgeDockService.java',
+):
+    filename = PROJECT / 'src/fr/dm100/prisme' / relative
+    helper = 'Lfr/dm100/prisme/' + relative.removesuffix('.java') + '$Api26;'
+    source_verified = filename.exists() and verify_boundary_source(filename.read_text(encoding='utf-8'))
+    dex_verified = verify_boundary_dex(helper, callers)
+    boundaries[helper] = {
+        'source': str(filename.relative_to(PROJECT)),
+        'all_source_helper_calls_guarded': source_verified,
+        'dex_helper_callers_confined_to_enclosing_class': dex_verified,
     }
-    for ref in list(incompatible):
-        use = callers.get(('L'+ref['owner']+';',ref['kind'],ref['name']),set())
-        if guard_verified and ref['kind']=='method' and (ref['owner'],ref['name']) in allowed and use and use.issubset(helpers):
-            guarded.append(dict(ref, callers=sorted(use), minimum_guard_api=26))
-            incompatible.remove(ref)
-else: guard_verified = False
+helpers = {helper for helper, checks in boundaries.items() if checks['all_source_helper_calls_guarded'] and checks['dex_helper_callers_confined_to_enclosing_class']}
+guard_verified = len(helpers) == len(boundaries)
+timer_guard_verified = boundaries['Lfr/dm100/prisme/TimerReceiver$Api26;']['all_source_helper_calls_guarded']
+rotation_guard_verified = boundaries['Lfr/dm100/prisme/GlobalRotationService$Api26;']['all_source_helper_calls_guarded']
+allowed = {
+    ('android/content/Context','startForegroundService(Landroid/content/Intent;)Landroid/content/ComponentName;'),
+    ('android/app/Notification$Builder','<init>(Landroid/content/Context;Ljava/lang/String;)V'),
+    ('android/app/NotificationManager','createNotificationChannel(Landroid/app/NotificationChannel;)V'),
+    ('android/app/NotificationChannel','<init>(Ljava/lang/String;Ljava/lang/CharSequence;I)V'),
+    ('android/app/NotificationChannel','setDescription(Ljava/lang/String;)V'),
+    ('android/app/NotificationChannel','setSound(Landroid/net/Uri;Landroid/media/AudioAttributes;)V'),
+    ('android/app/NotificationChannel','enableVibration(Z)V')
+}
+for ref in list(incompatible):
+    use = callers.get(('L'+ref['owner']+';',ref['kind'],ref['name']),set())
+    if ref['kind']=='method' and (ref['owner'],ref['name']) in allowed and use and use.issubset(helpers):
+        guarded.append(dict(ref, callers=sorted(use), minimum_guard_api=26))
+        incompatible.remove(ref)
 
 report = {
     "apk_sha256": hashlib.sha256(APK.read_bytes()).hexdigest(),
@@ -244,9 +308,10 @@ report = {
     "api26_boundary_source_guards_verified": guard_verified,
     "timer_api26_boundary_source_guard_verified": timer_guard_verified,
     "rotation_api26_boundary_source_guards_verified": rotation_guard_verified,
+    "api26_boundaries": boundaries,
     "unresolved_references": unresolved,
     "physical_watch_test": False,
-    "scope": "Static DEX public API history audit with version-aware inherited declarations. API26 notification/service references are allowed only in the isolated Api26 class, with final DEX caller checks and three exact SDK guards in the delivered source. This is not general control-flow proof and does not verify firmware behavior, inlined constants, resources or application-specific inheritance."
+    "scope": "Static DEX public API history audit with version-aware inherited declarations. API26 notification/service references are accepted only in private isolated Api26 helpers after every helper call matches an SDK>=26 guard and API25 fallback in the delivered source, with final DEX checks for both helper entry callers and platform API callers. This is not general control-flow proof and does not verify firmware behavior, inlined constants, resources or application-specific inheritance."
 }
 destination = PROJECT / "AUDIT_API25.json"
 destination.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
