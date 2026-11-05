@@ -24,3 +24,15 @@ L’essai multimédia enrichi requiert l’accès Android aux notifications acco
 `adb shell am instrument -w fr.dm100.prisme.qa/.WeatherValidation` teste une recherche de Paris et une prévision HTTPS réelle sur Android, puis le cache et la désactivation. Les trois magasins météo sont rétablis dans `finally`. Ce test active temporairement le réseau et nécessite Internet ; Paris est une fixture de test, pas la position de l’utilisateur.
 
 `VisualFixture` propose `-e action save`, `-e action style -e id 0` (0 à21), `-e action restore`. Créez d’abord le point privé, capturez chaque bureau et terminez toujours par restore. Les captures du catalogue installé sont privées : ne les publiez pas. La restauration réactive le bureau choisi et conserve la disposition des cartes. Ce harnais ne remplace pas les gestes au doigt ni l’inspection des images.
+
+## Titre, artiste et pochette — correctif 6.0.1
+
+```powershell
+adb shell am instrument -w fr.dm100.prisme.qa/.MusicValidation
+```
+
+`MusicValidation` crée une session musicale contrôlée **en pause**, sans audio focus ni commandes au lecteur existant. Elle teste le chemin de production de `MusicPlayback.fromController` avec son propre jeton de session, donc sans exiger d’accès aux sessions des autres applications : champs alternatifs, titre Unicode, trois clés de pochette bitmap, taille bornée, changement de morceau, disparition de la pochette et de l’artiste périmés, métadonnées vides et refus d’URI réseau ou de fichier arbitraire.
+
+Le test vérifie aussi le consentement local désactivé et les états d’accès Android. Si l’autorisation système est déjà accordée, il ajoute un parcours par le gestionnaire réel avec la préférence de lecteur temporairement pointée sur la session de test. Sinon, le champ `manager=SKIPPED` le signale ; les tests d’extraction continuent. **Le harnais ne donne ni ne révoque aucune autorisation Android.** Il restaure `prisme_media_access` dans `finally`, libère sa session et ne journalise aucune métadonnée de Spotify ou d’un autre lecteur réel.
+
+Lire `result`, `manager`, `assertions` et `preferences`. Un résultat d’extraction réussi avec `manager=SKIPPED` ne valide pas l’accès à un lecteur tiers. Le test des pochettes locales ne certifie pas les pochettes proposées uniquement sous forme d’URL distante.

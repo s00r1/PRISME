@@ -989,8 +989,10 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         musicOption(b,"Préférer les transitions d’accueil sans réinitialisation des tâches","preserve",true,changed);
         b.addView(text("PRISME évite de réinitialiser les tâches au changement d’écran, sans lire les notifications. La continuité audio reste gérée par Spotify, Deezer ou le firmware. La reprise automatique avancée est désactivée dans ce correctif.",14,MUTED));
         MusicPlayback.State state=MusicPlayback.state(this);
-        b.addView(text("État : "+state.title+" · "+(state.playing?"lecture":"pause / arrêt"),14,ACCENT));
-        b.addView(text("Commandes multimédias Android, sans accès aux notifications. Le titre et l'artiste ne sont plus récupérés dans cette version pour éviter le blocage Play Protect.",13,MUTED));
+        b.addView(text("État : "+MediaPanel.title(state)+" · "+(state.playing?"lecture":"pause / arrêt"),14,ACCENT));
+        b.addView(text("Les commandes simples fonctionnent sans accès aux notifications. Pour afficher le titre, l’artiste et la pochette, active les informations musicales puis accorde l’autorisation Android. Les messages ne sont ni lus ni conservés.",14,MUTED));
+        addButton(b,"Titres et pochettes · autorisation",()->MediaPanel.permissions(this));
+        addButton(b,"Ouvrir le lecteur musical",()->MediaPanel.open(this));
         section(b,"12 styles de lecteur");
         settingChoice(b,"Design du mini-lecteur",MusicPrefs.STYLES,musicPrefs.number("style",0),
                 n->{musicPrefs.putInt("style",n);changed.run();});
@@ -999,7 +1001,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         slider(b,"Position horizontale (%)",0,100,musicPrefs.number("x",50),n->{musicPrefs.putInt("x",n);changed.run();});
         slider(b,"Position verticale (%)",0,100,musicPrefs.number("y",87),n->{musicPrefs.putInt("y",n);changed.run();});
         slider(b,"Opacité (%)",30,100,musicPrefs.number("opacity",100),n->{musicPrefs.putInt("opacity",n);changed.run();});
-        musicOption(b,"Afficher l’état audio du lecteur","title",true,changed);
+        musicOption(b,"Afficher le titre et l’artiste","title",true,changed);
         musicOption(b,"Afficher le fond du lecteur","background",true,changed);
         section(b,"Tester les commandes");
         LinearLayout row=new LinearLayout(this);
@@ -1035,7 +1037,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     }
     @Override public void startActivity(Intent intent){
         if(intent!=null){String action=intent.getAction();
-            if(Settings.ACTION_MANAGE_OVERLAY_PERMISSION.equals(action)||Settings.ACTION_MANAGE_WRITE_SETTINGS.equals(action)||Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS.equals(action))
+            if(Settings.ACTION_MANAGE_OVERLAY_PERMISSION.equals(action)||Settings.ACTION_MANAGE_WRITE_SETTINGS.equals(action)||Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS.equals(action)||Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS.equals(action))
                 fr.dm100.prisme.volume.FloatingVolumeService.suspendForPermission(this);
         }
         super.startActivity(intent);

@@ -4,7 +4,7 @@
 
 **Round and square watches are outside this release's supported target. Other rectangular sizes and resolutions are not validated.**
 
-Current application version: **6.0.0 / versionCode 24**. The manifest minimum remains API 25; adding optional network weather does not turn this release into a Wear OS application.
+Current application version: **6.0.1 / versionCode 25**. The manifest minimum remains API 25; adding optional network weather does not turn this release into a Wear OS application.
 
 PRISME is a conventional Android home/launcher application. Its manifest requires Android API 25 (Android 7.1) or newer. It contains Java bytecode and resources with no bundled native CPU library. That minimum is an installation requirement, not a guarantee of every feature on every firmware.
 

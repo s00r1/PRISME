@@ -2,22 +2,22 @@
 
 **A customizable home screen for the DM100 and large rectangular full-Android watches.** Build your pages on the watch or on a PC, keep everyday tools within reach, and keep your data local.
 
-[Official website](https://s00r1.github.io/PRISME/) · [Version 6 release](https://github.com/s00r1/PRISME/releases/tag/v6.0.0) · [PC editor](https://s00r1.github.io/PRISME/home-studio.html)
+[Official website](https://s00r1.github.io/PRISME/) · [Version 6 release](https://github.com/s00r1/PRISME/releases/tag/v6.0.1) · [PC editor](https://s00r1.github.io/PRISME/home-studio.html)
 
 [Français](README.fr.md) · [English](README.en.md) · [Deutsch](README.de.md) · [中文](README.zh.md) · [Türkçe](README.tr.md) · [Русский](README.ru.md) · [العربية](README.ar.md)
 
-> **Published stable version: 6.0.0 · versionCode 24 · full Android 7.1 / API 25 minimum.** The reference device is a DM100 running Android 7.1.1 at 640 × 480 in landscape. Round/square watches, Wear OS, watchOS and Tizen are not validated targets. No root or firmware replacement is required.
+> **Published stable version: 6.0.1 · versionCode 25 · full Android 7.1 / API 25 minimum.** The reference device is a DM100 running Android 7.1.1 at 640 × 480 in landscape. Round/square watches, Wear OS, watchOS and Tizen are not validated targets. No root or firmware replacement is required.
 
 ## Downloads
 
 | Official file | Purpose |
 | --- | --- |
-| [PRISME-6.0.0.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0.apk) | Signed Android application; install over the existing PRISME application. |
-| [PRISME-PC-Studio-6.0.0.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-PC-Studio-6.0.0.zip) | Complete offline PC editors; extract the ZIP and open index.html. |
-| [PRISME-6.0.0-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | Validated watch application sources, web editors, documentation and tests, packaged as a Release asset. |
-| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.0/SHA256SUMS.txt) | Checksums for the distributed files. |
+| [PRISME-6.0.1.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1.apk) | Signed Android application; install over the existing PRISME application. |
+| [PRISME-PC-Studio-6.0.1.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-PC-Studio-6.0.1.zip) | Complete offline PC editors; extract the ZIP and open index.html. |
+| [PRISME-6.0.1-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1-sources.zip) | Validated watch application sources, web editors, documentation and tests, packaged as a Release asset. |
+| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.1/SHA256SUMS.txt) | Checksums for the distributed files. |
 
-These files are available in the stable `v6.0.0` Release. Download the [validated V6 sources](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) from the archive attached to that Release. The PC editor also runs [online](https://s00r1.github.io/PRISME/home-studio.html). The offline package needs a modern browser, not a development server or an account. Unsigned workflow artifacts are for developers; use the signed Release APK for installation.
+These files are available in the stable `v6.0.1` Release. Download the [validated V6 sources](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1-sources.zip) from the archive attached to that Release. The PC editor also runs [online](https://s00r1.github.io/PRISME/home-studio.html). The offline package needs a modern browser, not a development server or an account. Unsigned workflow artifacts are for developers; use the signed Release APK for installation.
 
 ## See PRISME 6
 
@@ -87,7 +87,7 @@ PRISME overlays are hidden over the modular home to keep cards clear. They retur
 ## Install or update
 
 1. Export your current configuration under **Settings → Profiles** and keep the original file.
-2. Download the signed `PRISME-6.0.0.apk` and install it over PRISME. From a PC: `adb install -r PRISME-6.0.0.apk`.
+2. Download the signed `PRISME-6.0.1.apk` and install it over PRISME. From a PC: `adb install -r PRISME-6.0.1.apk`.
 3. Do not uninstall the application for a normal update: the original signing certificate is retained, and local notes, tasks and settings are preserved.
 4. Open PRISME and choose it as the Android home application if the firmware allows it. Otherwise it works as a normal application.
 5. Grant overlay access separately if you want floating controls. Core home pages do not require notification access.
@@ -132,7 +132,7 @@ node tests/website.cjs
 python scripts/package-pc-editor.py
 ```
 
-[Build instructions](BUILD.md) · [Device tests](../tests/device/README.md) · [V6 guide, FR](V6-GUIDE.md) · [PC editor guide, FR](PC-STUDIO.md) · [Compatibility](COMPATIBILITY.md) · [Classic styles](STYLES.md) · [Validation](V6-VALIDATION.md) · [Release notes](RELEASE-6.0.0.md) · [Future work](V6-DEVELOPMENT.md).
+[Build instructions](BUILD.md) · [Device tests](../tests/device/README.md) · [V6 guide, FR](V6-GUIDE.md) · [PC editor guide, FR](PC-STUDIO.md) · [Compatibility](COMPATIBILITY.md) · [Classic styles](STYLES.md) · [Validation](V6-VALIDATION.md) · [Release notes](RELEASE-6.0.1.md) · [Future work](V6-DEVELOPMENT.md).
 
 For a bug report, include the model, Android API, PRISME version, orientation and reproduction steps. Do not post accounts, serials, personal exports or raw device logs. [Report an issue](https://github.com/s00r1/PRISME/issues/new/choose).
 

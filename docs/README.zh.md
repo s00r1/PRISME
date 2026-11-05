@@ -4,18 +4,18 @@
 
 [Français](README.fr.md) · [English](README.en.md) · [Deutsch](README.de.md) · [中文](README.zh.md) · [Türkçe](README.tr.md) · [Русский](README.ru.md) · [العربية](README.ar.md)
 
-> 当前版本：**6.0.0 · versionCode 24 · 最低完整 Android 7.1 / API 25**。测试参考设备为 DM100，Android 7.1.1，横屏 640 × 480。圆形、方形手表以及 Wear OS、watchOS、Tizen 不是已验证目标。不需要 root 或更换固件。
+> 当前版本：**6.0.1 · versionCode 25 · 最低完整 Android 7.1 / API 25**。测试参考设备为 DM100，Android 7.1.1，横屏 640 × 480。圆形、方形手表以及 Wear OS、watchOS、Tizen 不是已验证目标。不需要 root 或更换固件。
 
 ## 下载
 
 | 下载 | PRISME 6 |
 | --- | --- |
-| [PRISME-6.0.0.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0.apk) | 手表使用的签名 Android 应用，覆盖安装即可更新。 |
-| [PRISME-PC-Studio-6.0.0.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-PC-Studio-6.0.0.zip) | 完整离线电脑编辑器，解压全部文件后打开 index.html。 |
-| [PRISME-6.0.0-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | 应用、编辑器、测试及文档源代码。 |
-| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.0/SHA256SUMS.txt) | 发布文件的校验值。 |
+| [PRISME-6.0.1.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1.apk) | 手表使用的签名 Android 应用，覆盖安装即可更新。 |
+| [PRISME-PC-Studio-6.0.1.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-PC-Studio-6.0.1.zip) | 完整离线电脑编辑器，解压全部文件后打开 index.html。 |
+| [PRISME-6.0.1-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1-sources.zip) | 应用、编辑器、测试及文档源代码。 |
+| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.1/SHA256SUMS.txt) | 发布文件的校验值。 |
 
-[PRISME · Web](https://s00r1.github.io/PRISME/) · [PC Studio · Web](https://s00r1.github.io/PRISME/home-studio.html) · [GitHub · v6.0.0](https://github.com/s00r1/PRISME/releases/tag/v6.0.0)
+[PRISME · Web](https://s00r1.github.io/PRISME/) · [PC Studio · Web](https://s00r1.github.io/PRISME/home-studio.html) · [GitHub · v6.0.1](https://github.com/s00r1/PRISME/releases/tag/v6.0.1)
 
 ## V6 实机界面
 
@@ -66,13 +66,13 @@ DM100 上 V6 功能的真实截图，界面语言为法语。经典桌面图库�
 ## 安装与 V5 升级
 
 1. 在“设置 → 配置”中导出并保存现有配置。
-2. 下载签名文件 PRISME-6.0.0.apk，覆盖现有 PRISME 安装。正常更新不需要卸载。
+2. 下载签名文件 PRISME-6.0.1.apk，覆盖现有 PRISME 安装。正常更新不需要卸载。
 3. 原签名证书保持不变；笔记、任务和已有设置会保留。
 4. 固件允许时可将 PRISME 设为默认主页，也可作为普通应用启动。
 5. 单独授权需要的悬浮功能；模块化主页不要求读取通知权限。
 
 ```text
-adb install -r PRISME-6.0.0.apk
+adb install -r PRISME-6.0.1.apk
 ```
 
 支持旧版 JSON 配置。V6 导出采用 **schema 7**，这是文件格式版本，并不是 PRISME 7。请保留 V5 导出文件以便回退。Android 可能拒绝安装较低的 versionCode；程序不会为了降级自动卸载并删除数据。

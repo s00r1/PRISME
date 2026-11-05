@@ -3,7 +3,7 @@ from pathlib import Path
 import argparse, hashlib, json, zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "6.0.0"
+VERSION = "6.0.1"
 FILES = {
     "index.html": "home-studio.html",
     "home-model.js": "home-model.js",

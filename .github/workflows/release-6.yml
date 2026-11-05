@@ -37,9 +37,9 @@ jobs:
           EXPECTED: ${{ inputs.expected_commit }}
         run: |
           if ($env:EXPECTED -ne "${{ github.sha }}") { throw 'The tested commit SHA is not the current main revision.' }
-          if (Select-String -Path AndroidManifest.xml -Pattern 'android:versionName="6.0.0"' -Quiet -CaseSensitive) {
-            Write-Host 'Confirmed release version: 6.0.0'
-          } else { throw 'Manifest version is not marked 6.0.0.' }
+          if (Select-String -Path AndroidManifest.xml -Pattern 'android:versionName="6.0.1"' -Quiet -CaseSensitive) {
+            Write-Host 'Confirmed release version: 6.0.1'
+          } else { throw 'Manifest version is not marked 6.0.1.' }
       - run: python scripts/fetch-test-dependency.py
       - name: All tests
         shell: pwsh
@@ -71,7 +71,7 @@ jobs:
         run: |
           $path = Join-Path $env:RUNNER_TEMP 'prisme-release.jks'
           [IO.File]::WriteAllBytes($path,[Convert]::FromBase64String($env:PRISME_KEYSTORE_BASE64))
-          ./build.ps1 -Keystore $path -OutputFile PRISME-6.0.0.apk
+          ./build.ps1 -Keystore $path -OutputFile PRISME-6.0.1.apk
       - name: Verify original update-compatible certificate
         shell: pwsh
         env:
@@ -87,17 +87,17 @@ jobs:
           $signer = Join-Path $dir 'lib/apksigner.jar'
           $old = & java -jar $signer verify --print-certs --min-sdk-version 25 old/PRISME.apk
           if ($LASTEXITCODE -ne 0) { throw 'Old signature invalid.' }
-          $new = & java -jar $signer verify --print-certs --min-sdk-version 25 PRISME-6.0.0.apk
+          $new = & java -jar $signer verify --print-certs --min-sdk-version 25 PRISME-6.0.1.apk
           if ($LASTEXITCODE -ne 0) { throw 'New signature invalid.' }
           $o = @($old | Where-Object { $_ -match '^Signer #1 certificate SHA-256 digest:' })
           $n = @($new | Where-Object { $_ -match '^Signer #1 certificate SHA-256 digest:' })
           if ($o.Count -ne 1 -or $n.Count -ne 1 -or $o[0] -ne $n[0]) { throw 'Certificate mismatch; publication blocked.' }
       - name: Prepare complete release assets and notes
-        run: python scripts/prepare-release.py --apk PRISME-6.0.0.apk --output dist
+        run: python scripts/prepare-release.py --apk PRISME-6.0.1.apk --output dist
       - name: Publish verified release
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v6.0.0 dist/PRISME-6.0.0.apk dist/PRISME-PC-Studio-6.0.0.zip dist/PRISME-6.0.0-sources.zip dist/SHA256SUMS.txt --repo ${{ github.repository }} --target ${{ github.sha }} --title 'PRISME 6.0.0 — widgets, météo et PC Studio' --notes-file dist/RELEASE-NOTES.md --latest
+          gh release create v6.0.1 dist/PRISME-6.0.1.apk dist/PRISME-PC-Studio-6.0.1.zip dist/PRISME-6.0.1-sources.zip dist/SHA256SUMS.txt --repo ${{ github.repository }} --target ${{ github.sha }} --title 'PRISME 6.0.1 — widgets, météo et PC Studio' --notes-file dist/RELEASE-NOTES.md --latest
           if ($LASTEXITCODE -ne 0) { throw 'Release publishing failed.' }

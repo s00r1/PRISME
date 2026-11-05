@@ -4,18 +4,18 @@
 
 [Français](README.fr.md) · [English](README.en.md) · [Deutsch](README.de.md) · [中文](README.zh.md) · [Türkçe](README.tr.md) · [Русский](README.ru.md) · [العربية](README.ar.md)
 
-> Текущая версия: **6.0.0 · versionCode 24 · полноценный Android 7.1 / API 25 или новее**. Эталон: DM100, Android 7.1.1, 640 × 480 в альбомной ориентации. Круглые/квадратные часы, Wear OS, watchOS и Tizen не являются проверенными платформами. Root и замена прошивки не требуются.
+> Текущая версия: **6.0.1 · versionCode 25 · полноценный Android 7.1 / API 25 или новее**. Эталон: DM100, Android 7.1.1, 640 × 480 в альбомной ориентации. Круглые/квадратные часы, Wear OS, watchOS и Tizen не являются проверенными платформами. Root и замена прошивки не требуются.
 
 ## Скачать
 
 | Скачать | PRISME 6 |
 | --- | --- |
-| [PRISME-6.0.0.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0.apk) | Подписанный APK для часов; устанавливается поверх существующего PRISME. |
-| [PRISME-PC-Studio-6.0.0.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-PC-Studio-6.0.0.zip) | Полный автономный редактор для ПК: распакуйте архив и откройте index.html. |
-| [PRISME-6.0.0-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | Исходники приложения, редакторов, тестов и документации. |
-| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.0/SHA256SUMS.txt) | Контрольные суммы опубликованных файлов. |
+| [PRISME-6.0.1.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1.apk) | Подписанный APK для часов; устанавливается поверх существующего PRISME. |
+| [PRISME-PC-Studio-6.0.1.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-PC-Studio-6.0.1.zip) | Полный автономный редактор для ПК: распакуйте архив и откройте index.html. |
+| [PRISME-6.0.1-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1-sources.zip) | Исходники приложения, редакторов, тестов и документации. |
+| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.1/SHA256SUMS.txt) | Контрольные суммы опубликованных файлов. |
 
-[PRISME · Web](https://s00r1.github.io/PRISME/) · [PC Studio · Web](https://s00r1.github.io/PRISME/home-studio.html) · [GitHub · v6.0.0](https://github.com/s00r1/PRISME/releases/tag/v6.0.0)
+[PRISME · Web](https://s00r1.github.io/PRISME/) · [PC Studio · Web](https://s00r1.github.io/PRISME/home-studio.html) · [GitHub · v6.0.1](https://github.com/s00r1/PRISME/releases/tag/v6.0.1)
 
 ## Реальные экраны V6
 
@@ -64,13 +64,13 @@
 ## Установка и переход с V5
 
 1. Экспортируйте текущую конфигурацию в Настройки → Профили и сохраните оригинал.
-2. Скачайте подписанный PRISME-6.0.0.apk и установите поверх PRISME. Удалять приложение для обычного обновления не нужно.
+2. Скачайте подписанный PRISME-6.0.1.apk и установите поверх PRISME. Удалять приложение для обычного обновления не нужно.
 3. Исходный сертификат подписи сохранён; заметки, задачи и настройки остаются.
 4. Если прошивка позволяет, выберите PRISME домашним приложением; также доступен обычный запуск.
 5. Отдельно разрешите нужные плавающие функции. Рабочий стол и карточки не требуют доступа к уведомлениям.
 
 ```text
-adb install -r PRISME-6.0.0.apk
+adb install -r PRISME-6.0.1.apk
 ```
 
 Старые JSON-профили поддерживаются. Экспорт V6 использует **схему 7**: это номер формата файла, а не PRISME 7. Сохраните экспорт V5 для возврата. Android может отклонить меньший versionCode; автоматического удаления данных ради отката нет.

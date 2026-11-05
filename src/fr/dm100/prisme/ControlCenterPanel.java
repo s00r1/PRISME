@@ -52,6 +52,7 @@ public final class ControlCenterPanel extends FrameLayout {
   private Button closeButton, customizeButton, footerCloseButton;
   private TextView status, volumeLabel, brightnessLabel, centerClock, mediaTitle, mediaArtist;
   private Button mediaPlay;
+  private MediaArtworkView mediaArtwork;
   private SeekBar volumeSlider, brightnessSlider;
   private VerticalLevel verticalVolume, verticalBrightness;
   private boolean opened, adjustingVolume, adjustingBrightness;
@@ -175,6 +176,7 @@ public final class ControlCenterPanel extends FrameLayout {
     adjustingVolume = adjustingBrightness = false;
     status = volumeLabel = brightnessLabel = centerClock = mediaTitle = mediaArtist = null;
     mediaPlay = null;
+    mediaArtwork = null;
     volumeSlider = brightnessSlider = null;
     verticalVolume = verticalBrightness = null;
     boolean androidStyle = prefs.getInt("style", 0) == 1;
@@ -414,14 +416,35 @@ public final class ControlCenterPanel extends FrameLayout {
             muted,
             true);
     media.addView(heading);
+    LinearLayout track = new LinearLayout(activity);
+    track.setGravity(Gravity.CENTER_VERTICAL);
+    mediaArtwork = new MediaArtworkView(activity);
+    mediaArtwork.colors(tileColor, accent);
+    LinearLayout.LayoutParams artLp =
+        new LinearLayout.LayoutParams(Math.max(36, u(40)), Math.max(36, u(40)));
+    artLp.rightMargin = u(8);
+    track.addView(mediaArtwork, artLp);
+    LinearLayout labels = new LinearLayout(activity);
+    labels.setOrientation(LinearLayout.VERTICAL);
     mediaTitle = text("", androidStyle ? 16 : 14, ink, true);
-    mediaTitle.setMaxLines(1);
+    I18n.userText(mediaTitle);
+    mediaTitle.setMaxLines(2);
     mediaTitle.setEllipsize(TextUtils.TruncateAt.END);
-    media.addView(mediaTitle, new LinearLayout.LayoutParams(-1, -2));
+    labels.addView(mediaTitle, new LinearLayout.LayoutParams(-1, -2));
     mediaArtist = text("", 11, muted, false);
+    I18n.userText(mediaArtist);
     mediaArtist.setMaxLines(1);
     mediaArtist.setEllipsize(TextUtils.TruncateAt.END);
-    media.addView(mediaArtist, new LinearLayout.LayoutParams(-1, -2));
+    labels.addView(mediaArtist, new LinearLayout.LayoutParams(-1, -2));
+    track.addView(labels, new LinearLayout.LayoutParams(0, -2, 1));
+    track.setOnClickListener(
+        v -> {
+          close();
+          MediaPanel.launch(activity);
+        });
+    track.setContentDescription("Titre, pochette et réglages du lecteur");
+    track.setMinimumHeight(44);
+    media.addView(track, new LinearLayout.LayoutParams(-1, -2));
     LinearLayout controls = new LinearLayout(activity);
     controls.setGravity(Gravity.CENTER);
     Button previous = button("‹", "Piste précédente"), next = button("›", "Piste suivante");
@@ -635,16 +658,9 @@ public final class ControlCenterPanel extends FrameLayout {
     if (verticalBrightness != null && !adjustingBrightness) verticalBrightness.updateValue();
     if (mediaTitle != null) {
       MusicPlayback.State music = MusicPlayback.state(activity);
-      setTextIfChanged(mediaTitle, music.title);
-      setTextIfChanged(
-          mediaArtist,
-          music.hasSession
-              ? (music.artist.isEmpty()
-                  ? (music.playing ? "Lecture en cours" : "En pause")
-                  : music.artist)
-              : (music.playing
-                  ? "Audio Android · titre non partagé"
-                  : "Commandes du lecteur Android"));
+      setTextIfChanged(mediaTitle, MediaPanel.title(music));
+      setTextIfChanged(mediaArtist, MediaPanel.detail(music));
+      if (mediaArtwork != null) mediaArtwork.artwork(music.artwork);
       setTextIfChanged(mediaPlay, music.playing ? "Ⅱ" : "▶");
       mediaPlay.setContentDescription(
           music.playing

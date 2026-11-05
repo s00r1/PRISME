@@ -4,18 +4,18 @@ DM100 ve tam Android çalıştıran büyük dikdörtgen saatler için kişiselle
 
 [Français](README.fr.md) · [English](README.en.md) · [Deutsch](README.de.md) · [中文](README.zh.md) · [Türkçe](README.tr.md) · [Русский](README.ru.md) · [العربية](README.ar.md)
 
-> Güncel sürüm: **6.0.0 · versionCode 24 · en az tam Android 7.1 / API 25**. Referans: Android 7.1.1 kullanan DM100, yatay 640 × 480. Yuvarlak/kare saatler, Wear OS, watchOS ve Tizen doğrulanmış hedefler değildir. Root veya ürün yazılımını değiştirmek gerekmez.
+> Güncel sürüm: **6.0.1 · versionCode 25 · en az tam Android 7.1 / API 25**. Referans: Android 7.1.1 kullanan DM100, yatay 640 × 480. Yuvarlak/kare saatler, Wear OS, watchOS ve Tizen doğrulanmış hedefler değildir. Root veya ürün yazılımını değiştirmek gerekmez.
 
 ## İndir
 
 | İndir | PRISME 6 |
 | --- | --- |
-| [PRISME-6.0.0.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0.apk) | Saat için imzalı Android uygulaması; mevcut PRISME üzerine kurulur. |
-| [PRISME-PC-Studio-6.0.0.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-PC-Studio-6.0.0.zip) | Eksiksiz çevrimdışı PC düzenleyicileri; ZIP dosyasını çıkarıp index.html açın. |
-| [PRISME-6.0.0-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | Uygulama, düzenleyiciler, testler ve belgelerin kaynakları. |
-| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.0/SHA256SUMS.txt) | Dağıtılan dosyaların sağlama toplamları. |
+| [PRISME-6.0.1.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1.apk) | Saat için imzalı Android uygulaması; mevcut PRISME üzerine kurulur. |
+| [PRISME-PC-Studio-6.0.1.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-PC-Studio-6.0.1.zip) | Eksiksiz çevrimdışı PC düzenleyicileri; ZIP dosyasını çıkarıp index.html açın. |
+| [PRISME-6.0.1-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1-sources.zip) | Uygulama, düzenleyiciler, testler ve belgelerin kaynakları. |
+| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.1/SHA256SUMS.txt) | Dağıtılan dosyaların sağlama toplamları. |
 
-[PRISME · Web](https://s00r1.github.io/PRISME/) · [PC Studio · Web](https://s00r1.github.io/PRISME/home-studio.html) · [GitHub · v6.0.0](https://github.com/s00r1/PRISME/releases/tag/v6.0.0)
+[PRISME · Web](https://s00r1.github.io/PRISME/) · [PC Studio · Web](https://s00r1.github.io/PRISME/home-studio.html) · [GitHub · v6.0.1](https://github.com/s00r1/PRISME/releases/tag/v6.0.1)
 
 ## Gerçek V6 ekranları
 
@@ -64,13 +64,13 @@ Bağlantılı hava durumu **varsayılan olarak kapalıdır**. Hava durumu ayarla
 ## Kurulum ve V5 güncellemesi
 
 1. Mevcut yapılandırmayı Ayarlar → Profiller bölümünden dışa aktarıp saklayın.
-2. İmzalı PRISME-6.0.0.apk dosyasını indirip mevcut PRISME üzerine kurun. Normal güncellemede kaldırma gerekmez.
+2. İmzalı PRISME-6.0.1.apk dosyasını indirip mevcut PRISME üzerine kurun. Normal güncellemede kaldırma gerekmez.
 3. Asıl imza sertifikası korunur; notlar, görevler ve ayarlar yerinde kalır.
 4. Ürün yazılımı izin veriyorsa PRISME varsayılan ana ekran olabilir; normal uygulama olarak da açılır.
 5. Yüzen özellikler için ayrı izin verin. Klasik masaüstü ve kartlar bildirim erişimi gerektirmez.
 
 ```text
-adb install -r PRISME-6.0.0.apk
+adb install -r PRISME-6.0.1.apk
 ```
 
 Eski JSON profilleri desteklenir. V6 dışa aktarımları **şema 7** kullanır; bu dosya biçimidir, PRISME 7 değildir. Geri dönüş için V5 dosyanızı saklayın. Android düşük versionCode kurulumunu reddedebilir; uygulama sürüm düşürmek için verilerinizi otomatik silmez.

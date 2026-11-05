@@ -30,6 +30,11 @@ public final class PrismeDoctor {
         out.append("Volume flottant : ").append(fr.dm100.prisme.volume.FloatingVolumeService.isRunning()?"service actif":"service arrêté").append("\n");
         out.append("Rotation globale : ").append(GlobalRotationService.isRunning()?"active":"inactive").append("\n");
         out.append("Dock : ").append(context.getSharedPreferences("prisme_edge",0).getBoolean("enabled",false)?"demandé":"désactivé").append("\n");
+        int media=MediaAccess.accessStatus(context);
+        out.append("Informations musicales : ").append(media==MediaAccess.ACCESS_READY?"autorisées":media==MediaAccess.ACCESS_DISABLED?"désactivées dans PRISME":"autorisation Android manquante").append("\n");
+        MusicPlayback.State music=MusicPlayback.state(context);
+        out.append("Session musicale : ").append(music.hasSession?"accessible":"indisponible").append("\n");
+        out.append("Pochette locale : ").append(music.artworkLoading?"chargement":music.artwork!=null?"disponible":"non disponible").append("\n");
         out.append("\n").append(BatteryLevelReader.read(context,null).diagnostic()).append("\n");
         DeviceSnapshot d=DeviceSnapshot.read(context);
         out.append("\nRAM système utilisée : ").append(d.memoryUsedPct<0?"inconnue":d.memoryUsedPct+" %").append("\n");
