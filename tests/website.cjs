@@ -3,7 +3,7 @@ const elements=new Map(),requests=[];
 function el(){return {value:'fr',dataset:{},open:false,append(){},replaceChildren(){},setAttribute(){},addEventListener(){},showModal(){assert(!this.open);this.open=true},close(){this.open=false}}}
 const document={querySelector(s){if(!elements.has(s))elements.set(s,el());return elements.get(s)},querySelectorAll(){return []},createElement:el};
 const context=vm.createContext({document,fetch:url=>new Promise(resolve=>requests.push({url,resolve}))});
-vm.runInContext(fs.readFileSync('website/app.js','utf8'),context);
+vm.runInContext(fs.readFileSync(require('node:path').join(__dirname,'../website/app.js'),'utf8'),context);
 const run=s=>vm.runInContext(s,context),tick=()=>new Promise(r=>setImmediate(r));
 (async()=>{
  requests.shift().resolve({ok:true,json:async()=>[{file:'one.png',name:'One'}]});await tick();assert.equal(run('all.length'),1);

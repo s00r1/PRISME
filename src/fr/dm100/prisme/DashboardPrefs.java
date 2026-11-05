@@ -303,6 +303,8 @@ public final class DashboardPrefs {
         V6ProfileCodec.Prepared newModules = schema >= 7 ? V6ProfileCodec.prepareImport(root.getJSONObject("v6")) : null;
         // Explicitly imported legacy settings, including volumeRail, remain exact. Mark the
         // import migrated so a later activity recreation never changes an applied profile.
+        ProfileJournal.begin(appContext);
+        try {
         SharedPreferences.Editor editor = prefs.edit().clear().putInt(FORMAT_VERSION, 2).putBoolean(VOLUME_RAIL, false);
         for (Map.Entry<String, Integer> entry : ints.entrySet()) editor.putInt(entry.getKey(), entry.getValue());
         for (Map.Entry<String, Boolean> entry : bools.entrySet()) editor.putBoolean(entry.getKey(), entry.getValue());
@@ -315,6 +317,11 @@ public final class DashboardPrefs {
         if (volume != null) floatingVolume.applyPrepared(volume);
         if (organizer != null) checklist.replace(organizer);
         if (newModules != null) V6ProfileCodec.applyPrepared(appContext, newModules);
+        ProfileJournal.finish(appContext);
+        } catch (RuntimeException | JSONException error) {
+            ProfileJournal.recover(appContext);
+            throw new JSONException("Import interrompu : réglages précédents récupérés");
+        }
     }
 
     public void reset() { int language=getInt("language",0);prefs.edit().clear().putInt(FORMAT_VERSION, 2).putBoolean(VOLUME_RAIL, false).putInt("language",language).apply(); }

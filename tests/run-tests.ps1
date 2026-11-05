@@ -12,6 +12,14 @@ $sources += Join-Path $project 'src\fr\dm100\prisme\SearchIndex.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\ChecklistStore.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\DashboardPrefs.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\V6ProfileCodec.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\HomeLayout.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\HomeStore.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\ProfileJournal.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\Countdown.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\UtilityMath.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\PrefValues.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\ExternalActions.java'
+$sources += Join-Path $project 'src\fr\dm100\prisme\BackupVault.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\ThemeSpec.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\ControlCenterPrefs.java'
 $sources += Join-Path $project 'src\fr\dm100\prisme\FloatingVolumePrefs.java'
@@ -35,3 +43,6 @@ if ($LASTEXITCODE -ne 0) { throw 'Échec des tests des nouveaux outils et des sa
 
 & (Join-Path $JavaHome 'bin\java.exe') -classpath ($classes + ';' + $json) fr.dm100.prisme.MediaBatteryPrefsTest
 if ($LASTEXITCODE -ne 0) { throw 'Battery/music preference tests failed.' }
+
+& (Join-Path $JavaHome 'bin\java.exe') -classpath ($classes + ';' + $json) fr.dm100.prisme.V6CoreTest
+if ($LASTEXITCODE -ne 0) { throw 'V6 core tests failed.' }

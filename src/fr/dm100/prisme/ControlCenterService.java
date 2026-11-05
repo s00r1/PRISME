@@ -68,6 +68,7 @@ public final class ControlCenterService extends Service implements SharedPrefere
         return s!=null&&(s.handle!=null||s.panel!=null);
     }
     public static void refresh(Context context){
+        if(fr.dm100.prisme.OverlayPolicy.homeVisible||fr.dm100.prisme.OverlayPolicy.suspended(context)){context.stopService(new Intent(context,ControlCenterService.class));return;}
         Context app=context.getApplicationContext();
         ControlCenterPrefs prefs=new ControlCenterPrefs(app);
         if(!prefs.getBoolean("enabled",true)&&new BatteryIndicatorPrefs(app).displayMode()!=2){
@@ -128,6 +129,7 @@ public final class ControlCenterService extends Service implements SharedPrefere
         return power==null||power.isInteractive();
     }
     private void reconcile(){
+        if(OverlayPolicy.homeVisible||OverlayPolicy.suspended(this)){closePanel();removeHandle();removeBattery();stopSelf();return;}
         boolean centerEnabled=prefs.getBoolean("enabled",true);
         if(!centerEnabled&&batteryPrefs.displayMode()!=2){stopSelf();return;}
         if(!Settings.canDrawOverlays(this)){closePanel();removeHandle();removeBattery();stopSelf();return;}
@@ -242,7 +244,7 @@ public final class ControlCenterService extends Service implements SharedPrefere
                 android.widget.Toast.makeText(this,"Rotation refusée par Android",android.widget.Toast.LENGTH_SHORT).show();
             return;
         }
-        Intent launch=new Intent(this,MainActivity.class).putExtra("controlCenterAction",action)
+        Intent launch=new Intent(this,MainActivity.class).putExtra("controlCenterAction",action).putExtra("_prismeCommand",MainActivity.INTERNAL_COMMAND_TOKEN)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
         try{startActivity(launch);}catch(RuntimeException ignored){}
     }

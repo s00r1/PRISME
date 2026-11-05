@@ -6,8 +6,8 @@ import android.os.SystemClock;
 import android.view.KeyEvent;
 
 /**
- * Lightweight music controls without notification access.
- * Does not request accessibility, notifications, or other sensitive access.
+ * Music controls; enriched sessions require explicit device-local opt-in.
+ * The simple mode requires no notification or accessibility access.
  * Uses Android's native multimedia key dispatcher to target the current player.
  */
 public final class MusicPlayback {
@@ -24,6 +24,14 @@ public final class MusicPlayback {
     }
 
     public static State state(Context context) {
+        android.media.session.MediaController controller=MediaAccess.current(context);
+        if(controller!=null)try{
+            android.media.MediaMetadata meta=controller.getMetadata();
+            android.media.session.PlaybackState playback=controller.getPlaybackState();
+            String title=meta==null?null:meta.getString(android.media.MediaMetadata.METADATA_KEY_TITLE);
+            String artist=meta==null?null:meta.getString(android.media.MediaMetadata.METADATA_KEY_ARTIST);
+            return new State(title==null?controller.getPackageName():title,artist==null?"":artist,controller.getPackageName(),playback!=null&&playback.getState()==3,true,true);
+        }catch(RuntimeException ignored){}
         AudioManager audio=(AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
         boolean active=false;
         try{active=audio!=null&&audio.isMusicActive();}catch(RuntimeException ignored){}
@@ -33,6 +41,7 @@ public final class MusicPlayback {
     }
 
     public static void command(Context c,int command) {
+        if(MediaAccess.current(c)!=null){MediaAccess.command(c,command);return;}
         AudioManager audio=(AudioManager)c.getSystemService(Context.AUDIO_SERVICE);
         if(audio==null)return;
         int key=command==PREVIOUS?KeyEvent.KEYCODE_MEDIA_PREVIOUS:

@@ -20,7 +20,23 @@ Photos produit externes : annonce DM100. Elles illustrent le matériel, pas PRIS
 
 [Français](docs/README.fr.md) · [English](docs/README.en.md) · [Deutsch](docs/README.de.md) · [中文](docs/README.zh.md) · [Türkçe](docs/README.tr.md) · [Русский](docs/README.ru.md) · [العربية](docs/README.ar.md)
 
-**Développement V6 :** [Studio, Sense, Widgets, Dock et Link PC sur la branche de validation](docs/V6-DEVELOPMENT.md). Le téléchargement public reste en V5.4 tant qu’une V6 signée et validée sur la DM100 n’est pas publiée. PRISME reste exclusivement destiné aux montres Android rectangulaires.
+## PRISME 6 · première bêta
+
+**[Télécharger la bêta 6.0.0-beta1](https://github.com/s00r1/PRISME/releases/tag/v6.0.0-beta1)** · **[Composer son accueil sur PC](https://s00r1.github.io/PRISME/home-studio.html)** · [Guide V6](docs/V6-GUIDE.md)
+
+- **Accueil modulaire** : trois pages prêtes à l’emploi, jusqu’à cinq pages et huit blocs par page, déplacement tactile sur grille, taille des blocs, annulation/rétablissement et grands textes. Les chevauchements sont refusés.
+- **Six palettes originales** : Graphite, Verre, Papier, Instrument, Néon et Minimal. Les 22 bureaux classiques restent disponibles.
+- **Huit minuteurs nommés**, pause/reprise, alarmes Android et reprise après redémarrage. Calculatrice décimale et convertisseur hors ligne.
+- **Musique simple ou enrichie** : commandes sans accès aux notifications, ou sessions multimédias avec autorisation Android facultative. Aucun contenu de notification n’est lu ou stocké par PRISME.
+- **Récupération** : journal de restauration, sauvegardes privées, coffre chiffré exportable et mode de secours après trois plantages non traités consécutifs.
+- **Superpositions coordonnées** : masquées sur l’accueil modulaire pour ne pas couvrir les blocs, rétablies dans les autres applications selon les réglages locaux ; commande générale de suspension.
+- **Studio PC local** : préparation de pages et import/export d’un profil sans envoi de son contenu sur un serveur.
+
+Cette version est une **bêta testée sur une DM100**, pas une certification de toutes les applications, de l’autonomie ou de Play Protect. La version stable reste la 5.4. [Résultats et limites](docs/V6-VALIDATION.md).
+
+<table><tr><td><img src="assets/device/v6-beta1/home-graphite.png" width="410" alt="Accueil modulaire V6 sur la DM100"></td><td><img src="assets/device/v6-beta1/home-paper.png" width="410" alt="Palette Papier sur la DM100"></td></tr><tr><td><img src="assets/device/v6-beta1/page-media.png" width="410" alt="Page multimédia V6 sur la DM100"></td><td><img src="assets/device/v6-beta1/editor.png" width="410" alt="Éditeur de l’accueil V6 sur la DM100"></td></tr></table>
+
+
 
 **Un bureau personnalisable pour les montres sous Android complet**, avec 22 compositions, un centre de contrôle et des outils quotidiens. Hors ligne, sans compte, publicité ni télémétrie.
 
@@ -33,7 +49,7 @@ Photos produit externes : annonce DM100. Elles illustrent le matériel, pas PRIS
 
 
 
-## Vérification sur DM100 · 5 novembre 2026
+## Historique de la vérification V5 · 5 novembre 2026
 
 La montre USB testée utilise PRISME **5.4.1**, Android 7.1.1 et une surface paysage de 640 × 480. Les écrans ci-dessous sont de vraies captures de cette montre, distinctes de la galerie de démonstration. La Release téléchargeable reste **5.4** : le code 5.4.1 et ses corrections ne constituent pas une nouvelle Release publiée.
 

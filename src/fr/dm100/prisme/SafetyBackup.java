@@ -11,11 +11,12 @@ import java.util.Arrays;
 public final class SafetyBackup {
     private SafetyBackup(){}
     public static void once(Context c,DashboardPrefs prefs) {
-        if(c.getSharedPreferences("prisme_experience",0).getInt("backupVersion",0)>=16)return;
-        try{save(c,prefs);c.getSharedPreferences("prisme_experience",0).edit().putInt("backupVersion",16).apply();}catch(Exception ignored){}
+        android.content.SharedPreferences status=c.getSharedPreferences("prisme_experience",0);
+        if(status.getInt("backupVersion",0)>=22&&System.currentTimeMillis()-status.getLong("backupAt",0)<86400000L)return;
+        try{save(c,prefs);c.getSharedPreferences("prisme_experience",0).edit().putInt("backupVersion",22).putLong("backupAt",System.currentTimeMillis()).apply();}catch(Exception ignored){}
     }
     public static synchronized void save(Context c,DashboardPrefs prefs)throws Exception {
-        File parent=c.getExternalFilesDir(null);if(parent==null)parent=c.getFilesDir();File dir=new File(parent,"sauvegardes");
+        File parent=c.getFilesDir();File dir=new File(parent,"sauvegardes");
         if(!dir.isDirectory()&&!dir.mkdirs())throw new java.io.IOException("Dossier de sauvegarde indisponible");
         byte[] data=prefs.exportJSONObject().toString().getBytes(StandardCharsets.UTF_8);
         File target=new File(dir,"PRISME-securite-"+System.currentTimeMillis()+"-"+java.util.UUID.randomUUID().toString().substring(0,6)+".json");

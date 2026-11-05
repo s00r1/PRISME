@@ -30,6 +30,7 @@ public final class GlobalRotationService extends Service {
     public static int mode(Context c){return Math.max(0,Math.min(4,c.getSharedPreferences("prisme_rotation",0).getInt("mode",0)));}
     public static String label(Context c){String[] names={"Système","Portrait forcé","Paysage forcé","Portrait inversé","Paysage inversé"};return I18n.t(c,names[mode(c)]);}
     public static boolean apply(Context c,int mode){
+        if(OverlayPolicy.suspended(c))return false;
         int safe=Math.max(0,Math.min(4,mode));if(safe==0){release(c);return true;}if(!Settings.canDrawOverlays(c))return false;
         int previous=mode(c);c.getSharedPreferences("prisme_rotation",0).edit().putInt("mode",safe).commit();
         Intent i=new Intent(c,GlobalRotationService.class);

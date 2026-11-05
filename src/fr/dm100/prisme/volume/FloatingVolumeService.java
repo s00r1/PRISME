@@ -93,6 +93,7 @@ public final class FloatingVolumeService extends Service implements SharedPrefer
         else context.stopService(new Intent(context, FloatingVolumeService.class));
     }
     public static void refresh(Context context) {
+        if(fr.dm100.prisme.OverlayPolicy.homeVisible||fr.dm100.prisme.OverlayPolicy.suspended(context)){context.stopService(new Intent(context,FloatingVolumeService.class));return;}
         FloatingVolumeService service = instance;
         if (service != null) {
             service.runOnMain(new Runnable() { @Override public void run() {
@@ -174,6 +175,7 @@ public final class FloatingVolumeService extends Service implements SharedPrefer
         return prefs.getBoolean("enabled", false) && (prefs.mayResume(boot) || boot < 0 && manualSessionWithoutBootCount);
     }
     private void reconcile(boolean applyPosition) {
+        if(fr.dm100.prisme.OverlayPolicy.homeVisible||fr.dm100.prisme.OverlayPolicy.suspended(this)){removeOverlay();return;}
         if (stopping) return;
         if (!wanted()) { finishStop(); return; }
         boolean interactive = true;

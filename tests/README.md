@@ -15,3 +15,9 @@ La version 5.1 ajoute dix assertions de compatibilité et dédoublonnage du bout
 104 assertions supplémentaires couvrent les limites, types corrompus, palettes et portées des préférences Batterie/Musique. `run-all.ps1` les exécute également.
 
 `node tests/website.cjs` vérifie le chargement de la galerie, les changements de langue concurrents, les réponses HTTP en erreur, les données invalides, la reprise et la navigation dans la fenêtre d’image. Ce test isolé ne remplace pas une vérification visuelle dans un navigateur.
+
+## V6 bêta
+
+`run-all.ps1` inclut V6CoreTest : validation de la grille, collisions, imports complets, annulation, récupération après interruption, calculs de compte à rebours, bornage des utilitaires et chiffrement avec mots de passe erronés/fichiers altérés. `node tests/home-model.cjs` vérifie les mêmes frontières de disposition côté éditeur PC. [Essais Android réels](device/README.md).
+
+La validation du modèle n’est pas une preuve d’autonomie, de fluidité ou de compatibilité avec tous les lecteurs musicaux. Voir [le rapport V6](../docs/V6-VALIDATION.md).

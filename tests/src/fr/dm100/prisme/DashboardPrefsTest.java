@@ -209,6 +209,8 @@ public final class DashboardPrefsTest {
                 @Override public Editor putString(String key, String value) { pending.put(key, value);return this; }
                 @Override public Editor putStringSet(String key, Set<String> value) { pending.put(key, new HashSet<String>(value));return this; }
                 @Override public Editor putInt(String key, int value) { pending.put(key, value);return this; }
+                @Override public Editor putLong(String key,long value){pending.put(key,value);return this;}
+                @Override public Editor putFloat(String key,float value){pending.put(key,value);return this;}
                 @Override public Editor putBoolean(String key, boolean value) { pending.put(key, value);return this; }
                 @Override public Editor remove(String key) { pending.put(key, this);return this; }
                 @Override public Editor clear() { clear = true;return this; }

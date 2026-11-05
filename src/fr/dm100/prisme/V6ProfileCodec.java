@@ -38,8 +38,8 @@ public final class V6ProfileCodec {
         if(key.equals("dayTheme")||key.equals("nightTheme")||key.equals("lowTheme")||key.equals("chargeTheme"))return upper?21:0;
         if(key.equals("dayStart")||key.equals("nightStart"))return upper?23:0;
         if(key.equals("position"))return upper?3:0;
-        if(key.equals("opacity"))return upper?100:20;
-        if(key.equals("size"))return group==5?(upper?90:30):(upper?200:30);
+        if(key.equals("opacity"))return upper?100:(group==0?25:group==1?30:20);
+        if(key.equals("size"))return group==5?(upper?90:30):group==1?(upper?180:50):group==0?(upper?200:35):(upper?200:30);
         return upper?100:0;
     }
     static final class Prepared {
@@ -63,6 +63,10 @@ public final class V6ProfileCodec {
             }
             result.put(GROUPS[group],values);
         }
+        SharedPreferences home=context.getSharedPreferences("prisme_home",0);
+        JSONObject h=new JSONObject().put("layout",new HomeStore(context).read());
+        h.put("enabled",new HomeStore(context).enabled());
+        result.put("home",h);
         return result;
     }
     public static Prepared prepareImport(JSONObject root) throws JSONException {
@@ -72,6 +76,7 @@ public final class V6ProfileCodec {
         while(top.hasNext()){
             String key=top.next();boolean known=false;
             for(String g:GROUPS)if(g.equals(key))known=true;
+            if("home".equals(key))known=true;
             if(!known)throw new JSONException("Module V6 non reconnu : "+key);
         }
         for(int group=0;group<GROUPS.length;group++){
@@ -97,6 +102,14 @@ public final class V6ProfileCodec {
             }
             result.groups.put(STORES[group],validated);
         }
+        if(root.has("home")){
+            JSONObject home=root.getJSONObject("home");
+            if(home.length()!=2||!(home.get("enabled") instanceof Boolean))throw new JSONException("Accueil invalide");
+            Map<String,Object> values=new HashMap<>();
+            values.put("enabled",home.getBoolean("enabled"));
+            values.put("layout",HomeLayout.validate(home.getJSONObject("layout")).toString());
+            result.groups.put("prisme_home",values);
+        }
         return result;
     }
     public static void applyPrepared(Context context,Prepared validated){
@@ -104,6 +117,7 @@ public final class V6ProfileCodec {
             SharedPreferences.Editor edit=context.getSharedPreferences(group.getKey(),Context.MODE_PRIVATE).edit();
             for(Map.Entry<String,Object> entry:group.getValue().entrySet()){
                 if(entry.getValue() instanceof Boolean)edit.putBoolean(entry.getKey(),(Boolean)entry.getValue());
+                else if(entry.getValue() instanceof String)edit.putString(entry.getKey(),(String)entry.getValue());
                 else edit.putInt(entry.getKey(),(Integer)entry.getValue());
             }
             edit.apply();

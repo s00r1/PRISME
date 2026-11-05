@@ -45,12 +45,12 @@ public final class WatchWidgetsOverlay extends FrameLayout {
         DisplayMetrics metrics=getResources().getDisplayMetrics();
         int width=Math.max(1,getWidth()>0?getWidth():metrics.widthPixels);
         int height=Math.max(1,getHeight()>0?getHeight():metrics.heightPixels);
-        int size=Math.max(30,Math.min(200,options.getInt("size",75)));
-        int opacity=Math.max(20,Math.min(100,options.getInt("opacity",88)));
+        int size=Math.max(30,Math.min(200,PrefValues.number(options,"size",75)));
+        int opacity=Math.max(20,Math.min(100,PrefValues.number(options,"opacity",88)));
         int cardWidth=Math.min(width,Math.max(70,Math.round(134f*size/100f)));
         int cardHeight=Math.min(height,Math.max(31,Math.round(48f*size/100f)));
         for(int i=0;i<4;i++){
-            if(!options.getBoolean(SHOW[i],false))continue;
+            if(!PrefValues.flag(options,SHOW[i],false))continue;
             TextView card=new TextView(getContext());
             card.setGravity(Gravity.CENTER);
             card.setTextSize(TypedValue.COMPLEX_UNIT_PX,Math.max(13,Math.round(17f*size/100f)));
@@ -61,8 +61,8 @@ public final class WatchWidgetsOverlay extends FrameLayout {
             card.setBackground(bg);card.setAlpha(opacity/100f);
             final int index=i;
             card.setOnClickListener(v->host.action(index==0?"deskclock":index==1?"checklist":index==2?"timer":"device"));
-            int x=Math.max(0,Math.min(100,positions.getInt(XS[i],DEFAULT_X[i])));
-            int y=Math.max(0,Math.min(100,positions.getInt(YS[i],DEFAULT_Y[i])));
+            int x=Math.max(0,Math.min(100,PrefValues.number(positions,XS[i],DEFAULT_X[i])));
+            int y=Math.max(0,Math.min(100,PrefValues.number(positions,YS[i],DEFAULT_Y[i])));
             FrameLayout.LayoutParams params=new FrameLayout.LayoutParams(cardWidth,cardHeight,Gravity.TOP|Gravity.LEFT);
             params.leftMargin=Math.round((width-cardWidth)*x/100f);
             params.topMargin=Math.round((height-cardHeight)*y/100f);

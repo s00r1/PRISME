@@ -12,8 +12,9 @@ import android.os.Build;
 public final class TimerReceiver extends BroadcastReceiver {
     @Override public void onReceive(Context c,Intent i){
         if(i==null)return;
+        if("fr.dm100.prisme.MULTI_TIMER".equals(i.getAction())){MultiTimers.finish(c,i.getIntExtra("id",-1),i.getLongExtra("token",-1));return;}
         if("fr.dm100.prisme.TIMER".equals(i.getAction()))TimerEngine.finish(c,i.getLongExtra("token",-1));
-        else if(Intent.ACTION_BOOT_COMPLETED.equals(i.getAction())||Intent.ACTION_MY_PACKAGE_REPLACED.equals(i.getAction()))TimerEngine.schedule(c);
+        else if(Intent.ACTION_BOOT_COMPLETED.equals(i.getAction())||Intent.ACTION_MY_PACKAGE_REPLACED.equals(i.getAction())){TimerEngine.schedule(c);MultiTimers.restore(c);}
     }
     public static void dismissNotification(Context c){NotificationManager m=(NotificationManager)c.getSystemService(Context.NOTIFICATION_SERVICE);if(m!=null)m.cancel(410);}
     static void notifyFinished(Context c){
@@ -24,6 +25,13 @@ public final class TimerReceiver extends BroadcastReceiver {
         b.setSmallIcon(R.drawable.ic_prisme).setContentTitle(I18n.t(c,"PRISME · Minuteur terminé")).setContentText(I18n.t(c,"Le temps est écoulé. Toucher pour ouvrir le minuteur."))
                 .setCategory(Notification.CATEGORY_ALARM).setPriority(Notification.PRIORITY_HIGH).setDefaults(Notification.DEFAULT_ALL).setAutoCancel(true).setContentIntent(tap);
         try{m.notify(410,b.build());}catch(RuntimeException ignored){}
+    }
+    static void notifyNamed(Context c,int id,String name){
+        NotificationManager m=(NotificationManager)c.getSystemService(Context.NOTIFICATION_SERVICE);if(m==null)return;
+        PendingIntent tap=PendingIntent.getActivity(c,id,new Intent(c,MainActivity.class).putExtra("utilityAction","multiTimers").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP),PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
+        Notification.Builder b=Build.VERSION.SDK_INT>=26?Api26.builder(c,m):new Notification.Builder(c);
+        b.setSmallIcon(R.drawable.ic_prisme).setContentTitle("PRISME · "+name).setContentText(I18n.t(c,"Minuteur terminé")).setCategory(Notification.CATEGORY_ALARM).setPriority(Notification.PRIORITY_HIGH).setDefaults(Notification.DEFAULT_ALL).setAutoCancel(true).setContentIntent(tap);
+        try{m.notify(id,b.build());}catch(RuntimeException ignored){}
     }
     private static final class Api26 {
         static Notification.Builder builder(Context c,NotificationManager m){

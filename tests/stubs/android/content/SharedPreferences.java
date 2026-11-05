@@ -7,6 +7,7 @@ public interface SharedPreferences {
     Set<String> getStringSet(String key, Set<String> fallback);
     int getInt(String key, int fallback);
     boolean getBoolean(String key, boolean fallback);
+    default long getLong(String key,long fallback){Object v=getAll().get(key);return v==null?fallback:(Long)v;}
     boolean contains(String key);
     Editor edit();
     void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener);
@@ -16,6 +17,9 @@ public interface SharedPreferences {
         Editor putString(String key, String value);
         Editor putStringSet(String key, Set<String> value);
         Editor putInt(String key, int value);
+        Editor putLong(String key,long value);
+        Editor putFloat(String key,float value);
+        default boolean commit(){apply();return true;}
         Editor putBoolean(String key, boolean value);
         Editor remove(String key);
         Editor clear();

@@ -17,12 +17,12 @@ public final class TimerEngine {
     public static long remaining(Context c){
         SharedPreferences s=store(c);long wall=s.getLong("timerDeadline",0);if(wall==0)return s.getLong("timerPaused",0);
         long elapsed=s.getLong("timerElapsedDeadline",0);
-        return Math.max(0,elapsed>0&&s.getInt("timerBoot",-2)==boot(c)?elapsed-SystemClock.elapsedRealtime():wall-System.currentTimeMillis());
+        return Countdown.remaining(wall,elapsed,s.getInt("timerBoot",-2),boot(c),System.currentTimeMillis(),SystemClock.elapsedRealtime(),0);
     }
     public static boolean paused(Context c){return deadline(c)==0&&store(c).getLong("timerPaused",0)>0;}
     private static PendingIntent alarm(Context c,long token){return PendingIntent.getBroadcast(c,410,new Intent(c,TimerReceiver.class).setAction("fr.dm100.prisme.TIMER").putExtra("token",token),PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);}
     public static synchronized boolean start(Context c,long duration){
-        if(duration<1000||duration>24*60*60*1000L)return false;
+        if(!Countdown.validDuration(duration))return false;
         long token=store(c).getLong("timerToken",0)+1;
         store(c).edit().putLong("timerDeadline",System.currentTimeMillis()+duration).putLong("timerElapsedDeadline",SystemClock.elapsedRealtime()+duration)
                 .putInt("timerBoot",boot(c)).putLong("timerPaused",0).putLong("timerToken",token).putLong("timerFinishedAt",0).commit();

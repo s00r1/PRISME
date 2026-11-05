@@ -41,7 +41,7 @@ public final class PrismeDoctor {
         return out.toString();
     }
     public static void show(Activity a){
-        new AlertDialog.Builder(a).setTitle("◈ PRISME Doctor").setMessage(report(a))
+        new V6Ui.Builder(a).setTitle("◈ PRISME Doctor").setMessage(report(a))
             .setPositiveButton("Fermer",null).show();
     }
 }

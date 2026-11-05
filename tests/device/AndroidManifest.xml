@@ -1,0 +1,1 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="fr.dm100.prisme.qa"><uses-sdk android:minSdkVersion="25" android:targetSdkVersion="28"/><application android:label="PRISME QA"/><instrumentation android:name=".WatchValidation" android:targetPackage="fr.dm100.prisme" android:label="PRISME V6 on-device validation"/></manifest>

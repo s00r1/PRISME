@@ -52,9 +52,10 @@ public final class EdgeDockService extends Service {
         c.stopService(new Intent(c,EdgeDockService.class));
     }
     public static void refresh(Context c){
+        if(fr.dm100.prisme.OverlayPolicy.homeVisible||fr.dm100.prisme.OverlayPolicy.suspended(c)){c.stopService(new Intent(c,EdgeDockService.class));return;}
         SharedPreferences p=c.getSharedPreferences("prisme_edge",0);
         Intent intent=new Intent(c,EdgeDockService.class);
-        if(!p.getBoolean("enabled",false)){c.stopService(intent);return;}
+        if(!PrefValues.flag(p,"enabled",false)){c.stopService(intent);return;}
         if(!Settings.canDrawOverlays(c))return;
         try{if(Build.VERSION.SDK_INT>=26)Api26.start(c,intent);else c.startService(intent);}
         catch(RuntimeException ignored){}
@@ -87,11 +88,12 @@ public final class EdgeDockService extends Service {
     }
     private void draw(){
         remove();
-        if(!prefs.getBoolean("enabled",false)||!Settings.canDrawOverlays(this)||manager==null){stopSelf();return;}
+        if(OverlayPolicy.homeVisible||OverlayPolicy.suspended(this)){stopSelf();return;}
+        if(!PrefValues.flag(prefs,"enabled",false)||!Settings.canDrawOverlays(this)||manager==null){stopSelf();return;}
         PowerManager pm=(PowerManager)getSystemService(POWER_SERVICE);
         if(pm!=null&&!pm.isInteractive())return;
         Point display=new Point();manager.getDefaultDisplay().getRealSize(display);
-        int size=Math.max(30,Math.min(90,prefs.getInt("size",44)));
+        int size=Math.max(30,Math.min(90,PrefValues.number(prefs,"size",44)));
         int w=expanded?Math.max(92,size*2):size,h=expanded?Math.min(display.y,size*6):size;
         w=Math.min(display.x,w);h=Math.min(display.y,h);
         LinearLayout shell=new LinearLayout(this);shell.setOrientation(LinearLayout.VERTICAL);shell.setGravity(Gravity.CENTER);
@@ -124,10 +126,10 @@ public final class EdgeDockService extends Service {
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL|WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
             PixelFormat.TRANSLUCENT);
         p.gravity=Gravity.LEFT|Gravity.TOP;
-        int location=Math.max(0,Math.min(3,prefs.getInt("position",1)));
+        int location=Math.max(0,Math.min(3,PrefValues.number(prefs,"position",1)));
         p.x=(location%2==1)?Math.max(0,display.x-w):0;
         p.y=Math.max(0,Math.round((display.y-h)*(location<2?.5f:.72f)));
-        p.alpha=Math.max(.2f,Math.min(1f,prefs.getInt("opacity",90)/100f));
+        p.alpha=Math.max(.2f,Math.min(1f,PrefValues.number(prefs,"opacity",90)/100f));
         p.setTitle("PRISME:WatchEdgeDock");
         try{manager.addView(shell,p);overlay=shell;}catch(RuntimeException ex){overlay=null;}
     }
@@ -146,26 +148,26 @@ public final class EdgeDockService extends Service {
         SharedPreferences p=a.getSharedPreferences("prisme_edge",0);
         LinearLayout content=new LinearLayout(a);content.setPadding(12,12,12,12);content.setOrientation(LinearLayout.VERTICAL);
         CheckBox enabled=new CheckBox(a);enabled.setText("Activer le dock sur les applications");
-        enabled.setTextColor(0xfff2ffff);enabled.setChecked(p.getBoolean("enabled",false));
+        enabled.setTextColor(0xfff2ffff);enabled.setChecked(PrefValues.flag(p,"enabled",false));
         enabled.setOnCheckedChangeListener((v,yes)->{
             if(yes&&!enable(a)){enabled.setChecked(false);
-                new AlertDialog.Builder(a).setMessage("Autorise les superpositions Android dans les réglages de PRISME.")
+                new V6Ui.Builder(a).setMessage("Autorise les superpositions Android dans les réglages de PRISME.")
                     .setPositiveButton("Réglages",(d,w)->{try{a.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,android.net.Uri.parse("package:"+a.getPackageName())));}catch(RuntimeException ignored){}})
                     .setNegativeButton("Fermer",null).show();
             }else if(!yes)disable(a);change.run();
         });content.addView(enabled);
         CheckBox boot=new CheckBox(a);boot.setText("Relancer au démarrage de la montre");
-        boot.setTextColor(0xffe5ffff);boot.setChecked(p.getBoolean("boot",false));
+        boot.setTextColor(0xffe5ffff);boot.setChecked(PrefValues.flag(p,"boot",false));
         boot.setOnCheckedChangeListener((v,yes)->p.edit().putBoolean("boot",yes).apply());content.addView(boot);
         seek(a,content,p,"size","Taille",44,30,90,change);
         seek(a,content,p,"opacity","Opacité",90,20,100,change);
         seek(a,content,p,"position","Position (gauche/droite et hauteur)",1,0,3,change);
         android.widget.ScrollView scroll=new android.widget.ScrollView(a);scroll.addView(content);
-        new AlertDialog.Builder(a).setTitle("◈ Dock flottant V6").setView(scroll).setPositiveButton("Fermer",null).show();
+        new V6Ui.Builder(a).setTitle("◈ Dock flottant V6").setView(scroll).setPositiveButton("Fermer",null).show();
     }
     private static void seek(Activity a,LinearLayout root,SharedPreferences p,String key,String label,int fallback,int min,int max,Runnable changed){
-        TextView title=new TextView(a);title.setTextColor(0xfff3ffff);title.setText(label+" : "+p.getInt(key,fallback));root.addView(title);
-        SeekBar bar=new SeekBar(a);bar.setMax(max-min);bar.setProgress(Math.max(0,p.getInt(key,fallback)-min));
+        TextView title=new TextView(a);title.setTextColor(0xfff3ffff);title.setText(label+" : "+PrefValues.number(p,key,fallback));root.addView(title);
+        SeekBar bar=new SeekBar(a);bar.setMax(max-min);bar.setProgress(Math.max(0,PrefValues.number(p,key,fallback)-min));
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             public void onProgressChanged(SeekBar v,int progress,boolean user){
                 if(!user)return;int value=progress+min;p.edit().putInt(key,value).apply();title.setText(label+" : "+value);refresh(a);changed.run();

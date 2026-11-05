@@ -59,8 +59,12 @@ import java.util.Set;
 
 /** Native home screen and optional user-controlled global volume module. */
 public final class MainActivity extends Activity implements DashboardView.Listener, ControlCenterController.Host {
+    static final String INTERNAL_COMMAND_TOKEN=java.util.UUID.randomUUID().toString();
     private static final int INK=0xffeaf4ff, MUTED=0xffa3b4c8, SURFACE=0xff192638, BG=0xff0b1220, ACCENT=0xff82ead2;
     private static final int EXPORT=71, IMPORT=72, CAPTURE=73;
+    private String pendingVaultName;
+    private HomeDeck homeDeck;
+    private boolean rescue;
     private DashboardPrefs prefs;
     private DashboardView board;
     private ExperienceController experience;
@@ -102,12 +106,12 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     private TextView timerDisplay, stopwatchDisplay;
     private final List<java.lang.ref.WeakReference<AlertDialog>> ownedDialogs=new ArrayList<>();
     private final Runnable mediaTick = new Runnable(){@Override public void run(){
-        if(!visible)return;
+        if(!visible||!screenInteractive()||dashboardPlayer==null)return;
         if(dashboardPlayer!=null)dashboardPlayer.update();
         main.postDelayed(this,2500);
     }};
     private final Runnable tick = new Runnable(){ public void run(){
-        if(!visible)return;
+        if(!visible||!screenInteractive())return;
         updateSnapshot();
         if(SenseEngine.apply(MainActivity.this,prefs))refreshBoard();
         checkTimer();
@@ -126,6 +130,8 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     private final BroadcastReceiver changes = new BroadcastReceiver(){
         @Override public void onReceive(Context c,Intent i){
             String a=i.getAction();
+            if(Intent.ACTION_SCREEN_OFF.equals(a)){if(homeDeck!=null)homeDeck.pause();board.onHostPause();main.removeCallbacks(mediaTick);main.removeCallbacks(tick);return;}
+            if(Intent.ACTION_SCREEN_ON.equals(a)){if(homeDeck!=null&&new HomeStore(MainActivity.this).enabled())homeDeck.resume();board.onHostResume();main.post(mediaTick);main.post(tick);return;}
             if(Intent.ACTION_PACKAGE_ADDED.equals(a)||Intent.ACTION_PACKAGE_REMOVED.equals(a)||Intent.ACTION_PACKAGE_CHANGED.equals(a))loadApps();
             else updateSnapshot();
         }
@@ -133,7 +139,11 @@ public final class MainActivity extends Activity implements DashboardView.Listen
 
     @Override protected void attachBaseContext(Context base){super.attachBaseContext(I18n.wrap(base));}
     @Override public void onCreate(Bundle state){
-        super.onCreate(state);I18n.init(this);activityLanguage=I18n.selected(this);
+        super.onCreate(state);
+        RecoveryGuard.install(this);
+        try{ProfileJournal.recover(this);}catch(Exception e){RecoveryGuard.force(this);}
+        if(RecoveryGuard.needed(this)){rescue=true;RecoveryGuard.show(this);return;}
+        I18n.init(this);activityLanguage=I18n.selected(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         prefs=new DashboardPrefs(this);
         musicPrefs=new MusicPrefs(this);
@@ -160,6 +170,8 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         board=new DashboardView(this,prefs,this);
         mainLayer=new FrameLayout(this);
         mainLayer.addView(board,new FrameLayout.LayoutParams(-1,-1));
+        homeDeck=new HomeDeck(this,action->onAction(action));
+        mainLayer.addView(homeDeck,new FrameLayout.LayoutParams(-1,-1));
         watchWidgets=new WatchWidgetsOverlay(this,action->onAction(action));
         mainLayer.addView(watchWidgets,new FrameLayout.LayoutParams(-1,-1));
         controlPanel=new ControlCenterPanel(this,controlPrefs,controlController,new ControlCenterPanel.Listener(){
@@ -200,10 +212,10 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         super.onSaveInstanceState(state);
     }
     @Override protected void onNewIntent(Intent intent){
-        super.onNewIntent(intent);setIntent(intent);
+        super.onNewIntent(intent);setIntent(intent);if(rescue)return;
         requestVolumeSettings(intent);requestUtilityAction(intent);requestControlCenterAction(intent);
         if(intent!=null&&intent.hasCategory(Intent.CATEGORY_HOME)){
-            MusicPlayback.prepareHomeTransition(this);
+            MusicPlayback.prepareHomeTransition(this);V6Ui.closeAll(this);
             cancelSettingsRestore=true;
             closeControlExtras();
             for(int n=ownedDialogs.size()-1;n>=0;n--){AlertDialog d=ownedDialogs.get(n).get();if(d!=null&&d.isShowing())d.dismiss();}
@@ -212,10 +224,12 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         refreshBoard();
     }
     @Override protected void onResume(){
-        super.onResume();visible=true;if(experience!=null)experience.resume();timerDeadline=TimerEngine.deadline(this);
-        SenseEngine.apply(this,prefs);board.onHostResume();if(watchWidgets!=null)watchWidgets.onHostResume();
+        super.onResume();if(rescue)return;visible=true;OverlayPolicy.homeVisible=new HomeStore(this).enabled();
+        main.postDelayed(()->RecoveryGuard.clear(this),60000);
+        MultiTimers.restore(this);if(homeDeck!=null&&new HomeStore(this).enabled())homeDeck.resume();if(experience!=null)experience.resume();timerDeadline=TimerEngine.deadline(this);
+        SenseEngine.apply(this,prefs);board.onHostResume();if(watchWidgets!=null&&!new HomeStore(this).enabled())watchWidgets.onHostResume();
         if(!registered){
-            IntentFilter common=new IntentFilter();common.addAction(Intent.ACTION_TIME_CHANGED);common.addAction(Intent.ACTION_TIMEZONE_CHANGED);common.addAction(Intent.ACTION_BATTERY_CHANGED);
+            IntentFilter common=new IntentFilter();common.addAction(Intent.ACTION_SCREEN_OFF);common.addAction(Intent.ACTION_SCREEN_ON);common.addAction(Intent.ACTION_TIME_CHANGED);common.addAction(Intent.ACTION_TIMEZONE_CHANGED);common.addAction(Intent.ACTION_BATTERY_CHANGED);
             registerReceiver(changes,common);
             IntentFilter packages=new IntentFilter();packages.addAction(Intent.ACTION_PACKAGE_ADDED);packages.addAction(Intent.ACTION_PACKAGE_REMOVED);packages.addAction(Intent.ACTION_PACKAGE_CHANGED);packages.addDataScheme("package");
             registerReceiver(changes,packages);registered=true;
@@ -232,22 +246,30 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         EdgeDockService.refresh(this);
     }
     @Override protected void onPause(){
+        if(rescue){super.onPause();return;}
+        if(homeDeck!=null)homeDeck.pause();
+        OverlayPolicy.homeVisible=false;
+        ControlCenterService.refresh(this);EdgeDockService.refresh(this);fr.dm100.prisme.volume.FloatingVolumeService.refresh(this);
         main.removeCallbacks(mediaTick);
         visible=false;if(watchWidgets!=null)watchWidgets.onHostPause();if(experience!=null)experience.pause();closeScreenLamp();if(controlPanel!=null)controlPanel.onHostPause();if(controlController!=null)controlController.onHostPause();board.onHostPause();main.removeCallbacks(tick);main.removeCallbacks(timerTick);main.removeCallbacks(stopwatchTick);
         if(registered){unregisterReceiver(changes);registered=false;}
         saveUtilities();super.onPause();
     }
     @Override protected void onDestroy(){
+        if(rescue){V6Ui.closeAll(this);super.onDestroy();return;}
+        V6Ui.closeAll(this);
+        if(homeDeck!=null)homeDeck.pause();
         for(java.lang.ref.WeakReference<AlertDialog> ref:ownedDialogs){AlertDialog d=ref.get();if(d!=null&&d.isShowing())d.dismiss();}
         ownedDialogs.clear();if(experience!=null)experience.shutdown();closeControlExtras();repository.close();main.removeCallbacksAndMessages(null);super.onDestroy();
     }
     @Override public void onConfigurationChanged(Configuration c){
-        super.onConfigurationChanged(c);board.refresh();if(watchWidgets!=null)watchWidgets.refresh();refreshDashboardOverlays();if(controlPanel!=null)controlPanel.refresh();if(controlSettings!=null&&controlSettings.isShowing())controlSettings.refit();if(floatingSettings!=null&&floatingSettings.isShowing())floatingSettings.refit();
+        super.onConfigurationChanged(c);if(rescue)return;if(homeDeck!=null)homeDeck.refresh();board.refresh();if(watchWidgets!=null)watchWidgets.refresh();refreshDashboardOverlays();if(controlPanel!=null)controlPanel.refresh();if(controlSettings!=null&&controlSettings.isShowing())controlSettings.refit();if(floatingSettings!=null&&floatingSettings.isShowing())floatingSettings.refit();
         for(java.lang.ref.WeakReference<AlertDialog> ref:ownedDialogs){
             AlertDialog d=ref.get();if(d instanceof OwnedDialog&&d.isShowing())((OwnedDialog)d).fitWindow();
         }
     }
     @Override public void onBackPressed(){
+        if(rescue)return;
         if(screenLamp!=null){closeScreenLamp();return;}
         if(controlPanel!=null&&controlPanel.isOpen()){controlPanel.close();return;}
         if(controlSettings!=null&&controlSettings.isShowing()){controlSettings.dismiss();return;}
@@ -268,7 +290,12 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         List<AppEntry> visibleApps=new ArrayList<>();int workspace=prefs.getInt("workspace",0);
         Set<String> selected=workspace>0?prefs.getSet("workspace"+workspace):Collections.<String>emptySet();
         for(AppEntry a:apps)if(workspace==0||selected.contains(a.id))visibleApps.add(a);
-        board.setShortcutCatalog(apps);board.setApps(visibleApps);board.refresh();if(watchWidgets!=null)watchWidgets.refresh();updateSnapshot();applyWindowPrefs();
+        boolean modular=new HomeStore(this).enabled();
+        OverlayPolicy.homeVisible=visible&&modular;
+        if(homeDeck!=null){homeDeck.setVisibility(modular?View.VISIBLE:View.GONE);if(modular){homeDeck.refresh();if(visible)homeDeck.resume();}else homeDeck.pause();}
+        board.setVisibility(modular?View.GONE:View.VISIBLE);
+        board.setShortcutCatalog(apps);board.setApps(visibleApps);board.refresh();if(watchWidgets!=null){watchWidgets.setVisibility(modular?View.GONE:View.VISIBLE);watchWidgets.refresh();if(modular)watchWidgets.onHostPause();}
+        updateSnapshot();applyWindowPrefs();
     }
     private void updateSnapshot(){
         if(board!=null)board.setSnapshot(DeviceSnapshot.read(this));
@@ -285,7 +312,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         Point screenSize=screen();
         if(screenSize.x<=0||screenSize.y<=0)return;
         BatteryIndicatorPrefs bp=new BatteryIndicatorPrefs(this);
-        if(bp.displayMode()==1){
+        if(bp.displayMode()==1&&!new HomeStore(this).enabled()){
             dashboardBattery=new BatteryIndicatorView(this,bp);
             dashboardBattery.setBackgroundHint(ThemeSpec.get(prefs.getInt("theme",0)).bg);
             BatteryLevelReader.Reading state=BatteryLevelReader.read(this,null);
@@ -298,7 +325,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
             dashboardBattery.setAlpha(bp.integer("opacity",100)/100f);
             mainLayer.addView(dashboardBattery,Math.max(1,mainLayer.indexOfChild(controlPanel)),lp);
         }
-        if(musicPrefs.flag("enabled",true)){
+        if(musicPrefs.flag("enabled",true)&&!new HomeStore(this).enabled()){
             dashboardPlayer=new MiniMusicPlayer(this,musicPrefs);
             int width=Math.min(screenSize.x,dashboardPlayer.desiredWidth());
             int height=Math.min(screenSize.y,dashboardPlayer.desiredHeight());
@@ -309,6 +336,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
             dashboardPlayer.update();
         }
     }
+    private boolean screenInteractive(){android.os.PowerManager pm=(android.os.PowerManager)getSystemService(POWER_SERVICE);return pm==null||pm.isInteractive();}
     private void applyWindowPrefs(){
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             |View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
@@ -336,6 +364,17 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     }
     @Override public void onAction(String action){
         if(action==null)return;
+        if("v6Refresh".equals(action)){profileImported();return;}
+        if("v6Edit".equals(action)){homeDeck.editor();return;}
+        if("v6Home".equals(action)){new HomeStore(this).enabled(true);profileImported();return;}
+        if("v6Tools".equals(action)){showV6Tools();return;}
+        if("calculatorV6".equals(action)){UtilityPanel.calculator(this);return;}
+        if("converterV6".equals(action)){UtilityPanel.converter(this);return;}
+        if("vault".equals(action)){BackupPanel.open(this,prefs,()->profileImported(),file->{pendingVaultName=file.getName();try{startActivityForResult(new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("application/octet-stream").putExtra(Intent.EXTRA_TITLE,file.getName()),74);}catch(RuntimeException e){toast("Sélecteur de fichier indisponible");}});return;}
+        if("multiTimers".equals(action)){MultiTimerPanel.open(this);return;}
+        if("mediaPanel".equals(action)){MediaPanel.open(this);return;}
+        if("v6Favorites".equals(action)){showApps(true);return;}
+        if("safeMode".equals(action)){RecoveryGuard.force(this);dismissOwnedDialogs();recreate();return;}
         if("language".equals(action)){showLanguagePicker();return;}
         if("studio".equals(action)){WatchStudio.open(this,prefs,()->{if(watchWidgets!=null)watchWidgets.refresh();},()->{refreshBoard();refreshDashboardOverlays();});return;}
         if("sense".equals(action)){SenseEngine.open(this,prefs,()->{SenseEngine.apply(this,prefs);refreshBoard();});return;}
@@ -554,6 +593,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
                 settingsAction(b,"Applications masquées",()->showHidden());settingsAction(b,"Espaces de travail",()->showWorkspaces());
                 break;
             case 4:
+                addButton(b,"PRISME 6 · Accueil et outils",()->showV6Tools());
                 settingsIntro(b,"Confort et outils","Les utilitaires restent locaux et les réglages ci-dessous concernent PRISME.");
                 toggle(b,"Transitions courtes","animations",true);toggle(b,"Vibration légère","haptic",true);
                 toggle(b,"Garder l’écran allumé dans PRISME","keepScreenOn",false);
@@ -734,7 +774,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     }
     private void resetDashboardSafely(){try{SafetyBackup.save(this,prefs);String note=prefs.getString("notes","");GlobalRotationService.release(this);getSharedPreferences("prisme_rotation",MODE_PRIVATE).edit().putBoolean("boot",false).apply();fr.dm100.prisme.volume.FloatingVolumeService.stop(this);prefs.reset();controlPrefs.resetAll();floatingPrefs.resetAll();ControlCenterService.refresh(this);prefs.putString("notes",note);refreshBoard();toast("Bureau réinitialisé · sauvegarde de sécurité disponible");}catch(Exception e){toast("Sauvegarde indisponible · remise à zéro annulée");}}
     private void importSafely(JSONObject data)throws Exception{SafetyBackup.save(this,prefs);prefs.importJSONObject(data);}
-    private void requestUtilityAction(Intent intent){if(intent==null)return;String action=intent.getStringExtra("utilityAction");if(action!=null){intent.removeExtra("utilityAction");main.post(()->{if(!isFinishing()){dismissOwnedDialogs();onAction(action);}});}}
+    private void requestUtilityAction(Intent intent){if(intent==null)return;String action=intent.getStringExtra("utilityAction");if(ExternalActions.allowed(action)){intent.removeExtra("utilityAction");main.post(()->{if(!isFinishing()){dismissOwnedDialogs();onAction(action);}});}}
     private void showTestColor(int color){
         dismissOwnedDialogs();closeScreenLamp();TextView test=new TextView(this);test.setBackgroundColor(color);test.setTextColor(color==Color.WHITE?Color.BLACK:Color.WHITE);
         Point size=screen();test.setText("← 0                         "+(size.x-1)+" →\n\n"+size.x+" × "+size.y+"\n\nToucher pour fermer");test.setGravity(Gravity.CENTER);test.setTextSize(TypedValue.COMPLEX_UNIT_PX,20);
@@ -792,6 +832,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         if(requested==null||requested.hasCategory(Intent.CATEGORY_HOME))return;
         final String action=requested.getStringExtra("controlCenterAction");
         if(action==null||action.length()==0)return;
+        if(!ExternalActions.allowed(action)&&!INTERNAL_COMMAND_TOKEN.equals(requested.getStringExtra("_prismeCommand")))return;
         cancelSettingsRestore=true;
         requested.removeExtra("controlCenterAction");
         board.post(()->{
@@ -933,8 +974,21 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         }
         super.startActivity(intent);
     }
+    AlertDialog.Builder v6Builder(){return new OwnedBuilder();}
+    private void showV6Tools(){
+        LinearLayout root=V6Ui.column(this);
+        V6Ui.add(root,"Calculatrice",()->onAction("calculatorV6"));
+        V6Ui.add(root,"Convertisseur hors ligne",()->onAction("converterV6"));
+        V6Ui.add(root,"Sauvegardes chiffrées",()->onAction("vault"));
+        V6Ui.add(root,OverlayPolicy.suspended(this)?"Réactiver les éléments flottants":"Suspendre tous les éléments flottants",()->{if(OverlayPolicy.suspended(this))OverlayPolicy.resume(this);else OverlayPolicy.suspend(this);toast(OverlayPolicy.suspended(this)?"Éléments flottants suspendus":"Éléments flottants réactivés");});
+        String[] names={"Accueil modulaire","Composer mon accueil","Studio classique","Minuteurs nommés","Musique","Concentration","Tâches","Carnet","Chronomètre","Horloge de table","Centre de contrôle","Dock flottant","Règles Sense","Diagnostic","Sauvegarder / restaurer","Mode de secours"};
+        String[] ids={"v6Home","v6Edit","studio","multiTimers","mediaPanel","focus","checklist","notes","stopwatch","deskclock","controlCenter","edgeDock","sense","doctor","profilesV6","safeMode"};
+        for(int i=0;i<names.length;i++){final String id=ids[i];V6Ui.add(root,names[i],()->{if(id.equals("profilesV6"))showSettings(7);else onAction(id);});}
+        V6Ui.dialog(this,"PRISME 6 · Outils",root);
+    }
     private void showTools(){
         ScrollView scroll=scroll();LinearLayout b=column();scroll.addView(b);DeviceSnapshot s=DeviceSnapshot.read(this);
+        addButton(b,"PRISME 6 · Tous les outils",()->showV6Tools());
         b.addView(text("CENTRE DE CONTRÔLE",21,INK));
         b.addView(text("Batterie "+s.batteryPct+" %"+(s.charging?" · en charge":"")+"\nMémoire utilisée "+s.memoryUsedPct+" % · "+String.format(I18n.locale(),"%.1f",s.freeStorageGb)+" Go libres",16,MUTED));
         section(b,"Volume des médias");AudioManager audio=(AudioManager)getSystemService(AUDIO_SERVICE);
@@ -981,7 +1035,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         try{startActivityForResult(i,EXPORT);}catch(RuntimeException e){saveLocalConfig();}
     }
     private java.io.File backupDirectory()throws java.io.IOException{
-        java.io.File parent=getExternalFilesDir(null);if(parent==null)parent=getFilesDir();
+        java.io.File parent=getFilesDir();
         java.io.File directory=new java.io.File(parent,"sauvegardes");
         if(!directory.isDirectory()&&!directory.mkdirs())throw new java.io.IOException("Dossier de sauvegarde indisponible");
         return directory;
@@ -1054,10 +1108,11 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     private JSONObject readBoundedConfig(InputStream in)throws Exception{
         if(in==null)throw new java.io.IOException("Fichier indisponible");
         ByteArrayOutputStream bytes=new ByteArrayOutputStream();byte[] buffer=new byte[4096];int count;
-        while((count=in.read(buffer))!=-1){if(bytes.size()+count>65536)throw new java.io.IOException("Trop volumineux");bytes.write(buffer,0,count);}
+        while((count=in.read(buffer))!=-1){if(bytes.size()+count>100000)throw new java.io.IOException("Trop volumineux");bytes.write(buffer,0,count);}
         return new JSONObject(new String(bytes.toByteArray(),"UTF-8"));
     }
     private void confirmImport(final JSONObject obj){
+        if(obj.has("prismeVault")){BackupPanel.importVault(this,obj,prefs,()->profileImported());return;}
         new OwnedBuilder().setTitle("Importer ce bureau ?").setMessage("La configuration actuelle de PRISME sera remplacée par cette sauvegarde. Les applications de la montre restent installées.").setNegativeButton("Annuler",null).setPositiveButton("Importer",(d,w)->{
             try{importSafely(obj);profileImported();toast("Configuration importée");}catch(Exception e){toast("Configuration invalide · réglages conservés");}
         }).show();
@@ -1076,6 +1131,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
         }
         if(result!=RESULT_OK||data==null||data.getData()==null)return;
         Uri uri=data.getData();
+        if(request==74){try{if(pendingVaultName==null||!pendingVaultName.matches("PRISME-chiffre-[0-9]+\\.vault"))throw new java.io.IOException();java.io.File file=new java.io.File(backupDirectory(),pendingVaultName);try(InputStream in=new java.io.FileInputStream(file);OutputStream out=getContentResolver().openOutputStream(uri)){byte[] buffer=new byte[4096];int n;if(out==null)throw new java.io.IOException();while((n=in.read(buffer))!=-1)out.write(buffer,0,n);}toast("Sauvegarde chiffrée exportée");}catch(Exception e){toast("Export impossible");}pendingVaultName=null;return;}
         try{
             if(request==EXPORT){try(OutputStream out=getContentResolver().openOutputStream(uri)){if(out==null)throw new Exception();out.write(prefs.exportJSONObject().toString().getBytes("UTF-8"));}toast("Configuration exportée");}
             else if(request==IMPORT){try(InputStream in=getContentResolver().openInputStream(uri)){confirmImport(readBoundedConfig(in));}}
@@ -1113,7 +1169,7 @@ public final class MainActivity extends Activity implements DashboardView.Listen
     private void saveUtilities(){getSharedPreferences("prisme_utilities",MODE_PRIVATE).edit().putLong("stopwatchAccumulated",stopwatchAccumulated).putLong("stopwatchCheckpoint",stopwatchElapsed()).putLong("stopwatchStart",stopwatchStart).putBoolean("stopwatchRunning",stopwatchRunning).putInt("stopwatchBoot",currentBoot()).apply();}
     private static String formatDuration(long millis){long s=(millis+999)/1000;return String.format(I18n.locale(),"%02d:%02d",s/60,s%60);}
     /** Leave every PRISME panel before handing control to a real, installed HOME activity. */
-    private void dismissOwnedDialogs(){
+    private void dismissOwnedDialogs(){V6Ui.closeAll(this);
         closeControlExtras();
         for(int n=ownedDialogs.size()-1;n>=0;n--){
             AlertDialog d=ownedDialogs.get(n).get();if(d!=null&&d.isShowing())d.dismiss();

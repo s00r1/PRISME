@@ -36,7 +36,7 @@ public final class WatchStudio {
         for(int i=0;i<4;i++){
             final int n=i;CheckBox c=new CheckBox(activity);
             c.setText("Afficher "+LABEL[i]);c.setTextColor(0xffe8ffff);
-            c.setChecked(shown.getBoolean(SHOW[i],false));
+            c.setChecked(PrefValues.flag(shown,SHOW[i],false));
             c.setOnCheckedChangeListener((v,checked)->{shown.edit().putBoolean(SHOW[n],checked).apply();canvas.invalidate();changed.run();});
             root.addView(c);
         }
@@ -44,7 +44,7 @@ public final class WatchStudio {
         pack.setOnClickListener(v->{
             String[] names={"Minimal OLED","Console cyber","Quotidien Nova","Tablette et infos"};
             int[] themes={21,5,20,1};
-            new AlertDialog.Builder(activity).setTitle("Packs PRISME").setItems(names,(dialog,selected)->{
+            new V6Ui.Builder(activity).setTitle("Packs PRISME").setItems(names,(dialog,selected)->{
                 int id=themes[selected];dashboard.putInt("theme",id);
                 android.content.SharedPreferences.Editor e=shown.edit();
                 e.putBoolean("showClock",selected!=0).putBoolean("showTasks",selected>=2)
@@ -54,7 +54,7 @@ public final class WatchStudio {
             }).setNegativeButton("Annuler",null).show();
         });root.addView(pack);
         TextView size=new TextView(activity);size.setText("Taille des widgets");size.setTextColor(0xffe8ffff);root.addView(size);
-        SeekBar slider=new SeekBar(activity);slider.setMax(170);slider.setProgress(Math.max(0,shown.getInt("size",75)-30));
+        SeekBar slider=new SeekBar(activity);slider.setMax(170);slider.setProgress(Math.max(0,PrefValues.number(shown,"size",75)-30));
         slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             public void onProgressChanged(SeekBar bar,int value,boolean user){if(user){shown.edit().putInt("size",value+30).apply();canvas.invalidate();changed.run();}}
             public void onStartTrackingTouch(SeekBar bar){}
@@ -62,9 +62,9 @@ public final class WatchStudio {
         });root.addView(slider);
         android.widget.ScrollView scroller=new android.widget.ScrollView(activity);
         scroller.setFillViewport(false);scroller.addView(root);
-        new AlertDialog.Builder(activity).setTitle("◈ PRISME Studio V6")
+        new V6Ui.Builder(activity).setTitle("◈ PRISME Studio V6")
             .setView(scroller).setPositiveButton("Terminer",(d,w)->changed.run())
-            .setNeutralButton("Réinitialiser",(d,w)->{
+            .setNegativeButton("Réinitialiser",(d,w)->{
                 SharedPreferences.Editor e=layout.edit();
                 for(int i=0;i<4;i++)e.putInt(XS[i],DX[i]).putInt(YS[i],DY[i]);
                 e.apply();changed.run();
@@ -83,14 +83,14 @@ public final class WatchStudio {
             super.onDraw(c);float w=getWidth(),h=getHeight();
             paint.setColor(0x334cc8b1);paint.setStrokeWidth(1);
             for(int i=1;i<10;i++){float x=i*w/10,y=i*h/10;c.drawLine(x,0,x,h,paint);c.drawLine(0,y,w,y,paint);}
-            float cw=Math.min(w,Math.max(62,120*shown.getInt("size",75)/100f));
-            float ch=Math.min(h,Math.max(32,48*shown.getInt("size",75)/100f));
+            float cw=Math.min(w,Math.max(62,120*PrefValues.number(shown,"size",75)/100f));
+            float ch=Math.min(h,Math.max(32,48*PrefValues.number(shown,"size",75)/100f));
             paint.setTextSize(14);paint.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
             for(int i=0;i<4;i++){
-                float x=Math.max(0,(w-cw))*layout.getInt(XS[i],DX[i])/100f;
-                float y=Math.max(0,(h-ch))*layout.getInt(YS[i],DY[i])/100f;
+                float x=Math.max(0,(w-cw))*PrefValues.number(layout,XS[i],DX[i])/100f;
+                float y=Math.max(0,(h-ch))*PrefValues.number(layout,YS[i],DY[i])/100f;
                 bounds[i].set(x,y,x+cw,y+ch);
-                paint.setColor(shown.getBoolean(SHOW[i],false)?(i==active?0xff287c83:0xff244b57):0xff283544);
+                paint.setColor(PrefValues.flag(shown,SHOW[i],false)?(i==active?0xff287c83:0xff244b57):0xff283544);
                 c.drawRoundRect(bounds[i],9,9,paint);
                 paint.setStyle(Paint.Style.STROKE);paint.setColor(i==active?0xff85fff1:0xff839eac);
                 c.drawRoundRect(bounds[i],9,9,paint);paint.setStyle(Paint.Style.FILL);

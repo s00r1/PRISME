@@ -43,6 +43,7 @@ public final class ExperienceController {
     public void refreshApps(){if(searchRefresh!=null)searchRefresh.run();}
     public void shutdown(){pause();live=null;searchRefresh=null;}
     private static final String[][] ACTIONS={
+        {"v6Home","Accueil modulaire","pages blocs theme v6"},{"multiTimers","Minuteurs nommés","alarme compte rebours"},{"mediaPanel","Musique","lecteur titre piste"},{"v6Tools","Outils PRISME 6","studio sense doctor secours"},
         {"rotationSettings","Orientation globale","portrait paysage forcer tourner ecran"},{"language","Langue / Language","arabe anglais allemand chinois turc russe francais"},{"shortcutShelf","Mes raccourcis","raccourcis favoris commandes rapides"},{"today","Aujourd’hui","accueil quotidien favoris recents"},{"checklist","Liste de tâches","courses rappels liste cocher"},
         {"notes","Carnet local","notes texte idee"},{"timer","Minuteur","alarme compte a rebours"},{"focus","Concentration","pomodoro travail repos"},
         {"stopwatch","Chronomètre","temps tours sport"},{"deskclock","Horloge de table","nuit veille heure"},
@@ -59,7 +60,7 @@ public final class ExperienceController {
         {"2","Raccourcis des styles","personnaliser boutons applications"},
         {"3","Applications, favoris et espaces","masque trier recent"},
         {"4","Gestes, minuteur et outils","glisser double appui horloge taches notes"},
-        {"5","Sauvegardes et profils","importer exporter restaurer retour cadran"},
+        {"7","Sauvegardes et profils","importer exporter restaurer retour cadran"},
         {"controlCenterSettings","Centre de contrôle","transparence opacite ios android geste wifi bluetooth"},
         {"floatingVolumeSettings","Pastille de volume","forme taille cercle position opacite audio"}};
     public ExperienceController(Activity a,DashboardPrefs p,List<AppEntry> entries,Host h){activity=a;prefs=p;apps=entries;host=h;tasks=p.getChecklist();}

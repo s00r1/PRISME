@@ -28,3 +28,11 @@ The optional Imou helper declares overlay, usage-access, foreground-service and 
 Private keystores, signing passwords, local backup archives, exports, raw watch logs, serials, network names and personal machine paths are excluded. Public build scripts accept local SDK/JDK paths and signing secrets through arguments/environment variables. Commits use a generic project identity. The public GitHub account/repository name remains public as part of GitHub hosting.
 
 Screenshots use an isolated demo build with fictional apps, generic icons, sample tasks and sample notes. They capture PRISME's own views rather than another app's windows. No account screenshots or real installed-app catalog are used. APK signing certificates contain a public verification key; the private signing keys are never distributed.
+
+## V6 beta changes
+
+The optional MediaAccess service is protected by Android's BIND_NOTIFICATION_LISTENER_SERVICE permission. The user must separately opt in inside PRISME and grant access in Android. PRISME uses MediaSessionManager for active media metadata and transport controls; notification message bodies are not read or stored. Device-local media consent is excluded from imported profiles.
+
+Automatic recovery files and the restore journal are held in app-private storage. Ordinary JSON exports are plaintext. Optional portable vaults use PBKDF2-HMAC-SHA1 (120,000 iterations, random 16-byte salt), a 256-bit AES key, AES-GCM with a random 12-byte nonce and a 128-bit authentication tag. SHA1 here is the PBKDF2 PRF required for Android 7 compatibility, not a file integrity checksum. Password derivation runs outside the UI thread. Files cannot be recovered without the password. Local filesystem encryption and hardware-backed key storage are not assumed.
+
+V6 screenshots are real DM100 captures of configuration screens and generic home cards. Notes and installed-app catalogs are not exposed in these images. Media titles from a synthetic local QA session are not user listening history. No new Internet permission is declared.

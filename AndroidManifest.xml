@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fr.dm100.prisme"
-    android:versionCode="21"
-    android:versionName="6.0.0-rc1">
+    android:versionCode="22"
+    android:versionName="6.0.0-beta1">
     <uses-sdk android:minSdkVersion="25" android:targetSdkVersion="28" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -43,6 +43,9 @@
         <receiver android:name=".TimerReceiver" android:exported="false">
             <intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /><action android:name="android.intent.action.MY_PACKAGE_REPLACED" /></intent-filter>
         </receiver>
+        <service android:name=".MediaAccess" android:label="PRISME · Sessions multimédias (facultatif)" android:exported="true" android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter><action android:name="android.service.notification.NotificationListenerService" /></intent-filter>
+        </service>
         <service android:name=".GlobalRotationService" android:exported="false" />
         <service android:name=".ControlCenterService" android:exported="false" android:stopWithTask="false" />
         <service android:name=".EdgeDockService" android:exported="false" android:stopWithTask="false" />
