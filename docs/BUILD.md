@@ -59,3 +59,13 @@ python scripts/package-pc-editor.py --output dist/PRISME-PC-Studio-6.0.0.zip
 The archive contains both standalone editors, local scripts/styles, a Windows launcher, instructions, license and a file-integrity manifest. Extract it and open index.html directly; no local server or JavaScript package installation is required by the end user.
 
 V6 keeps the selected classic desktop as the entry point. Optional cards are explicitly opened, and importing their layout does not change the active desktop/card mode.
+
+## Preparing the complete stable Release
+
+After verifying the signed APK and committing the exact tested source tree:
+
+```powershell
+python scripts/prepare-release.py --apk PRISME-6.0.0.apk --output dist
+```
+
+This packages the APK, both PC editors, exact Git sources, SHA-256 sums and portable Release notes. It refuses an uncommitted source tree and does not sign or publish. The manually dispatched `release-6.yml` uses the same packaging after its tested-commit and original-certificate checks. It never runs on a tag push or ordinary merge.
