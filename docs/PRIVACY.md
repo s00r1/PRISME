@@ -45,6 +45,10 @@ The optional Imou helper separately declares overlay, usage-access, foreground-s
 
 The optional MediaAccess service is protected by Android’s `BIND_NOTIFICATION_LISTENER_SERVICE` permission. The user must opt in inside PRISME and grant Android notification-listener access separately. PRISME uses active media metadata and transport controls; it does not read or store notification message bodies. The simple media-key mode needs no notification-listener access. Device-local consent is excluded from imported profiles.
 
+The 6.0.1 music correction reads title, artist, album and cover art from the selected authorized media session. A provider's alternate display fields are used when its main fields are blank. Notification text is not used as a metadata fallback. Cover images are kept only in a bounded in-memory cache, scaled to at most 256 pixels on the longest edge; they are not saved to disk, exported, logged or uploaded. Images may be supplied as session bitmaps or readable local `content://` / `android.resource://` resources. HTTP/HTTPS, arbitrary file paths and other URI schemes are refused. A local provider may still deny access, and a player may not supply art at all.
+
+Track changes invalidate the old cover before a new image is decoded. Disabling enriched mode or losing its Android grant clears the session snapshot and artwork. A diagnostic access state distinguishes the PRISME opt-in from Android's grant; imports cannot grant either one. Enabling notification-listener access is an explicit user action in Android, never an automatic repair.
+
 Desktop/card mode, automatic Sense activation and sensitive permissions remain local during import. A profile cannot force the optional card panel over the selected classic desktop. Public launcher commands open approved screens; sensitive Control Center commands require a process-local internal token.
 
 ## Recovery and encryption

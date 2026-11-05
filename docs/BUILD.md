@@ -11,7 +11,7 @@ sdkmanager "platforms;android-35" "build-tools;35.0.0"
 ./build.ps1 -Unsigned
 ```
 
-This creates `PRISME_DM100-unsigned.apk`, a developer artifact that must be signed before installation. Ordinary users should download the signed `PRISME-6.0.0.apk` from Releases. An APK built with a different signing key cannot update the official installation in place.
+This creates `PRISME_DM100-unsigned.apk`, a developer artifact that must be signed before installation. Ordinary users should download the signed `PRISME-6.0.1.apk` from Releases. An APK built with a different signing key cannot update the official installation in place.
 
 For a locally signed build, create and keep your own keystore, then set `PRISME_KEYSTORE`, `PRISME_STORE_PASSWORD` and `PRISME_KEY_PASSWORD` in your local environment. Never commit them. Run:
 
@@ -53,7 +53,7 @@ The historical style galleries are rendered on an Android device from an isolate
 ## PC editor distribution
 
 ```powershell
-python scripts/package-pc-editor.py --output dist/PRISME-PC-Studio-6.0.0.zip
+python scripts/package-pc-editor.py --output dist/PRISME-PC-Studio-6.0.1.zip
 ```
 
 The archive contains both standalone editors, local scripts/styles, a Windows launcher, instructions, license and a file-integrity manifest. Extract it and open index.html directly; no local server or JavaScript package installation is required by the end user.
@@ -65,7 +65,7 @@ V6 keeps the selected classic desktop as the entry point. Optional cards are exp
 After verifying the signed APK and committing the exact tested source tree:
 
 ```powershell
-python scripts/prepare-release.py --apk PRISME-6.0.0.apk --output dist
+python scripts/prepare-release.py --apk PRISME-6.0.1.apk --output dist
 ```
 
 This packages the APK, both PC editors, exact Git sources, SHA-256 sums and portable Release notes. It refuses an uncommitted source tree and does not sign or publish. The manually dispatched `release-6.yml` uses the same packaging after its tested-commit and original-certificate checks. It never runs on a tag push or ordinary merge.

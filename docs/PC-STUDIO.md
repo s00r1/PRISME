@@ -1,11 +1,11 @@
-# PRISME PC Studio 6.0.0
+# PRISME PC Studio 6.0.1
 
 L’éditeur PC prépare les **widgets des 22 bureaux** et les **cartes facultatives**, dans un navigateur moderne sous Windows, macOS ou Linux. Il fonctionne avec souris, tactile et champs numériques, sans compte, installation ou connexion directe à la montre. Le bureau classique sélectionné reste principal.
 
 ## Ouvrir l’éditeur
 
 - **En ligne :** [PC Studio](https://s00r1.github.io/PRISME/home-studio.html).
-- **Hors ligne :** extraire entièrement `PRISME-PC-Studio-6.0.0.zip`, puis ouvrir `index.html`. Sous Windows, `LANCER-EDITEUR.cmd` ouvre ce fichier dans le navigateur par défaut.
+- **Hors ligne :** extraire entièrement `PRISME-PC-Studio-6.0.1.zip`, puis ouvrir `index.html`. Sous Windows, `LANCER-EDITEUR.cmd` ouvre ce fichier dans le navigateur par défaut.
 
 Le ZIP comprend les scripts, styles, 22 aperçus de référence, les deux éditeurs, ce guide, la licence et `FILES-SHA256.json`. Il fonctionne directement en `file://`, sans serveur, extension ou outil de développement. Seuls les liens facultatifs vers GitHub ou le site nécessitent une connexion lorsqu’on les ouvre.
 

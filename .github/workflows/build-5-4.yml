@@ -32,12 +32,12 @@ jobs:
           java-version: '17'
       - name: Compile PRISME 6
         shell: pwsh
-        run: ./build.ps1 -Unsigned -OutputFile PRISME-6.0.0.apk
+        run: ./build.ps1 -Unsigned -OutputFile PRISME-6.0.1.apk
       - name: Upload unsigned APK for local signing
         uses: actions/upload-artifact@v4
         with:
-          name: PRISME-6.0.0-unsigned
-          path: PRISME-6.0.0-unsigned.apk
+          name: PRISME-6.0.1-unsigned
+          path: PRISME-6.0.1-unsigned.apk
           if-no-files-found: error
       - name: Sign update-compatible watch test APK when original key is available
         id: signed_test
@@ -56,7 +56,7 @@ jobs:
           }
           $keyPath = Join-Path $env:RUNNER_TEMP 'prisme-v6-test-signing.jks'
           [IO.File]::WriteAllBytes($keyPath,[Convert]::FromBase64String($env:PRISME_KEYSTORE_BASE64))
-          ./build.ps1 -Keystore $keyPath -OutputFile PRISME-6.0.0-signed.apk
+          ./build.ps1 -Keystore $keyPath -OutputFile PRISME-6.0.1-signed.apk
           if ($LASTEXITCODE -ne 0) { throw 'Signed V6 build failed.' }
           New-Item -ItemType Directory -Force -Path old | Out-Null
           gh release download v5.1.0 --repo ${{ github.repository }} --pattern PRISME.apk --dir old
@@ -68,7 +68,7 @@ jobs:
           $signer = Join-Path $buildTools 'lib/apksigner.jar'
           $oldCert = & java -jar $signer verify --print-certs --min-sdk-version 25 old/PRISME.apk
           if ($LASTEXITCODE -ne 0) { throw 'Original APK signature verification failed.' }
-          $newCert = & java -jar $signer verify --print-certs --min-sdk-version 25 PRISME-6.0.0-signed.apk
+          $newCert = & java -jar $signer verify --print-certs --min-sdk-version 25 PRISME-6.0.1-signed.apk
           if ($LASTEXITCODE -ne 0) { throw 'V6 test APK signature verification failed.' }
           $oldHash = @($oldCert | Where-Object { $_ -match '^Signer #1 certificate SHA-256 digest:' })
           $newHash = @($newCert | Where-Object { $_ -match '^Signer #1 certificate SHA-256 digest:' })
@@ -81,6 +81,6 @@ jobs:
         if: ${{ steps.signed_test.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
-          name: PRISME-6.0.0-signed-watch-test
-          path: PRISME-6.0.0-signed.apk
+          name: PRISME-6.0.1-signed-watch-test
+          path: PRISME-6.0.1-signed.apk
           if-no-files-found: error

@@ -6,18 +6,18 @@
 
 [Français](README.fr.md) · [English](README.en.md) · [Deutsch](README.de.md) · [中文](README.zh.md) · [Türkçe](README.tr.md) · [Русский](README.ru.md) · [العربية](README.ar.md)
 
-> الإصدار الحالي: **6.0.0 · versionCode 24 · Android كامل 7.1 / API 25 على الأقل**. الجهاز المرجعي DM100 بنظام Android 7.1.1 ودقة أفقية 640 × 480. الساعات الدائرية والمربعة وWear OS وwatchOS وTizen ليست أهدافاً معتمدة بالاختبار. لا حاجة إلى root أو تبديل البرنامج الثابت.
+> الإصدار الحالي: **6.0.1 · versionCode 25 · Android كامل 7.1 / API 25 على الأقل**. الجهاز المرجعي DM100 بنظام Android 7.1.1 ودقة أفقية 640 × 480. الساعات الدائرية والمربعة وWear OS وwatchOS وTizen ليست أهدافاً معتمدة بالاختبار. لا حاجة إلى root أو تبديل البرنامج الثابت.
 
 ## التنزيل
 
 | التنزيل | PRISME 6 |
 | --- | --- |
-| [PRISME-6.0.0.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0.apk) | تطبيق Android موقع للساعة، يُثبّت فوق PRISME الحالي. |
-| [PRISME-PC-Studio-6.0.0.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-PC-Studio-6.0.0.zip) | محررات كمبيوتر كاملة دون اتصال؛ فك الأرشيف وافتح index.html. |
-| [PRISME-6.0.0-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | مصادر التطبيق والمحررات والاختبارات والوثائق. |
-| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.0/SHA256SUMS.txt) | قيم التحقق من ملفات الإصدار. |
+| [PRISME-6.0.1.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1.apk) | تطبيق Android موقع للساعة، يُثبّت فوق PRISME الحالي. |
+| [PRISME-PC-Studio-6.0.1.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-PC-Studio-6.0.1.zip) | محررات كمبيوتر كاملة دون اتصال؛ فك الأرشيف وافتح index.html. |
+| [PRISME-6.0.1-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1-sources.zip) | مصادر التطبيق والمحررات والاختبارات والوثائق. |
+| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.1/SHA256SUMS.txt) | قيم التحقق من ملفات الإصدار. |
 
-[PRISME · Web](https://s00r1.github.io/PRISME/) · [PC Studio · Web](https://s00r1.github.io/PRISME/home-studio.html) · [GitHub · v6.0.0](https://github.com/s00r1/PRISME/releases/tag/v6.0.0)
+[PRISME · Web](https://s00r1.github.io/PRISME/) · [PC Studio · Web](https://s00r1.github.io/PRISME/home-studio.html) · [GitHub · v6.0.1](https://github.com/s00r1/PRISME/releases/tag/v6.0.1)
 
 ## صور V6 الحقيقية
 
@@ -66,13 +66,13 @@
 ## التثبيت والتحديث من V5
 
 1. صدّر الإعدادات الحالية من الإعدادات ← الملفات الشخصية واحتفظ بالأصل.
-2. نزّل PRISME-6.0.0.apk الموقع وثبته فوق PRISME. لا يتطلب التحديث المعتاد إزالة التطبيق.
+2. نزّل PRISME-6.0.1.apk الموقع وثبته فوق PRISME. لا يتطلب التحديث المعتاد إزالة التطبيق.
 3. شهادة التوقيع الأصلية محفوظة، وتبقى الملاحظات والمهام والإعدادات.
 4. اختر PRISME كتطبيق رئيسي إذا سمح النظام، أو افتحه كتطبيق عادي.
 5. امنح أذونات العناصر العائمة عند الحاجة بشكل منفصل. لا يتطلب المكتب والبطاقات وصولاً إلى الإشعارات.
 
 ```text
-adb install -r PRISME-6.0.0.apk
+adb install -r PRISME-6.0.1.apk
 ```
 
 تُقبل ملفات JSON القديمة. يستخدم تصدير V6 **المخطط 7**، وهو رقم تنسيق الملف وليس تطبيق PRISME 7. احتفظ بتصدير V5 للعودة؛ قد يرفض Android تثبيت versionCode أقل، ولا يحذف التطبيق بياناتك تلقائياً للرجوع.

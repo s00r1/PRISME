@@ -2,22 +2,22 @@
 
 **Un bureau personnalisable pour la DM100 et les grandes montres Android rectangulaires.** Composez votre accueil sur la montre ou sur PC, retrouvez vos outils quotidiens et gardez vos données en local.
 
-[Site officiel](https://s00r1.github.io/PRISME/) · [Télécharger la V6](https://github.com/s00r1/PRISME/releases/tag/v6.0.0) · [Éditeur PC en ligne](https://s00r1.github.io/PRISME/home-studio.html) · [Guide détaillé](docs/V6-GUIDE.md)
+[Site officiel](https://s00r1.github.io/PRISME/) · [Télécharger la V6](https://github.com/s00r1/PRISME/releases/tag/v6.0.1) · [Éditeur PC en ligne](https://s00r1.github.io/PRISME/home-studio.html) · [Guide détaillé](docs/V6-GUIDE.md)
 
 [Français](docs/README.fr.md) · [English](docs/README.en.md) · [Deutsch](docs/README.de.md) · [中文](docs/README.zh.md) · [Türkçe](docs/README.tr.md) · [Русский](docs/README.ru.md) · [العربية](docs/README.ar.md)
 
-> **Version stable publiée : 6.0.0 · versionCode 24 · Android complet 7.1 / API 25 minimum.** La DM100 sous Android 7.1.1, avec surface paysage 640 × 480, est la référence testée. Cette distribution cible les montres rectangulaires ; les montres rondes/carrées, Wear OS, watchOS et Tizen ne sont pas des cibles validées. Aucun root ni remplacement du firmware n’est nécessaire.
+> **Version stable publiée : 6.0.1 · versionCode 25 · Android complet 7.1 / API 25 minimum.** La DM100 sous Android 7.1.1, avec surface paysage 640 × 480, est la référence testée. Cette distribution cible les montres rectangulaires ; les montres rondes/carrées, Wear OS, watchOS et Tizen ne sont pas des cibles validées. Aucun root ni remplacement du firmware n’est nécessaire.
 
 ## Télécharger : l’application et son éditeur PC
 
 | Fichier officiel | Utilisation |
 | --- | --- |
-| [**PRISME-6.0.0.apk**](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0.apk) | Application Android signée ; mise à jour de PRISME sur la montre. |
-| [**PRISME-PC-Studio-6.0.0.zip**](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-PC-Studio-6.0.0.zip) | Éditeurs PC complets, utilisables hors ligne en ouvrant un fichier HTML. |
-| [**PRISME-6.0.0-sources.zip**](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | Sources validées de l’application, des éditeurs, tests et documentation, dans l’archive jointe à la Release. |
-| [**SHA256SUMS.txt**](https://github.com/s00r1/PRISME/releases/download/v6.0.0/SHA256SUMS.txt) | Sommes de contrôle des trois fichiers distribués. |
+| [**PRISME-6.0.1.apk**](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1.apk) | Application Android signée ; mise à jour de PRISME sur la montre. |
+| [**PRISME-PC-Studio-6.0.1.zip**](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-PC-Studio-6.0.1.zip) | Éditeurs PC complets, utilisables hors ligne en ouvrant un fichier HTML. |
+| [**PRISME-6.0.1-sources.zip**](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1-sources.zip) | Sources validées de l’application, des éditeurs, tests et documentation, dans l’archive jointe à la Release. |
+| [**SHA256SUMS.txt**](https://github.com/s00r1/PRISME/releases/download/v6.0.1/SHA256SUMS.txt) | Sommes de contrôle des trois fichiers distribués. |
 
-Ces fichiers sont disponibles dans la Release stable `v6.0.0`. Les [sources validées de la V6](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) sont fournies dans l’archive jointe à cette Release. L’éditeur existe aussi [directement dans le navigateur](https://s00r1.github.io/PRISME/home-studio.html). Le ZIP PC est un outil local : aucune installation, inscription ou connexion permanente n’est nécessaire. Les artefacts non signés des workflows GitHub sont destinés au développement ; pour installer PRISME, utiliser l’APK signé.
+Ces fichiers sont disponibles dans la Release stable `v6.0.1`. Les [sources validées de la V6](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1-sources.zip) sont fournies dans l’archive jointe à cette Release. L’éditeur existe aussi [directement dans le navigateur](https://s00r1.github.io/PRISME/home-studio.html). Le ZIP PC est un outil local : aucune installation, inscription ou connexion permanente n’est nécessaire. Les artefacts non signés des workflows GitHub sont destinés au développement ; pour installer PRISME, utiliser l’APK signé.
 
 ## La V6 sur la montre
 
@@ -77,7 +77,7 @@ Les 22 bureaux restent accessibles dans **Réglages → 22 styles**. Les cartes 
 | Fonction | Dans la V6 | À savoir |
 | --- | --- | --- |
 | Minuteurs nommés | Jusqu’à huit minuteurs, pause/reprise, redémarrage et suppression indépendants. | Durée initiale de 1 à 1 440 minutes ; le firmware peut retarder une alarme. |
-| Musique | Commandes simples ou titre/artiste et choix de session en mode enrichi. | Le lecteur doit publier une session ; le mode enrichi nécessite un consentement distinct. |
+| Musique | Commandes simples ; titre, artiste, album, pochette et choix de session en mode enrichi (correctif 6.0.1). | Le lecteur doit fournir ces données ; un accord PRISME et l’accès Android sont deux choix distincts. |
 | Calculatrice | Addition, soustraction, multiplication, division et décimales. | Nombres bornés, pas d’exécution d’expressions ou de scripts. |
 | Convertisseur | Longueur, masse, température et durée, sans Internet. | Résultats arrondis pour l’affichage. |
 | Carnet et tâches | Notes locales à sauvegarde automatique, checklist, recherche et accès depuis les blocs. | Les blocs d’accueil ne dévoilent pas le texte du carnet. |
@@ -89,10 +89,18 @@ Les 22 bureaux restent accessibles dans **Réglages → 22 styles**. Les cartes 
 
 Les superpositions PRISME sont masquées sur l’accueil modulaire pour ne pas couvrir les blocs. Elles reviennent dans les autres applications selon vos réglages. **Outils → Suspendre tous les éléments flottants** permet une suspension générale jusqu’à réactivation.
 
+### Titre et pochette du morceau — correctif 6.0.1
+
+Dans **Outils → Musique → Activer titres et pochettes**, accepter le choix local puis activer **PRISME · Sessions multimédias** dans le réglage Android qui s’ouvre. Revenir ensuite dans PRISME. Un titre ou une pochette ne peut pas être lu dans le mode simple ; les commandes lecture/pause restent disponibles.
+
+Le panneau musical s’actualise pendant la lecture et au retour des réglages Android. Les champs alternatifs du lecteur sont reconnus lorsque son titre ou son artiste principal est vide. Une vraie pochette peut apparaître dans le panneau, les widgets, les cartes, le mini-lecteur et les centres de contrôle. Elle vient de la session musicale, est réduite en mémoire et disparaît au changement de morceau si le lecteur n’en fournit pas de nouvelle. L’absence d’autorisation est distinguée de l’absence de session.
+
+Les pochettes intégrées et les URI locales autorisées sont prises en charge ; PRISME ne télécharge pas d’image depuis un lien HTTP/HTTPS du lecteur et n’invente pas de couverture. La disponibilité reste celle du lecteur. [Activation, dépannage et limites](docs/V6-GUIDE.md#musique-et-autorisations).
+
 ## Installer ou mettre à jour depuis la V5
 
 1. **Exporter votre configuration actuelle** depuis Réglages → Profils, puis conserver ce fichier.
-2. Télécharger `PRISME-6.0.0.apk` depuis la Release officielle et l’ouvrir sur la montre, ou utiliser `adb install -r PRISME-6.0.0.apk` depuis un PC.
+2. Télécharger `PRISME-6.0.1.apk` depuis la Release officielle et l’ouvrir sur la montre, ou utiliser `adb install -r PRISME-6.0.1.apk` depuis un PC.
 3. Installer **par-dessus** la version existante. La signature d’origine est conservée ; ne pas désinstaller PRISME pour une mise à jour normale.
 4. Ouvrir PRISME. Le bureau sélectionné reste affiché ; les cartes sont facultatives et s’ouvrent depuis Outils → Bureau et cartes. Les notes, tâches et réglages restent présents.
 5. Choisir PRISME comme accueil si le firmware le permet, ou l’utiliser comme une application normale. Les fonctions flottantes demandent séparément la superposition Android.
@@ -147,7 +155,7 @@ JDK 17+, SDK Android, PowerShell 7+, Python 3 et Node sont documentés dans [BUI
 
 ## Documentation et contribution
 
-[Guide V6](docs/V6-GUIDE.md) · [Éditeur PC](docs/PC-STUDIO.md) · [Compatibilité](docs/COMPATIBILITY.md) · [Styles](docs/STYLES.md) · [Captures](docs/SCREENSHOTS.md) · [Notes de version](docs/RELEASE-6.0.0.md) · [Fonctions futures](docs/V6-DEVELOPMENT.md)
+[Guide V6](docs/V6-GUIDE.md) · [Éditeur PC](docs/PC-STUDIO.md) · [Compatibilité](docs/COMPATIBILITY.md) · [Styles](docs/STYLES.md) · [Captures](docs/SCREENSHOTS.md) · [Notes de version](docs/RELEASE-6.0.1.md) · [Fonctions futures](docs/V6-DEVELOPMENT.md)
 
 Pour signaler un problème, indiquer le modèle, l’API Android, l’orientation, la version PRISME et les étapes de reproduction. Éviter les comptes, identifiants, exports personnels et journaux bruts. [Ouvrir une issue](https://github.com/s00r1/PRISME/issues/new/choose).
 

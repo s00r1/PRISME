@@ -24,7 +24,7 @@ public final class HomeDeck extends LinearLayout {
   private final FrameLayout grid;
   private final Handler handler = new Handler(Looper.getMainLooper());
   private int page;
-  private boolean running, editing;
+  private boolean running, editing, musicOnPage;
   private final List<Runnable> updates = new ArrayList<>();
   private static final int[][] PALETTES = {
     {0xff0d1421, 0xff1c2c3e, 0xff8aebd7, 0xffeff7ff},
@@ -41,7 +41,12 @@ public final class HomeDeck extends LinearLayout {
           MultiTimers.check(a);
           for (Runnable r : updates) r.run();
           handler.postDelayed(
-              this, TimerEngine.deadline(a) > 0 || MultiTimers.active(a) ? 1000 : 10000);
+              this,
+              TimerEngine.deadline(a) > 0
+                      || MultiTimers.active(a)
+                      || (musicOnPage && MediaAccess.enabled(a) && MediaAccess.granted(a))
+                  ? 1000
+                  : 10000);
         }
       };
 
@@ -98,6 +103,7 @@ public final class HomeDeck extends LinearLayout {
       nav.removeAllViews();
       grid.removeAllViews();
       updates.clear();
+      musicOnPage = false;
       Button prev =
           button(
               "‹",
@@ -167,10 +173,33 @@ public final class HomeDeck extends LinearLayout {
         value.setTextColor(colors[3]);
         value.setMaxLines(c.getInt("h") >= 2 ? 3 : 1);
         value.setEllipsize(android.text.TextUtils.TruncateAt.END);
-        card.addView(value, new LayoutParams(-1, 0, 1));
+        final MediaArtworkView artwork;
+        if (kind.equals("music")) {
+          musicOnPage = true;
+          I18n.userText(value);
+          LinearLayout track = new LinearLayout(a);
+          track.setGravity(Gravity.CENTER_VERTICAL);
+          artwork = new MediaArtworkView(a);
+          artwork.colors(colors[0], colors[2]);
+          int side = c.getInt("h") >= 2 ? 56 : 32;
+          LayoutParams artLp = new LayoutParams(side, side);
+          artLp.rightMargin = 8;
+          track.addView(artwork, artLp);
+          track.addView(value, new LayoutParams(0, -2, 1));
+          card.addView(track, new LayoutParams(-1, 0, 1));
+        } else {
+          artwork = null;
+          card.addView(value, new LayoutParams(-1, 0, 1));
+        }
         Runnable update =
             () -> {
-              String text = value(kind);
+              String text;
+              if (artwork != null) {
+                MusicPlayback.State music = MusicPlayback.state(a);
+                text = MediaPanel.title(music);
+                if (!music.artist.isEmpty()) text += "\n" + music.artist;
+                artwork.artwork(music.artwork);
+              } else text = value(kind);
               if (!text.contentEquals(value.getText())) value.setText(text);
             };
         updates.add(update);

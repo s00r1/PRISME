@@ -4,18 +4,18 @@ Ein anpassbarer Startbildschirm für die DM100 und große rechteckige Uhren mit 
 
 [Français](README.fr.md) · [English](README.en.md) · [Deutsch](README.de.md) · [中文](README.zh.md) · [Türkçe](README.tr.md) · [Русский](README.ru.md) · [العربية](README.ar.md)
 
-> Aktuell: **6.0.0 · versionCode 24 · Android 7.1 / API 25 mindestens**. Referenzgerät: DM100, Android 7.1.1, 640 × 480 im Querformat. Runde/quadratische Uhren, Wear OS, watchOS und Tizen sind keine validierten Ziele. Root und ein Firmwarewechsel sind nicht erforderlich.
+> Aktuell: **6.0.1 · versionCode 25 · Android 7.1 / API 25 mindestens**. Referenzgerät: DM100, Android 7.1.1, 640 × 480 im Querformat. Runde/quadratische Uhren, Wear OS, watchOS und Tizen sind keine validierten Ziele. Root und ein Firmwarewechsel sind nicht erforderlich.
 
 ## Downloads
 
 | Downloads | PRISME 6 |
 | --- | --- |
-| [PRISME-6.0.0.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0.apk) | Signierte Android-App für die Uhr. Über die vorhandene Installation installieren. |
-| [PRISME-PC-Studio-6.0.0.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-PC-Studio-6.0.0.zip) | Vollständige PC-Editoren für die Offline-Nutzung. ZIP entpacken und index.html öffnen. |
-| [PRISME-6.0.0-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | Quellcode, Tests, Web-Editoren und Dokumentation. |
-| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.0/SHA256SUMS.txt) | Prüfsummen der veröffentlichten Dateien. |
+| [PRISME-6.0.1.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1.apk) | Signierte Android-App für die Uhr. Über die vorhandene Installation installieren. |
+| [PRISME-PC-Studio-6.0.1.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-PC-Studio-6.0.1.zip) | Vollständige PC-Editoren für die Offline-Nutzung. ZIP entpacken und index.html öffnen. |
+| [PRISME-6.0.1-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.1/PRISME-6.0.1-sources.zip) | Quellcode, Tests, Web-Editoren und Dokumentation. |
+| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.1/SHA256SUMS.txt) | Prüfsummen der veröffentlichten Dateien. |
 
-[PRISME · Web](https://s00r1.github.io/PRISME/) · [PC Studio · Web](https://s00r1.github.io/PRISME/home-studio.html) · [GitHub · v6.0.0](https://github.com/s00r1/PRISME/releases/tag/v6.0.0)
+[PRISME · Web](https://s00r1.github.io/PRISME/) · [PC Studio · Web](https://s00r1.github.io/PRISME/home-studio.html) · [GitHub · v6.0.1](https://github.com/s00r1/PRISME/releases/tag/v6.0.1)
 
 ## Echte Ansichten der V6
 
@@ -66,13 +66,13 @@ Die verbundene Wetterfunktion ist **standardmäßig deaktiviert**. Erst in den W
 ## Installation und Wechsel von V5
 
 1. Vorhandene Konfiguration unter Einstellungen → Profile exportieren und aufbewahren.
-2. Die signierte PRISME-6.0.0.apk herunterladen und über PRISME installieren. Eine normale Aktualisierung erfordert keine Deinstallation.
+2. Die signierte PRISME-6.0.1.apk herunterladen und über PRISME installieren. Eine normale Aktualisierung erfordert keine Deinstallation.
 3. Das ursprüngliche Signaturzertifikat bleibt erhalten; Notizen, Aufgaben und Einstellungen bleiben bestehen.
 4. PRISME als Start-App wählen, falls die Firmware dies erlaubt, oder als normale Anwendung öffnen.
 5. Schwebende Funktionen separat autorisieren. Der modulare Startbildschirm benötigt keinen Benachrichtigungszugriff.
 
 ```text
-adb install -r PRISME-6.0.0.apk
+adb install -r PRISME-6.0.1.apk
 ```
 
 Alte JSON-Profile werden akzeptiert. V6 exportiert **Schema 7**: Das ist die Dateiformatnummer, keine App-Version 7. Für eine Rückkehr einen V5-Export behalten. Android kann eine niedrigere versionCode ablehnen; PRISME löscht zum Downgrade keine Daten automatisch.

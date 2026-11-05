@@ -124,6 +124,8 @@ public final class WidgetHost extends FrameLayout {
       JSONObject w = widgets.optJSONObject(i);
       if ((w.optString("type").equals("clock") || w.optString("type").equals("world"))
           && w.optBoolean("seconds")) return true;
+      if (w.optString("type").equals("music") && MediaAccess.enabled(a) && MediaAccess.granted(a))
+        return true;
       if (w.optString("type").equals("stopwatch")
           && PrefValues.flag(
               a.getSharedPreferences("prisme_utilities", 0), "stopwatchRunning", false))
@@ -380,8 +382,15 @@ public final class WidgetHost extends FrameLayout {
   private void addMusic(LinearLayout card, JSONObject item, ThemeSpec theme, int ink) {
     LinearLayout row = new LinearLayout(a);
     row.setGravity(Gravity.CENTER_VERTICAL);
+    MediaArtworkView artwork = new MediaArtworkView(a);
+    artwork.colors(theme.surface, theme.accent);
+    LinearLayout.LayoutParams artLp =
+        new LinearLayout.LayoutParams(horizontal ? 32 : 44, horizontal ? 32 : 44);
+    artLp.rightMargin = 7;
+    row.addView(artwork, artLp);
     TextView content =
         text("", Math.max(13, Math.min(22, 17 * item.optInt("textScale", 100) / 100)), ink);
+    I18n.userText(content);
     content.setMaxLines(horizontal ? 2 : item.optInt("variant") == 1 ? 1 : 3);
     row.addView(content, new LinearLayout.LayoutParams(0, -2, 1));
     Button play =
@@ -393,7 +402,8 @@ public final class WidgetHost extends FrameLayout {
               MusicPlayback.command(a, MusicPlayback.TOGGLE);
               updateCards();
             });
-    if (horizontal) row.addView(play, new LinearLayout.LayoutParams(44, 44));
+    if (horizontal || !item.optBoolean("detail", true) || item.optInt("variant") == 3)
+      row.addView(play, new LinearLayout.LayoutParams(44, 44));
     card.addView(row);
     if (!horizontal && item.optBoolean("detail", true) && item.optInt("variant") != 3) {
       card.addView(play, new LinearLayout.LayoutParams(-1, 44));
@@ -416,12 +426,13 @@ public final class WidgetHost extends FrameLayout {
           String title =
               item.optInt("variant") == 3
                   ? (music.playing ? "En lecture" : "En pause")
-                  : music.title;
+                  : MediaPanel.title(music);
           if (item.optBoolean("detail", true)
               && item.optInt("variant") != 1
               && !music.artist.isEmpty()) title += "\n" + music.artist;
           if (item.optInt("variant") == 2 && !horizontal)
-            title += "\n" + (music.hasSession ? "Session connectée" : "Commandes Android");
+            title += "\n" + (music.hasSession ? "Session connectée" : MediaPanel.detail(music));
+          artwork.artwork(music.artwork);
           set(content, title);
           set(play, music.playing ? "Ⅱ" : "▶");
         });

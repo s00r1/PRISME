@@ -1,15 +1,15 @@
-# PRISME 6.0.0 — Guide
+# PRISME 6.0.1 — Guide
 
-PRISME 6 cible la DM100 rectangulaire sous Android complet 7.1.1 / API 25, en 640 × 480. La version stable publiée utilise le **versionCode 24**. Aucun root ni remplacement de firmware n’est nécessaire.
+PRISME 6 cible la DM100 rectangulaire sous Android complet 7.1.1 / API 25, en 640 × 480. La version stable publiée utilise le **versionCode 25**. Aucun root ni remplacement de firmware n’est nécessaire.
 
 ## Installer et migrer
 
 1. Exporter la configuration existante et conserver l’APK précédent.
-2. Installer l’APK signé `PRISME-6.0.0.apk` par-dessus PRISME, sans désinstallation. La signature d’origine et les données existantes sont conservées.
+2. Installer l’APK signé `PRISME-6.0.1.apk` par-dessus PRISME, sans désinstallation. La signature d’origine et les données existantes sont conservées.
 3. Le **bureau classique sélectionné reste affiché par défaut**. Les cartes sont facultatives. Les premières configurations V6 qui ouvraient automatiquement les cartes sont ramenées une fois au bureau choisi sans perdre leurs pages.
 4. Ouvrir **Styles** sur le bureau ou le bouton permanent **22 styles** des réglages pour choisir une composition. Dans les cartes, **Bureau**, **22 styles** ou Retour Android ramènent au bureau choisi.
 
-Les profils JSON antérieurs restent acceptés. Les exports V6 utilisent le **schéma 7**, qui désigne un format de fichier. Garder un export V5 pour le retour arrière : une ancienne application peut refuser un profil V6 et Android peut refuser un numéro de version inférieur. La [Release stable v6.0.0](https://github.com/s00r1/PRISME/releases/tag/v6.0.0) est disponible avec l’APK signé, l’éditeur PC, les sources validées et leurs sommes de contrôle.
+Les profils JSON antérieurs restent acceptés. Les exports V6 utilisent le **schéma 7**, qui désigne un format de fichier. Garder un export V5 pour le retour arrière : une ancienne application peut refuser un profil V6 et Android peut refuser un numéro de version inférieur. La [Release stable v6.0.1](https://github.com/s00r1/PRISME/releases/tag/v6.0.1) est disponible avec l’APK signé, l’éditeur PC, les sources validées et leurs sommes de contrôle.
 
 ## Choisir parmi les 22 bureaux
 
@@ -66,9 +66,20 @@ Calculatrice décimale bornée, convertisseur hors ligne (longueur, masse, temp�
 
 ## Musique et autorisations
 
-Le mode simple utilise les commandes multimédias Android. **Outils → Musique → Accès multimédia enrichi** demande un choix local puis une autorisation système sensible d’accès aux notifications. PRISME utilise les sessions multimédias sans lire ni conserver les corps des messages. La liste des lecteurs, les titres, artistes et commandes dépendent des sessions publiées.
+Le **correctif musique 6.0.1** ajoute la pochette réelle et l’actualisation continue des informations musicales. Le mode simple utilise les touches multimédias Android et ne peut pas lire les titres ou pochettes d’un autre lecteur.
 
-Le mode simple reste utilisable sans accès enrichi. Désactiver ce dernier dans PRISME arrête son utilisation ; l’autorisation système peut être révoquée dans Android. Le test d’une session locale ne certifie pas tous les lecteurs tiers.
+Pour le mode enrichi :
+
+1. Ouvrir **Outils → Musique → Activer titres et pochettes**, ou les réglages du widget Musique.
+2. Accepter le choix local de PRISME et ouvrir le réglage Android.
+3. Activer **PRISME · Sessions multimédias** dans les accès aux notifications, puis revenir dans PRISME. Cet accès Android est sensible : PRISME utilise les sessions multimédias et ne lit ni ne conserve les corps des messages.
+4. Lancer un morceau dans le lecteur souhaité. Si plusieurs sessions sont présentes, choisir le lecteur dans le panneau musical.
+
+Le panneau distingue accès PRISME désactivé, autorisation Android manquante et absence de session. Le titre, l’artiste et la pochette se mettent à jour sans refermer le panneau, y compris après un retour des réglages. Les champs alternatifs du lecteur sont utilisés lorsqu’un champ principal est vide. Les couvertures intégrées, ou accessibles par une URI locale autorisée, sont réduites en mémoire à une taille adaptée à la montre ; une ancienne couverture n’est pas conservée pour un nouveau titre qui n’en fournit pas.
+
+La pochette n’est jamais inventée. Une image absente, interdite par son fournisseur ou proposée uniquement sous forme de lien HTTP/HTTPS reste indisponible : PRISME ne télécharge pas ces liens musicaux. Le réseau facultatif de la météo ne sert pas à récupérer les pochettes. Les métadonnées et images ne sont pas incluses dans les profils exportés.
+
+Le mode simple reste utilisable sans cet accès. Le désactiver dans PRISME arrête l’utilisation des sessions et retire la pochette en mémoire ; l’autorisation système peut être révoquée séparément dans Android. Le test d’une session locale ne certifie pas tous les lecteurs tiers. Les essais réellement exécutés sont distingués des scénarios de modèle dans les rapports de validation.
 
 ## Sauvegardes et récupération
 
