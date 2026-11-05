@@ -69,6 +69,7 @@ public final class V6Ui {
       return this;
     }
 
+    @Override public AlertDialog.Builder setMultiChoiceItems(CharSequence[] values,boolean[] checked,DialogInterface.OnMultiChoiceClickListener click){if(delegate!=null)delegate.setMultiChoiceItems(values,checked,click);else super.setMultiChoiceItems(values,checked,click);return this;}
     @Override
     public AlertDialog create() {
       AlertDialog d = delegate == null ? super.create() : delegate.create();

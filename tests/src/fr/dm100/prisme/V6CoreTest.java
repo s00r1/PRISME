@@ -81,6 +81,7 @@ public final class V6CoreTest {
     reject(() -> HomeLayout.validate(bad), "control character");
     DashboardPrefsTest.MemoryContext c = new DashboardPrefsTest.MemoryContext();
     HomeStore home = new HomeStore(c);
+    check(!home.enabled(),"classic desktop remains default");home.enabled(true);check(new HomeStore(c).enabled(),"cards need explicit opt-in and remain remembered");
     String before = home.read().toString();
     JSONObject edit = home.read().put("theme", 3);
     home.save(edit);
@@ -96,6 +97,7 @@ public final class V6CoreTest {
     DashboardPrefsTest.MemoryContext other = new DashboardPrefsTest.MemoryContext();
     new DashboardPrefs(other).importJSONObject(profile);
     check(new HomeStore(other).read().getInt("theme") == 3, "home round trip");
+    check(!new HomeStore(other).enabled(),"imported cards do not replace the selected desktop");
     check(new MusicPrefs(other).number("style", 0) == 4, "music round trip");
     check(new BatteryIndicatorPrefs(other).integer("style", 0) == 22, "battery round trip");
     JSONObject hostile = new JSONObject(profile.toString());

@@ -28,6 +28,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Verify the exact tested revision
         shell: pwsh
         env:
@@ -41,6 +44,14 @@ jobs:
       - name: All tests
         shell: pwsh
         run: ./tests/run-all.ps1
+      - name: PC card model tests
+        run: node tests/home-model.cjs
+      - name: PC widget model tests
+        run: node tests/dashboard-widget-model.cjs
+      - name: Complete profile model tests
+        run: node tests/complete-profile-model.cjs
+      - name: Website gallery tests
+        run: node tests/website.cjs
       - name: Require original release signing credentials
         shell: pwsh
         env:
@@ -81,10 +92,12 @@ jobs:
           $o = @($old | Where-Object { $_ -match '^Signer #1 certificate SHA-256 digest:' })
           $n = @($new | Where-Object { $_ -match '^Signer #1 certificate SHA-256 digest:' })
           if ($o.Count -ne 1 -or $n.Count -ne 1 -or $o[0] -ne $n[0]) { throw 'Certificate mismatch; publication blocked.' }
+      - name: Prepare complete release assets and notes
+        run: python scripts/prepare-release.py --apk PRISME-6.0.0.apk --output dist
       - name: Publish verified release
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v6.0.0 PRISME-6.0.0.apk --repo ${{ github.repository }} --target ${{ github.sha }} --title "PRISME 6.0 · Watch only" --notes "For rectangular Android watches, DM100 tested. Studio, Sense, Widgets, floating Edge Dock, adaptive dashboard battery, V7 backups, desktop ADB Link and expanded gestures. Same package/signing certificate; no smartphone port."
+          gh release create v6.0.0 dist/PRISME-6.0.0.apk dist/PRISME-PC-Studio-6.0.0.zip dist/PRISME-6.0.0-sources.zip dist/SHA256SUMS.txt --repo ${{ github.repository }} --target ${{ github.sha }} --title 'PRISME 6.0.0 — widgets, météo et PC Studio' --notes-file dist/RELEASE-NOTES.md --latest
           if ($LASTEXITCODE -ne 0) { throw 'Release publishing failed.' }

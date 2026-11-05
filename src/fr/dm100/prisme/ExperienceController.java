@@ -43,6 +43,7 @@ public final class ExperienceController {
     public void refreshApps(){if(searchRefresh!=null)searchRefresh.run();}
     public void shutdown(){pause();live=null;searchRefresh=null;}
     private static final String[][] ACTIONS={
+        {"weather","Météo et prévisions","ville temperature vent pluie soleil meteo"},{"widgetsSettings","Widgets des 22 styles","horloge musique meteo ajouter retirer personnaliser widget"},
         {"v6Home","Accueil modulaire","pages blocs theme v6"},{"multiTimers","Minuteurs nommés","alarme compte rebours"},{"mediaPanel","Musique","lecteur titre piste"},{"v6Tools","Outils PRISME 6","studio sense doctor secours"},
         {"rotationSettings","Orientation globale","portrait paysage forcer tourner ecran"},{"language","Langue / Language","arabe anglais allemand chinois turc russe francais"},{"shortcutShelf","Mes raccourcis","raccourcis favoris commandes rapides"},{"today","Aujourd’hui","accueil quotidien favoris recents"},{"checklist","Liste de tâches","courses rappels liste cocher"},
         {"notes","Carnet local","notes texte idee"},{"timer","Minuteur","alarme compte a rebours"},{"focus","Concentration","pomodoro travail repos"},

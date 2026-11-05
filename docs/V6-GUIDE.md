@@ -1,54 +1,97 @@
-# PRISME 6.0.0-beta1 — Guide
+# PRISME 6.0.0 — Guide
 
-Cette bêta cible la DM100 rectangulaire sous Android complet 7.1.1 / API 25, en 640 × 480. Aucun root ni remplacement de firmware n’est nécessaire.
+PRISME 6 cible la DM100 rectangulaire sous Android complet 7.1.1 / API 25, en 640 × 480. La livraison préparée pour la PR utilise le **versionCode 24**. Aucun root ni remplacement de firmware n’est nécessaire.
 
 ## Installer et migrer
 
-1. Dans votre V5, exportez la configuration et conservez l’APK précédent.
-2. Téléchargez l’APK signé de la Release `v6.0.0-beta1` et installez-le par-dessus PRISME. Ne désinstallez pas l’application pour mettre à jour.
-3. La signature d’origine est conservée. Les applications, notes, tâches et réglages existants sont conservés ; l’accueil modulaire s’affiche par défaut.
-4. Pour retrouver les 22 bureaux : **Modifier → Revenir au bureau classique**. Dans la recherche, cherchez « accueil modulaire » pour revenir à la V6.
+1. Exporter la configuration existante et conserver l’APK précédent.
+2. Installer l’APK signé `PRISME-6.0.0.apk` par-dessus PRISME, sans désinstallation. La signature d’origine et les données existantes sont conservées.
+3. Le **bureau classique sélectionné reste affiché par défaut**. Les cartes sont facultatives. Les premières configurations V6 qui ouvraient automatiquement les cartes sont ramenées une fois au bureau choisi sans perdre leurs pages.
+4. Ouvrir **Styles** sur le bureau ou le bouton permanent **22 styles** des réglages pour choisir une composition. Dans les cartes, **Bureau**, **22 styles** ou Retour Android ramènent au bureau choisi.
 
-Les profils JSON de versions antérieures restent acceptés. Les exports V6 utilisent le schéma 7 et peuvent ne pas être compris par les anciennes versions : conservez un export V5 pour le retour arrière. Android peut refuser un numéro de version inférieur : un retour V5 nécessite alors une procédure dédiée avec sauvegarde, sans désinstallation automatique. Ne désactivez pas Play Protect si une installation est bloquée ; la validation USB ne certifie pas ce service.
+Les profils JSON antérieurs restent acceptés. Les exports V6 utilisent le **schéma 7**, qui désigne un format de fichier. Garder un export V5 pour le retour arrière : une ancienne application peut refuser un profil V6 et Android peut refuser un numéro de version inférieur. La publication de la Release intervient après revue de la PR.
 
-## Composer l’accueil
+## Choisir parmi les 22 bureaux
 
-Les flèches du haut changent de page. Les sept types de bloc sont Horloge, Tâches, Minuteur, Musique, Carnet, Favoris et Montre. Un appui court ouvre la fonction ; un appui long ouvre les coordonnées et dimensions. Dans **Modifier → Déplacer les blocs au doigt**, glissez un bloc puis touchez **Terminer**. Les positions s’alignent sur une grille de quatre colonnes et quatre lignes.
+Le sélecteur compact comporte une recherche, un indicateur de style actif et un accès aux aperçus. Choisir un style l’affiche immédiatement et ferme les cartes. Le choix manuel suspend les règles Sense de changement automatique pour conserver le bureau choisi. Les compositions historiques restent disponibles, avec leur identité, leur catalogue d’applications et leurs commandes.
 
-Jusqu’à cinq pages et huit blocs par page. Les coordonnées vont de 0 à 3 et les dimensions de 1 à 4 ; un bloc ne peut ni sortir de la page ni chevaucher un autre bloc. Une modification invalide est refusée. Une étape d’annulation et de rétablissement est disponible. Les pages peuvent être vides, mais il reste toujours au moins une page.
+## Widgets communs aux 22 styles
 
-Les palettes de l’accueil sont indépendantes du style du bureau classique. Les blocs Carnet et Favoris n’affichent pas leur contenu personnel sur l’accueil. Les notes/tâches restent partagées entre les pages.
+**Réglages → Widgets** ou **Outils → Widgets des 22 styles** ouvre le catalogue. Un appui long sur un widget ouvre directement sa personnalisation ; un appui court ouvre sa fonction. La zone dédiée garde les commandes du bureau dégagées : gauche ou droite en paysage, bande horizontale en portrait. Elle défile si nécessaire et peut être entièrement masquée.
+
+Treize types sont disponibles : **Météo, Horloge, Musique, Batterie, Tâches, Carnet, Minuteurs, Calendrier, Horloge mondiale, Système, Concentration, Raccourcis et Chronomètre**. Jusqu’à seize instances peuvent être ajoutées. Météo, Musique et Tâches sont activés dans la configuration initiale ; le chronomètre est ajoutable depuis le catalogue. Ajouter, retirer, désactiver ou réordonner un widget ne supprime pas les données de l’outil.
+
+Chaque instance possède ses propres réglages :
+
+- **Six apparences** : Signature du bureau, Verre, Carte pleine, Contour, Minimal, Néon.
+- **Trois densités**, quatre présentations, sept choix d’accent dont la couleur du bureau, opacité du fond de 30 à 100 %, arrondis de 0 à 28 et texte de 80 à 140 %.
+- Titre personnalisé, titre visible ou masqué, détails visibles ou masqués.
+- Affichage dans tous les styles ou seulement certains des 22 bureaux.
+- Horloges digitale, analogique, grands chiffres ou date/heure ; secondes, format 12/24 h et fuseau de l’horloge mondiale.
+- Déplacement dans la liste et annulation/rétablissement de la dernière modification.
+
+Les couleurs suivent le bureau lorsque l’accent « Selon le bureau » est choisi. Le carnet ne révèle pas son texte privé dans le widget. Les informations musicales et commandes disponibles dépendent du lecteur Android.
+
+## Configurer la météo
+
+1. Toucher le widget Météo ou ouvrir **Outils → Météo et prévisions**.
+2. Ouvrir **Ville, unités et météo connectée**. Lire l’explication puis activer explicitement Open-Meteo.
+3. Rechercher manuellement la ville et sélectionner le résultat correspondant. Aucun accès GPS n’est demandé.
+4. Régler les °C/°F et la fréquence d’actualisation en premier plan : 15, 30, 45, 60, 120 ou 180 minutes.
+5. Personnaliser le widget : actuelle et tendance, compacte, cinq jours ou prochaines heures.
+
+Le panneau détaillé affiche conditions, température, ressenti, humidité, vent, douze prochaines heures et cinq jours, selon la réponse du fournisseur. **Actualiser** demande une mise à jour manuelle avec limitation de fréquence. La date du relevé, les erreurs et l’ancienneté du cache restent visibles ; une absence de connexion conserve le dernier relevé sans le présenter comme une nouvelle mesure.
+
+La météo exige Internet et la disponibilité du fournisseur. La permission Internet figure dans le manifeste ; les requêtes restent désactivées avant le consentement local. Open-Meteo reçoit l’adresse IP et la ville recherchée ou les coordonnées de la ville sélectionnée. La désactivation stoppe les nouvelles requêtes et conserve le cache local. Aucun compte PRISME, télémétrie ou suivi de position n’est ajouté.
+
+Les paramètres portables ne comprennent que l’unité et l’intervalle. Ville, coordonnées, fuseau météo, cache et consentement ne sont jamais importés/exportés dans un profil. Les données portent l’attribution **Weather data by Open-Meteo.com** ; l’API gratuite est destinée aux usages non commerciaux. [Confidentialité et fournisseur](PRIVACY.md).
+
+## Deux centres de contrôle distincts
+
+Le style **iOS** utilise des modules séparés, des commandes circulaires et des curseurs verticaux de luminosité et de volume. Le style **Android** adopte des tuiles de réglages rapides plus larges, des états textuels et des curseurs horizontaux. La musique conserve des commandes adaptées à chaque composition.
+
+Les mêmes fonctions restent disponibles selon les préférences : choix et ordre des raccourcis, couleurs, taille, position, gestes d’ouverture, rotation et fonctions flottantes. Certains boutons ouvrent les réglages Android lorsque le système interdit un basculement direct. Ces interfaces s’inspirent des plateformes ; elles ne remplacent pas leur panneau système.
+
+## Cartes facultatives
+
+Ouvrir **Outils → Bureau et cartes → Ouvrir les cartes**. Les flèches changent de page et **Bureau** revient au style choisi. Les sept cartes sont Horloge, Tâches, Minuteur, Musique, Carnet, Favoris et Montre. Appui court : ouvrir ; appui long : coordonnées et dimensions. **Modifier → Déplacer les blocs au doigt** active le déplacement ; **Terminer** le quitte.
+
+Jusqu’à cinq pages et huit cartes par page, sur une grille de quatre colonnes et quatre lignes. Coordonnées de 0 à 3 et dimensions de 1 à 4. Chevauchements et sorties d’écran refusés ; une page au moins doit rester présente. Une étape d’annulation/rétablissement est disponible. Les six palettes Graphite, Verre, Papier, Instrument, Néon et Minimal et les grands textes sont indépendants du style du bureau. Les notes et tâches sont partagées entre pages.
 
 ## Minuteurs et outils
 
-**Outils → Minuteurs nommés** propose huit minuteurs, avec durée initiale de 1 à 1 440 minutes. Pause, reprise, redémarrage et suppression sont indépendants. Les alarmes sont reprogrammées après redémarrage ; le firmware peut retarder une livraison. L’accueil et le panneau vérifient aussi les expirations lorsqu’ils sont ouverts.
+**Outils → Minuteurs nommés** propose huit minuteurs, de 1 à 1 440 minutes initialement, avec pause, reprise, redémarrage et suppression indépendants. Les alarmes sont reprogrammées après redémarrage, sous réserve des restrictions du firmware ; les panneaux vérifient aussi les expirations à leur ouverture. Les exécutions actives ne sont pas importées depuis un profil.
 
-Les minuteurs actifs ne sont pas importés depuis un thème ou une sauvegarde. La calculatrice accepte des nombres décimaux bornés et quatre opérations. Le convertisseur fonctionne sans réseau : longueur, masse, température et durée.
+Calculatrice décimale bornée, convertisseur hors ligne (longueur, masse, température, durée), carnet, tâches, chronomètre avec tours, concentration, horloge de table et diagnostic Doctor restent disponibles. Les 24 présentations de batterie, douze palettes, volume flottant, Studio historique, Sense et dock facultatif sont conservés.
 
-## Musique et permissions
+## Musique et autorisations
 
-Le mode simple utilise les commandes multimédias Android. Le mode enrichi, **Outils → Musique → Accès multimédia enrichi**, nécessite une autorisation Android explicite d’accès aux notifications. PRISME utilise les sessions multimédias, sans lire ni conserver les messages des notifications. La liste des lecteurs dépend des sessions publiées par les applications.
+Le mode simple utilise les commandes multimédias Android. **Outils → Musique → Accès multimédia enrichi** demande un choix local puis une autorisation système sensible d’accès aux notifications. PRISME utilise les sessions multimédias sans lire ni conserver les corps des messages. La liste des lecteurs, les titres, artistes et commandes dépendent des sessions publiées.
 
-Le titre, l’artiste et les commandes disponibles dépendent du lecteur. Le mode simple reste utilisable sans cette autorisation. Désactiver le mode enrichi dans PRISME arrête son utilisation ; la permission système peut être révoquée dans Android. Le fonctionnement avec Spotify, Deezer et tous les navigateurs n’est pas certifié par le test d’une session locale.
+Le mode simple reste utilisable sans accès enrichi. Désactiver ce dernier dans PRISME arrête son utilisation ; l’autorisation système peut être révoquée dans Android. Le test d’une session locale ne certifie pas tous les lecteurs tiers.
 
 ## Sauvegardes et récupération
 
-La configuration active exportée comprend les réglages du bureau, notes, tâches, centre de contrôle, volume, batterie, musique et modules V6, dont les pages. Les autorisations système, l’activation du dock, l’accès enrichi et les exécutions de minuteurs restent locaux. La banque de profils nommés n’est pas exportée récursivement.
+L’export contient les réglages portables, notes, tâches, centre de contrôle, volume, batterie, musique, pages et apparences des widgets. Les autorisations système, consentements, ville météo, cache, activation du dock et exécutions de minuteurs restent locaux. La banque de profils nommés n’est pas exportée récursivement.
 
-Les sauvegardes automatiques se trouvent dans l’espace privé de l’application. Un point est créé à l’entrée en V6, puis au lancement après 24 heures ; dix points automatiques sont conservés. Les anciens exports V5 ne sont pas supprimés et restent accessibles via le sélecteur Android.
+Un point de récupération privé est créé à l’entrée en V6 puis au lancement après 24 heures ; dix points automatiques sont conservés. **Outils → Sauvegardes chiffrées** crée un coffre AES-256-GCM avec phrase de passe d’au moins dix caractères. Importer depuis Réglages → Profils. Aucune récupération de mot de passe à distance ; les JSON ordinaires restent en clair.
 
-**Outils → Sauvegardes chiffrées** crée un coffre AES-256-GCM avec mot de passe d’au moins dix caractères. Il peut être exporté via le sélecteur Android puis importé depuis **Réglages → Profils → Importer une configuration**. Le mot de passe est indispensable : il n’y a ni serveur ni récupération à distance. Les exports JSON ordinaires restent en clair.
+Les imports sont validés avant écriture et protégés par un journal de récupération. Après trois exceptions non traitées consécutives, le mode de secours offre reprise ou bureau classique avec fonctions flottantes désactivées. Il ne répare ni le firmware ni un stockage défectueux.
 
-Les imports sont validés avant écriture ; un journal privé permet de revenir à l’état précédent après une interruption de restauration. Après trois exceptions non traitées consécutives, le mode de secours offre une reprise ou un retour au bureau classique avec les fonctions flottantes désactivées. Il ne répare ni une mémoire de stockage défectueuse ni le firmware.
+## Éditeur PC et énergie
 
-## Superpositions et énergie
+[PC Studio](https://s00r1.github.io/PRISME/home-studio.html) prépare les 13 widgets et les cartes à partir d’un export JSON complet, sans envoyer son contenu. Le ZIP officiel fonctionne hors ligne en ouvrant `index.html`. Le Studio classique reste inclus. [Guide détaillé](PC-STUDIO.md).
 
-Sur l’accueil modulaire, les poignées et indicateurs flottants PRISME sont masqués pour libérer les blocs. Ils reviennent dans les autres applications selon les réglages autorisés. **Outils → Suspendre tous les éléments flottants** les suspend jusqu’à réactivation ; ce choix reste local.
+Importer une disposition conserve le mode bureau/cartes et l’activation Sense actuels. Les superpositions PRISME sont masquées dans le panneau de cartes ; **Outils → Suspendre tous les éléments flottants** propose une pause générale. Les rafraîchissements d’interface s’arrêtent à l’extinction de l’écran ; la météo ne programme pas de service périodique en arrière-plan. Aucun gain chiffré d’autonomie n’est revendiqué sans essai prolongé.
 
-Les nouveaux écrans limitent leur travail à leur période d’affichage. Les rafraîchissements de l’accueil s’arrêtent à l’extinction de l’écran. Sense et le dock hérités de la branche V6 restent facultatifs. Aucun gain chiffré d’autonomie n’est annoncé avant un essai prolongé.
+Les interfaces historiques restent disponibles en sept langues ; certains messages détaillés nouveaux restent en français. Les validations et limites matérielles figurent dans le [rapport V6](V6-VALIDATION.md).
 
-## Éditeur PC
+## Affichage portrait sur la DM100
 
-Ouvrez [l’éditeur d’accueil](https://s00r1.github.io/PRISME/home-studio.html). Chargez votre export JSON complet V5/V6, composez les pages puis exportez le profil. Sans fichier réel, seul l’aperçu est proposé. Le contenu du fichier n’est pas envoyé sur le réseau. Les sept types de bloc, limites et collisions sont vérifiés ; la montre effectue sa propre validation complète avant import.
+La zone widgets devient un ruban horizontal défilant, avec son bouton d’ajout accessible. Les centres de contrôle changent leur disposition selon la place disponible et gardent leur fermeture permanente.
 
-Les interfaces V5 restent disponibles en sept langues. Les principaux libellés V6 sont ajoutés aux six catalogues traduits ; certains messages détaillés nouveaux restent en français dans cette première bêta.
+| Widgets en portrait | Centre iOS | Centre Android |
+| --- | --- | --- |
+| ![Ruban des widgets](../assets/device/v6/widgets-portrait.png) | ![iOS portrait](../assets/device/v6/control-center-ios-portrait.png) | ![Android portrait](../assets/device/v6/control-center-android-portrait.png) |
+
+Captures DM100 ; une sélection d’applications vide a été utilisée pendant la préparation visuelle pour préserver le catalogue personnel.

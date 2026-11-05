@@ -17,13 +17,16 @@ jobs:
         with:
           python-version: '3.12'
       - run: python scripts/fetch-test-dependency.py
-      - run: python -m py_compile scripts/prisme-link.py
+      - run: python -m py_compile scripts/prisme-link.py scripts/prepare-release.py
+      - run: python tests/api25_audit.py --self-test
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - run: node --check website/studio.js
       - run: node --check website/home-studio.js
       - run: node tests/home-model.cjs
+      - run: node tests/dashboard-widget-model.cjs
+      - run: node tests/complete-profile-model.cjs
       - shell: pwsh
         run: ./tests/run-all.ps1
       - run: node tests/website.cjs

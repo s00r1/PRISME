@@ -4,6 +4,7 @@ import android.app.*;
 import android.content.*;
 import android.graphics.Typeface;
 import android.os.*;
+import android.util.TypedValue;
 import android.view.*;
 import android.widget.*;
 import java.text.*;
@@ -54,7 +55,7 @@ public final class HomeDeck extends LinearLayout {
     header.setGravity(Gravity.CENTER_VERTICAL);
     addView(header, new LayoutParams(-1, 45));
     grid = new FrameLayout(a);
-    grid.setPadding(4, 0, 4, 0);
+    grid.setPadding(0, 0, 0, 0);
     addView(grid, new LayoutParams(-1, 0, 1));
     nav = new LinearLayout(a);
     addView(nav, new LayoutParams(-1, 47));
@@ -107,21 +108,34 @@ public final class HomeDeck extends LinearLayout {
               colors[1],
               colors[1],
               colors[3]);
-      header.addView(prev, new LayoutParams(48, -1));
+      Button desktop =
+          button("Bureau", () -> host.action("classicHome"), colors[1], colors[2], colors[3]);
+      desktop.setTextSize(TypedValue.COMPLEX_UNIT_PX, 15);
+      header.addView(desktop, new LayoutParams(86, -1));
+
       TextView title =
           V6Ui.text(
               a,
-              "◈ "
+              I18n.t(a, "Cartes")
+                  + " · "
                   + I18n.t(a, current.getString("name"))
                   + "   "
                   + (page + 1)
                   + "/"
                   + pages.length(),
-              19);
+              17);
       I18n.userText(title);
+      title.setSingleLine(true);
+      title.setEllipsize(android.text.TextUtils.TruncateAt.END);
+      title.setGravity(Gravity.CENTER_VERTICAL);
       title.setTextColor(colors[3]);
       title.setTypeface(null, Typeface.BOLD);
       header.addView(title, new LayoutParams(0, -1, 1));
+      Button styles =
+          button("22 styles", () -> host.action("styles"), colors[1], colors[2], colors[3]);
+      styles.setTextSize(TypedValue.COMPLEX_UNIT_PX, 14);
+      header.addView(styles, new LayoutParams(90, -1));
+      header.addView(prev, new LayoutParams(42, -1));
       header.addView(
           button(
               "›",
@@ -132,7 +146,7 @@ public final class HomeDeck extends LinearLayout {
               colors[1],
               colors[1],
               colors[3]),
-          new LayoutParams(48, -1));
+          new LayoutParams(42, -1));
       JSONArray cards = current.getJSONArray("cards");
       int width = Math.max(1, grid.getWidth()), height = Math.max(1, grid.getHeight());
       int scale = layout.getBoolean("largeText") ? 22 : 17;
@@ -475,7 +489,7 @@ public final class HomeDeck extends LinearLayout {
         "Revenir au bureau classique",
         () -> {
           store.enabled(false);
-          host.action("v6Refresh");
+          host.action("classicHome");
         });
     editDialog[0] = V6Ui.dialog(a, "PRISME 6 · Composer mon accueil", root);
   }

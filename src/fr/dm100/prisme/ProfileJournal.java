@@ -19,7 +19,7 @@ public final class ProfileJournal {
     "prisme_sense",
     "prisme_widgets",
     "prisme_edge",
-    "prisme_home"
+    "prisme_home", "prisme_widget_engine", "prisme_weather"
   };
 
   // Store names must match their owners; unknown preference files are never imported.

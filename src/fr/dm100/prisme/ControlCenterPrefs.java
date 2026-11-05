@@ -27,7 +27,7 @@ public final class ControlCenterPrefs {
     private static final int[] INT_MIN = {0, 20, 80, 2, 0, 65, 55, 0, 0, 0, 16, 24, 0, 0, 0, 0, 0, 0, 24};
     private static final int[] INT_MAX = {1, 100, 125, 5, 3, 100, 100, 3, 3, 3, 96, 140, 2, 36, 5, 0xFFFFFF, 100, 60, 120};
     private static final int[] INT_DEFAULT = {0, 68, 100, 4, 0, 100, 90, 0, 3, 0, 64, 36, 1, 24, 0, 0x62D9CC, 28, 8, 28};
-    private static final String[] BOOL_KEYS = {"enabled", "dark", "labels", "status", "volume", "brightness", "customAccent", "compactHandle"};
+    private static final String[] BOOL_KEYS = {"enabled", "dark", "labels", "status", "volume", "brightness", "customAccent", "compactHandle", "media"};
     private static final List<String> DEFAULT_TILES = Arrays.asList("wifi", "bluetooth", "sound", "airplane", "location",
             "rotateGlobal", "screenlamp", "settings", "timer", "clock");
     private static final Set<String> TILE_IDS = new HashSet<String>(Arrays.asList("wifi", "bluetooth", "sound", "airplane",

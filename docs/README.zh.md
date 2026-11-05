@@ -1,179 +1,110 @@
-# PRISME — 仅适用于长方形手表
+# PRISME 6
 
-## 参考：2.86 英寸大屏 · 横屏 640 × 480（4:3）· 完整 Android 7.1+ / API 25+
-
-> **不适用于圆形或正方形手表。本版本面向 DM100 长方形屏幕。其他长方形尺寸和分辨率尚未验证。**
-
-## 🌐 [访问 PRISME 官方网站](https://s00r1.github.io/PRISME/)
-
-**https://s00r1.github.io/PRISME/**
-
-
-<table>
-<tr><td align="center" valign="top"><a href="https://www.ebay.nl/itm/185939246016"><img src="https://i.ebayimg.com/images/g/WZgAAOSwAUlkiEmk/s-l1600.jpg" width="270" alt="DM100 2.86 rectangular watch"></a></td><td align="center" valign="top"><a href="https://www.ebay.nl/itm/185939246016"><img src="https://i.ebayimg.com/images/g/5EcAAOSwrulkiEmS/s-l1600.jpg" width="270" alt="DM100 2.86 rectangular watch"></a></td></tr>
-</table>
-
-**Domiwear / Domino DM100 — 已实机测试的参考型号，同一型号的两张图片**
-
-外部产品照片来自 DM100 商品页面，展示硬件，并非 PRISME。 [Source](https://www.ebay.nl/itm/185939246016) · [Specifications](https://www.domino-china.com/news/19.html)
-
+为 DM100 和大屏矩形完整 Android 手表打造的可定制桌面。在手表或电脑上编排页面，把常用工具放在手边，数据保留在本地。
 
 [Français](README.fr.md) · [English](README.en.md) · [Deutsch](README.de.md) · [中文](README.zh.md) · [Türkçe](README.tr.md) · [Русский](README.ru.md) · [العربية](README.ar.md)
 
-**面向完整 Android 智能手表的可自定义桌面。** 可离线使用，无需账户，无广告或遥测。
+> 当前版本：**6.0.0 · versionCode 24 · 最低完整 Android 7.1 / API 25**。测试参考设备为 DM100，Android 7.1.1，横屏 640 × 480。圆形、方形手表以及 Wear OS、watchOS、Tizen 不是已验证目标。不需要 root 或更换固件。
 
+## 下载
 
-**[⬇ 下载 APK](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
+| 下载 | PRISME 6 |
+| --- | --- |
+| [PRISME-6.0.0.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0.apk) | 手表使用的签名 Android 应用，覆盖安装即可更新。 |
+| [PRISME-PC-Studio-6.0.0.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-PC-Studio-6.0.0.zip) | 完整离线电脑编辑器，解压全部文件后打开 index.html。 |
+| [PRISME-6.0.0-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | 应用、编辑器、测试及文档源代码。 |
+| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.0/SHA256SUMS.txt) | 发布文件的校验值。 |
 
-<table>
-<tr><td align="center" valign="top"><b>Control Center</b><br><a href="../assets/localized/zh/screenshots/control-center-ios.png"><img src="../assets/localized/zh/screenshots/control-center-ios.png" width="410" alt="Control Center"></a></td><td align="center" valign="top"><b>Volume</b><br><a href="../assets/localized/zh/screenshots/volume-live-circle-open.png"><img src="../assets/localized/zh/screenshots/volume-live-circle-open.png" width="410" alt="Volume"></a></td></tr>
-</table>
+[PRISME · Web](https://s00r1.github.io/PRISME/) · [PC Studio · Web](https://s00r1.github.io/PRISME/home-studio.html) · [GitHub · v6.0.0](https://github.com/s00r1/PRISME/releases/tag/v6.0.0)
 
+## V6 实机界面
 
-## 安装
+| PRISME 6 | PRISME 6 |
+| --- | --- |
+| ![DM100](../assets/device/v6/home-graphite.png) | ![DM100](../assets/device/v6/home-paper.png) |
+| ![DM100](../assets/device/v6/page-media.png) | ![DM100](../assets/device/v6/editor.png) |
 
-**[下载PRISME 5.4 APK](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [版本与校验和](https://github.com/s00r1/PRISME/releases)
+DM100 上 V6 功能的真实截图，界面语言为法语。经典桌面图库使用虚构演示数据，不展示个人应用目录。
 
-需要**完整 Android 7.1 或更高版本，最低 API 25**，并支持安装普通 Android APK。在手表浏览器下载 APK，使用 Android 安装程序打开；如有提示，允许该安装来源。启动 PRISME，固件允许时可设为默认桌面，也可作为普通应用打开。悬浮音量和全局方向需要“显示在其他应用上层”权限。在**设置 → 样式 → 语言**中选择语言。官方更新直接覆盖原有版本安装。
+## 页面与外观
 
-电脑安装：`adb install -r PRISME-5.4.apk`。无需 root、刷固件或修改 Google 服务。
+**默认显示您选择的经典桌面。** 设置中的固定按钮“22 styles”可直接打开全部样式。卡片为可选面板，“Bureau”按钮与 Android 返回键可回到原桌面；选择样式会立即显示它。
 
-## ✨ PRISME 5.4 新功能
+默认提供主页面、工作和多媒体三个页面；最多 **5 页、每页 8 个模块**，采用 **4 × 4 网格**。时钟、任务、计时器、音乐、笔记、收藏和手表状态共七类模块，可移动并调整大小。重叠或超出页面的布局会被拒绝。
 
-- **🔋 独立电池设置页**：24 种电池样式、12 套配色、随电量变化的颜色，以及百分比、大小、位置、透明度和阈值调节。可选**仅在桌面显示**或**覆盖其他应用**（需要 Android 悬浮窗权限）。诊断功能比较多个电量来源，但设备固件仍可能提供错误读数。
-- **🎵 独立音乐设置页**：**22 种桌面布局均有迷你播放器**，提供**播放/暂停、上一首、下一首**，12 种外观和大小、位置、透明度设置。需要已有媒体应用正在运行。
-- **🔄 全局屏幕旋转**：通过悬浮控制中心切换横竖屏，**不主动返回 PRISME 桌面**；实际效果取决于设备固件及当前应用。
-- **🎧 返回桌面**：尽量不重置正在运行的应用任务。音视频后台播放受 Android 和媒体应用自身限制，**无法保证**。
+轻点模块打开功能；长按可设置坐标和尺寸。在“修改”中启用拖动模式，移动后选择“完成”。支持一步撤销与恢复。不同页面共享同一份笔记和任务，首页模块不会展示笔记正文。
 
-**注意：** 已收到 v5.4 APK 被 Play Protect 阻止安装的报告。请勿关闭设备保护来强制安装，后续修复请查看 [Releases](https://github.com/s00r1/PRISME/releases)。图库中可能包含旧版本截图。
+六套配色：石墨、玻璃、纸张、仪表、霓虹与极简，并提供大字体选项。原有 **22 种经典桌面**继续保留。在“修改”中切换到经典桌面；通过搜索“模块化主页”返回新首页。经典桌面与模块化主页的样式独立设置。
 
-## 功能
+## 为 22 种桌面提供的组件
 
-- **22 种不同布局**：日历、桌面、应用画廊、终端、街机、星座、文字目录、拼贴、蜂窝、仪表、笔记本和极简视图。
-- 固定导航：原生表盘、样式、今日和设置。长按“今日”打开五个可自定义快捷方式。
-- **iOS 或 Android 风格控制中心**：可调整按钮、顺序、颜色、透明度、大小、位置及开关手势。部分按钮会打开 Android 设置。
-- **竖屏 / 横屏**：轻触旋转，长按选择反向方向或系统模式；通知按钮也可在其他应用中旋转。已在 DM100 测试，其他固件可能限制此功能。
-- **悬浮音量按钮**：多种样式和形状，可调尺寸、不透明度、位置、展开控制和闲置淡出。
-- 应用及设置搜索、收藏、最近应用、工作区、自定义名称。
-- 今日、自动保存笔记、待办清单、Android 闹钟式倒计时、分段秒表、桌面时钟。
-- 全局缩放、边距、文本和图标大小、颜色、配置文件、本地备份。
-- **法语、英语、德语、简体中文、土耳其语、俄语及阿拉伯语**，支持从右到左显示。
+除了可选的网格页面，**22 种经典桌面**现在共享一块独立组件区。组件目录有 **13 类**：天气、时钟、音乐、电量、任务、笔记、计时器、日历、世界时钟、系统、专注、快捷入口和秒表。默认显示天气、音乐与任务；可以添加、删除、隐藏和调整顺序，最多保存 16 个组件。删除或隐藏组件不会改变已选择的桌面样式。
 
-<!-- PRISME-VISUAL-SHOWCASE -->
-<a id="control-center"></a>
-## 按您的习惯定制控制中心
+从 **设置 → Widgets** 或长按组件，可分别调整外观、密度、强调色、透明度、圆角、文字大小、自定义标题，以及在哪些样式中显示。六种外观为桌面原生、玻璃、实心卡片、轮廓、极简和霓虹。时钟支持指针显示，世界时钟可选择时区。横屏时组件位于左右侧栏，竖屏时改为顶部横条；桌面保留自己的显示区域。可以隐藏整个组件区，并撤销或恢复最近一次修改。
 
-可选 iOS 或 Android 布局，自定义快捷方式、顺序、透明度、颜色、大小、位置和手势。轻触竖屏 / 横屏旋转，长按打开方向选项。
+### 可选的 Open-Meteo 天气
 
-<table>
-<tr><td align="center" valign="top"><b>iOS</b><br><a href="../assets/localized/zh/screenshots/control-center-ios.png"><img src="../assets/localized/zh/screenshots/control-center-ios.png" width="410" alt="iOS"></a></td><td align="center" valign="top"><b>Android</b><br><a href="../assets/localized/zh/screenshots/control-center-android.png"><img src="../assets/localized/zh/screenshots/control-center-android.png" width="410" alt="Android"></a></td></tr>
-</table>
+天气联网功能**默认关闭**。在天气设置中主动启用后，手动搜索并选择城市；无需 GPS 或定位权限。Open-Meteo 会接收 IP 地址，以及搜索文字或所选城市的坐标。详情页提供当前温度、体感温度、湿度、风速、未来数小时和五天天气；可设置摄氏/华氏及前台刷新间隔。本地缓存会显示更新时间和过期状态，断网时不会生成虚构数据。关闭天气联网后停止请求，已有缓存保留。[数据提供者：Open-Meteo](https://open-meteo.com/)。
 
-<details><summary>查看自定义选项</summary>
+### 两套真正不同的控制中心
 
-<table>
-<tr><td align="center" valign="top"><b>Center Options Appearance</b><br><a href="../assets/localized/zh/screenshots/center-options-appearance.png"><img src="../assets/localized/zh/screenshots/center-options-appearance.png" width="270" alt="Center Options Appearance"></a></td><td align="center" valign="top"><b>Center Options Content</b><br><a href="../assets/localized/zh/screenshots/center-options-content.png"><img src="../assets/localized/zh/screenshots/center-options-content.png" width="270" alt="Center Options Content"></a></td><td align="center" valign="top"><b>Center Options Gestures</b><br><a href="../assets/localized/zh/screenshots/center-options-gestures.png"><img src="../assets/localized/zh/screenshots/center-options-gestures.png" width="270" alt="Center Options Gestures"></a></td></tr>
-<tr><td align="center" valign="top"><b>Center Options Layout</b><br><a href="../assets/localized/zh/screenshots/center-options-layout.png"><img src="../assets/localized/zh/screenshots/center-options-layout.png" width="270" alt="Center Options Layout"></a></td><td align="center" valign="top"><b>Center Ios Transparent</b><br><a href="../assets/localized/zh/screenshots/center-ios-transparent.png"><img src="../assets/localized/zh/screenshots/center-ios-transparent.png" width="270" alt="Center Ios Transparent"></a></td><td align="center" valign="top"><b>Center Ios Opaque</b><br><a href="../assets/localized/zh/screenshots/center-ios-opaque.png"><img src="../assets/localized/zh/screenshots/center-ios-opaque.png" width="270" alt="Center Ios Opaque"></a></td></tr>
-</table>
-
-</details>
-
-<a id="floating-volume"></a>
-## 悬浮音量：小巧、可展开、可自定义
-
-悬浮按钮可展开为 + 和 −。形状、样式、尺寸、位置和不透明度独立调整。以下是真实 Android 组件的特写及桌面效果。
-
-<table>
-<tr><td align="center" valign="top"><b>收起的圆形</b><br><img src="../assets/localized/zh/screenshots/widget-circle-closed.png" width="155" height="155" alt="收起的圆形"></td><td align="center" valign="top"><b>展开的圆形</b><br><img src="../assets/localized/zh/screenshots/widget-circle-open.png" width="155" height="52" alt="展开的圆形"></td><td align="center" valign="top"><b>Android</b><br><img src="../assets/localized/zh/screenshots/widget-android.png" width="54" height="155" alt="Android"></td><td align="center" valign="top"><b>霓虹</b><br><img src="../assets/localized/zh/screenshots/widget-neon.png" width="155" height="52" alt="霓虹"></td></tr>
-<tr><td align="center" valign="top"><b>极简</b><br><img src="../assets/localized/zh/screenshots/widget-minimal.png" width="155" height="52" alt="极简"></td><td align="center" valign="top"><b>钛金属</b><br><img src="../assets/localized/zh/screenshots/widget-titanium.png" width="54" height="155" alt="钛金属"></td><td align="center" valign="top"><b>浅色</b><br><img src="../assets/localized/zh/screenshots/widget-light.png" width="155" height="54" alt="浅色"></td><td align="center" valign="top"></td></tr>
-</table>
-
-<table>
-<tr><td align="center" valign="top"><b>展开的圆形</b><br><a href="../assets/localized/zh/screenshots/volume-live-circle-open.png"><img src="../assets/localized/zh/screenshots/volume-live-circle-open.png" width="410" alt="展开的圆形"></a></td><td align="center" valign="top"><b>Android</b><br><a href="../assets/localized/zh/screenshots/volume-live-android.png"><img src="../assets/localized/zh/screenshots/volume-live-android.png" width="410" alt="Android"></a></td></tr>
-</table>
-
-<details><summary>查看自定义选项</summary>
-
-<table>
-<tr><td align="center" valign="top"><b>Volume Options Style</b><br><a href="../assets/localized/zh/screenshots/volume-options-style.png"><img src="../assets/localized/zh/screenshots/volume-options-style.png" width="410" alt="Volume Options Style"></a></td><td align="center" valign="top"><b>Volume Options Shape</b><br><a href="../assets/localized/zh/screenshots/volume-options-shape.png"><img src="../assets/localized/zh/screenshots/volume-options-shape.png" width="410" alt="Volume Options Shape"></a></td></tr>
-<tr><td align="center" valign="top"><b>Volume Options Position</b><br><a href="../assets/localized/zh/screenshots/volume-options-position.png"><img src="../assets/localized/zh/screenshots/volume-options-position.png" width="410" alt="Volume Options Position"></a></td><td align="center" valign="top"><b>Volume Options Advanced</b><br><a href="../assets/localized/zh/screenshots/volume-options-advanced.png"><img src="../assets/localized/zh/screenshots/volume-options-advanced.png" width="410" alt="Volume Options Advanced"></a></td></tr>
-</table>
-
-</details>
-
-<a id="styles-showcase"></a>
-## 真正不同的布局
-
-日历、终端、街机、星座、文字目录、蜂窝或日常仪表板，结构各不相同。点击图片可查看原尺寸。
-
-样式名称中的 Apple、Samsung、Garmin 等仅表示视觉灵感，不代表兼容的手表型号。
-
-<table>
-<tr><td align="center" valign="top"><b>Prisme Touch</b><br><a href="../assets/localized/zh/styles/style_00.png"><img src="../assets/localized/zh/styles/style_00.png" width="270" alt="Prisme Touch"></a></td><td align="center" valign="top"><b>Tablette</b><br><a href="../assets/localized/zh/styles/style_01.png"><img src="../assets/localized/zh/styles/style_01.png" width="270" alt="Tablette"></a></td><td align="center" valign="top"><b>Ghost Terminal</b><br><a href="../assets/localized/zh/styles/style_05.png"><img src="../assets/localized/zh/styles/style_05.png" width="270" alt="Ghost Terminal"></a></td></tr>
-<tr><td align="center" valign="top"><b>Arcade 1986</b><br><a href="../assets/localized/zh/styles/style_06.png"><img src="../assets/localized/zh/styles/style_06.png" width="270" alt="Arcade 1986"></a></td><td align="center" valign="top"><b>Orbit</b><br><a href="../assets/localized/zh/styles/style_08.png"><img src="../assets/localized/zh/styles/style_08.png" width="270" alt="Orbit"></a></td><td align="center" valign="top"><b>Papier</b><br><a href="../assets/localized/zh/styles/style_09.png"><img src="../assets/localized/zh/styles/style_09.png" width="270" alt="Papier"></a></td></tr>
-<tr><td align="center" valign="top"><b>Samsung Galaxy</b><br><a href="../assets/localized/zh/styles/style_13.png"><img src="../assets/localized/zh/styles/style_13.png" width="270" alt="Samsung Galaxy"></a></td><td align="center" valign="top"><b>Nova</b><br><a href="../assets/localized/zh/styles/style_20.png"><img src="../assets/localized/zh/styles/style_20.png" width="270" alt="Nova"></a></td><td align="center" valign="top"><b>Silence</b><br><a href="../assets/localized/zh/styles/style_21.png"><img src="../assets/localized/zh/styles/style_21.png" width="270" alt="Silence"></a></td></tr>
-</table>
-
-<details><summary>显示全部 22 种样式</summary>
-
-<table>
-<tr><td align="center" valign="top"><b>Prisme Touch</b><br><a href="../assets/localized/zh/styles/style_00.png"><img src="../assets/localized/zh/styles/style_00.png" width="270" alt="Prisme Touch"></a></td><td align="center" valign="top"><b>Tablette</b><br><a href="../assets/localized/zh/styles/style_01.png"><img src="../assets/localized/zh/styles/style_01.png" width="270" alt="Tablette"></a></td><td align="center" valign="top"><b>Bureau Windows</b><br><a href="../assets/localized/zh/styles/style_02.png"><img src="../assets/localized/zh/styles/style_02.png" width="270" alt="Bureau Windows"></a></td></tr>
-<tr><td align="center" valign="top"><b>Dock macOS</b><br><a href="../assets/localized/zh/styles/style_03.png"><img src="../assets/localized/zh/styles/style_03.png" width="270" alt="Dock macOS"></a></td><td align="center" valign="top"><b>Kali Workbench</b><br><a href="../assets/localized/zh/styles/style_04.png"><img src="../assets/localized/zh/styles/style_04.png" width="270" alt="Kali Workbench"></a></td><td align="center" valign="top"><b>Ghost Terminal</b><br><a href="../assets/localized/zh/styles/style_05.png"><img src="../assets/localized/zh/styles/style_05.png" width="270" alt="Ghost Terminal"></a></td></tr>
-<tr><td align="center" valign="top"><b>Arcade 1986</b><br><a href="../assets/localized/zh/styles/style_06.png"><img src="../assets/localized/zh/styles/style_06.png" width="270" alt="Arcade 1986"></a></td><td align="center" valign="top"><b>Meca Cockpit</b><br><a href="../assets/localized/zh/styles/style_07.png"><img src="../assets/localized/zh/styles/style_07.png" width="270" alt="Meca Cockpit"></a></td><td align="center" valign="top"><b>Orbit</b><br><a href="../assets/localized/zh/styles/style_08.png"><img src="../assets/localized/zh/styles/style_08.png" width="270" alt="Orbit"></a></td></tr>
-<tr><td align="center" valign="top"><b>Papier</b><br><a href="../assets/localized/zh/styles/style_09.png"><img src="../assets/localized/zh/styles/style_09.png" width="270" alt="Papier"></a></td><td align="center" valign="top"><b>Aurora</b><br><a href="../assets/localized/zh/styles/style_10.png"><img src="../assets/localized/zh/styles/style_10.png" width="270" alt="Aurora"></a></td><td align="center" valign="top"><b>LCD Studio</b><br><a href="../assets/localized/zh/styles/style_11.png"><img src="../assets/localized/zh/styles/style_11.png" width="270" alt="LCD Studio"></a></td></tr>
-<tr><td align="center" valign="top"><b>Apple Ultra</b><br><a href="../assets/localized/zh/styles/style_12.png"><img src="../assets/localized/zh/styles/style_12.png" width="270" alt="Apple Ultra"></a></td><td align="center" valign="top"><b>Samsung Galaxy</b><br><a href="../assets/localized/zh/styles/style_13.png"><img src="../assets/localized/zh/styles/style_13.png" width="270" alt="Samsung Galaxy"></a></td><td align="center" valign="top"><b>Garmin MARQ</b><br><a href="../assets/localized/zh/styles/style_14.png"><img src="../assets/localized/zh/styles/style_14.png" width="270" alt="Garmin MARQ"></a></td></tr>
-<tr><td align="center" valign="top"><b>TAG Racing</b><br><a href="../assets/localized/zh/styles/style_15.png"><img src="../assets/localized/zh/styles/style_15.png" width="270" alt="TAG Racing"></a></td><td align="center" valign="top"><b>Hublot Fusion</b><br><a href="../assets/localized/zh/styles/style_16.png"><img src="../assets/localized/zh/styles/style_16.png" width="270" alt="Hublot Fusion"></a></td><td align="center" valign="top"><b>Tambour Light</b><br><a href="../assets/localized/zh/styles/style_17.png"><img src="../assets/localized/zh/styles/style_17.png" width="270" alt="Tambour Light"></a></td></tr>
-<tr><td align="center" valign="top"><b>Montblanc Summit</b><br><a href="../assets/localized/zh/styles/style_18.png"><img src="../assets/localized/zh/styles/style_18.png" width="270" alt="Montblanc Summit"></a></td><td align="center" valign="top"><b>Ultimate Design</b><br><a href="../assets/localized/zh/styles/style_19.png"><img src="../assets/localized/zh/styles/style_19.png" width="270" alt="Ultimate Design"></a></td><td align="center" valign="top"><b>Nova</b><br><a href="../assets/localized/zh/styles/style_20.png"><img src="../assets/localized/zh/styles/style_20.png" width="270" alt="Nova"></a></td></tr>
-<tr><td align="center" valign="top"><b>Silence</b><br><a href="../assets/localized/zh/styles/style_21.png"><img src="../assets/localized/zh/styles/style_21.png" width="270" alt="Silence"></a></td><td align="center" valign="top"></td><td align="center" valign="top"></td></tr>
-</table>
-
-</details>
+**iOS：**前四个已选命令组成圆形开关模块，配有紧凑音乐卡片和竖向亮度、音量控制。**Android：**大时钟、两列宽幅 Material 快捷按钮、横向控制条和全宽音乐卡片。窄屏时会调整布局。命令选择、顺序和长按操作保持一致；音乐和控制条可以单独隐藏。状态来自 Android，受系统限制的功能会打开对应设置。关闭按钮、返回键和自定义手势始终可用。
 
 ## 日常工具
 
-<table>
-<tr><td align="center" valign="top"><b>Today</b><br><a href="../assets/localized/zh/screenshots/today.png"><img src="../assets/localized/zh/screenshots/today.png" width="410" alt="Today"></a></td><td align="center" valign="top"><b>Notes</b><br><a href="../assets/localized/zh/screenshots/notes.png"><img src="../assets/localized/zh/screenshots/notes.png" width="410" alt="Notes"></a></td></tr>
-<tr><td align="center" valign="top"><b>Checklist</b><br><a href="../assets/localized/zh/screenshots/checklist.png"><img src="../assets/localized/zh/screenshots/checklist.png" width="410" alt="Checklist"></a></td><td align="center" valign="top"><b>Timer</b><br><a href="../assets/localized/zh/screenshots/timer.png"><img src="../assets/localized/zh/screenshots/timer.png" width="410" alt="Timer"></a></td></tr>
-</table>
+| PRISME | 日常工具 |
+| --- | --- |
+| 命名计时器 | 最多八个独立倒计时，可暂停、继续、重启和删除；初始时长为 1–1440 分钟。 |
+| 音乐 | 简单媒体按键，或可选的标题、艺术家和播放会话选择；功能依赖播放器提供的会话。 |
+| 计算与换算 | 四则十进制计算；长度、质量、温度和时长离线换算。 |
+| 笔记与任务 | 本地自动保存笔记、清单和搜索，也可从首页模块进入。 |
+| 时间工具 | 带分段记录的秒表、专注倒计时和桌面时钟。 |
+| 控制中心 | iOS/Android 布局、顺序、配色、尺寸、手势与全局旋转；部分按钮打开 Android 设置。 |
+| 音量与电量 | 悬浮音量；24 种电量展示、12 套配色和固件读数诊断。 |
+| Studio / Sense / Dock / Doctor | 经典组件、本地时间/充电样式规则、可选悬浮栏和本地设备诊断。 |
 
-## 分类清晰的设置
+## 安装与 V5 升级
 
-<table>
-<tr><td align="center" valign="top"><b>Settings Style</b><br><a href="../assets/localized/zh/screenshots/settings-style.png"><img src="../assets/localized/zh/screenshots/settings-style.png" width="270" alt="Settings Style"></a></td><td align="center" valign="top"><b>Settings Shortcuts</b><br><a href="../assets/localized/zh/screenshots/settings-shortcuts.png"><img src="../assets/localized/zh/screenshots/settings-shortcuts.png" width="270" alt="Settings Shortcuts"></a></td><td align="center" valign="top"><b>Settings Tools</b><br><a href="../assets/localized/zh/screenshots/settings-tools.png"><img src="../assets/localized/zh/screenshots/settings-tools.png" width="270" alt="Settings Tools"></a></td></tr>
-</table>
+1. 在“设置 → 配置”中导出并保存现有配置。
+2. 下载签名文件 PRISME-6.0.0.apk，覆盖现有 PRISME 安装。正常更新不需要卸载。
+3. 原签名证书保持不变；笔记、任务和已有设置会保留。
+4. 固件允许时可将 PRISME 设为默认主页，也可作为普通应用启动。
+5. 单独授权需要的悬浮功能；模块化主页不要求读取通知权限。
 
+```text
+adb install -r PRISME-6.0.0.apk
+```
 
-PRISME 图片全部来自独立演示应用，使用通用图标和虚构内容，不展示账户或个人应用清单。
+支持旧版 JSON 配置。V6 导出采用 **schema 7**，这是文件格式版本，并不是 PRISME 7。请保留 V5 导出文件以便回退。Android 可能拒绝安装较低的 versionCode；程序不会为了降级自动卸载并删除数据。
 
-<!-- /PRISME-VISUAL-SHOWCASE -->
+## 电脑编辑器：编排与传输
 
-## 手表兼容性
+1. 打开在线编辑器，或完整解压电脑 ZIP 后打开 index.html。Windows 也可运行 LANCER-EDITEUR.cmd。
+2. 加载来自 PRISME 的完整 JSON 导出。没有配置文件时只能预览，不能生成不完整的导入文件。
+3. 选择 22 种桌面的组件编辑或可选网格页面。调整组件顺序与外观，或卡片的位置、尺寸、配色和大字体；网格冲突会被拒绝。
+4. 导出 PRISME-6-Studio.json，通过 USB 复制到手表。
+5. 在手表的“设置 → 配置 → 导入配置”中打开 Android 文件选择器，选择文件并确认。
 
-| 型号或系列 | 状态 |
-|---|---|
-| Domiwear / Domino DM100，Android 7.1.1 | **已实机测试**，横屏参考 640 × 480 |
-| 其他 DM100 变体 | 需分别确认；同名不代表相同固件 |
-| 其他参考尺寸 2.86 英寸 / 640 × 480 的长方形手表 | 尚未验证，需要单独实机测试 |
+配置内容只在浏览器内存中处理，不会上传；原配置的其他部分会保留。电脑天气预览明确使用示例数据；城市和联网同意在手表上选择，电脑可传输单位与刷新间隔。classic-studio.html 继续用于 22 种经典桌面及原有四个组件。电脑编辑器及详细指南目前为法语。离线使用不需要服务器、账号或开发工具。
 
-未测试型号是**候选清单，不是认证支持清单**。请检查实际手表的系统、API 和 APK 安装能力。本项目不是 Wear OS 表盘包；Pixel Watch 和 Wear OS Galaxy Watch 尚未验证。watchOS、Tizen 以及无法安装 Android APK 的专有系统不在目标范围。[条件与来源](COMPATIBILITY.md)。
+## 权限、隐私与恢复
 
-## 图片、隐私与限制
+PRISME 无广告、无账号、无遥测。PRISME 6 为可选天气声明 **INTERNET** 权限，但天气请求默认关闭；笔记、任务、收藏和其他配置数据不会发送给天气服务。联网同意、城市和坐标只保留在手表本地，不会从主题导入。普通 JSON 导出为明文，可能包含个人笔记、任务和收藏，请勿公开发布。
 
-[菜单和选项](SCREENSHOTS.md) · [全部 22 种样式](STYLES.md)
+增强音乐默认关闭。启用时 Android 会要求敏感的通知访问授权；PRISME 只使用媒体会话，不读取或保存通知消息正文。悬浮窗、系统设置和勿扰访问各有独立用途。
 
-图片来自独立演示构建中的真实界面，使用虚构数据和通用图标，不含用户账户或个人应用清单。应用没有 Internet 权限。笔记、任务、收藏和从 PRISME 发起的启动记录保存在本地；用户主动导出的文件可能含有这些数据。仓库不发布私有密钥、用户备份、设备标识符或个人日志。
+自动恢复点位于应用私有存储，保留十个自动恢复点。工具中可创建采用 AES-256-GCM 的可导出加密备份，密码至少十个字符，丢失后无法远程找回。导入前会验证整个配置；恢复日志保护被中断的导入。主题文件不导入正在执行的计时器或 Android 授权。连续三次未处理崩溃后，恢复模式可重试或退回关闭悬浮功能的经典桌面。
 
-厂商省电机制可能终止计时和悬浮服务。音乐控制需要活跃的播放器。部分翻译可继续完善。DM100 上报告的侧边黑色区域**尚无已确认的修复**。PRISME 不改变面板或显示驱动，也不保证所有屏幕的布局。
+PRISME 悬浮组件会在模块化主页隐藏，在其他应用内按本地设置恢复；工具中也能统一暂停或恢复。
 
-提供 Java 源码、资源、语言目录、测试及可选 Imou 辅助应用。[构建和测试](BUILD.md) · [权限](PRIVACY.md) · [报告兼容性](https://github.com/s00r1/PRISME/issues/new/choose)。原创代码采用 MIT 许可证，保留许可证声明即可使用、修改和再分发。样式中的品牌名称仅表示视觉灵感，本项目与这些品牌无隶属关系。
+## 验证与已知限制
 
-![PRISME — zh](../assets/localized/zh/screenshots/language-zh.png)
+此前的 V6 验证记录包括 **67,407 项 Java 断言**、**1,775 项电脑模型断言**、图库测试、真实 Edge 浏览器流程，以及 **16 项 DM100 实机断言**，覆盖迁移、验证、恢复、加密、闹钟及模拟媒体会话。触控测试覆盖页面、网格拖动、配色和手动恢复模式。新增组件、天气与控制中心的最新验证以[验证报告](V6-VALIDATION.md)为准；这些历史数字本身不代表新功能已全部验证。
 
+模型案例数量不等于已测试实体手表数量。不承诺其他设备、长时间续航、所有第三方播放器或 Play Protect 认证。后台播放、闹钟、悬浮窗和旋转受 Android 与固件管理。保留七种历史界面语言；部分 V6 详细提示仍为法语。
 
-[◈ PRISME — Website / Site web](https://s00r1.github.io/PRISME/) · [Community / Testers](https://github.com/s00r1/PRISME/discussions/1)
+## 文档与反馈
 
+反馈时请提供设备型号、Android API、PRISME 版本、屏幕方向与复现步骤。请勿公开账号、序列号、个人导出或原始日志。采用 MIT 许可证；样式中的品牌名称不代表合作关系或硬件兼容认证。
 
-[DM100 hardware audit · 2026-11-05 (FR), current source/release status and real screenshots](AUDIT-2026-11-05.md)
-
-
-**PRISME 6.0.0-beta1:** [V6 guide (FR)](V6-GUIDE.md) · [Hardware validation](V6-VALIDATION.md) · [Beta download](https://github.com/s00r1/PRISME/releases/tag/v6.0.0-beta1). Stable release: v5.4.
+[V6 · FR](V6-GUIDE.md) · [PC Studio · FR](PC-STUDIO.md) · [English guide](README.en.md) · [Compatibility](COMPATIBILITY.md) · [22 styles](STYLES.md) · [Privacy](PRIVACY.md) · [Validation](V6-VALIDATION.md) · [Build](BUILD.md) · [MIT](../LICENSE) · [Issues](https://github.com/s00r1/PRISME/issues/new/choose)

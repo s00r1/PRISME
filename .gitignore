@@ -28,3 +28,6 @@ SHA256.txt
 sauvegardes/
 backups/
 private/
+
+# Distribution archives
+dist/

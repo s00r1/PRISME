@@ -159,8 +159,9 @@ public final class ControlCenterSettings {
         if(target!=null)target.post(()->{if(scroller==target)target.scrollTo(0,y);});
     }
     private void styleSettings(){
-        intro("Deux ambiances","Le style du centre de contrôle se choisit séparément des 22 styles PRISME.");
-        choice("Présentation",new String[]{"iOS · cartes arrondies","Android · tuiles rapides"},prefs.getInt("style",0),n->changeInt("style",n));
+        intro("Deux centres distincts","Le style du centre de contrôle se choisit séparément des 22 styles PRISME. Tes commandes et leur ordre sont conservés d’un centre à l’autre.");
+        choice("Présentation",new String[]{"iOS · cercles et curseurs verticaux","Android · grandes tuiles Material"},prefs.getInt("style",0),n->changeInt("style",n));
+        body.addView(text("iOS : quatre commandes dans un module, boutons circulaires, lecteur compact et niveaux verticaux. Android : heure agrandie, grandes tuiles sur deux colonnes, luminosité et volume horizontaux.",14,MUTED));
         toggle("Fond sombre","dark",true);
         body.addView(text("Couleur principale",16,INK));
         for(int row=0;row<2;row++){
@@ -231,8 +232,9 @@ public final class ControlCenterSettings {
             row.addView(up,new LinearLayout.LayoutParams(44,48));row.addView(down,new LinearLayout.LayoutParams(44,48));row.addView(remove,new LinearLayout.LayoutParams(44,48));
             body.addView(row,new LinearLayout.LayoutParams(-1,-2));
         }
-        section("Curseurs indépendants");toggle("Curseur du volume des médias","volume",true);toggle("Curseur de luminosité","brightness",true);
+        section("Modules indépendants");toggle("Lecteur multimédia intégré","media",true);toggle("Curseur du volume des médias","volume",true);toggle("Curseur de luminosité","brightness",true);
         body.addView(text("La luminosité reste locale à PRISME sans l’autorisation Android décrite dans Commandes.",13,MUTED));
+        body.addView(text("Le lecteur commande l’application audio Android. Le titre et l’artiste apparaissent si le lecteur partage une session et si l’accès aux notifications est autorisé dans PRISME.",13,MUTED));
     }
     private void addTileChooser(boolean applications){
         intro(applications?"Ajouter une application":"Ajouter une commande","Choisis une entrée pour l’ajouter à la fin de ta liste.");
@@ -295,7 +297,8 @@ public final class ControlCenterSettings {
         intro("Placement du panneau","Le bord de la zone de geste se choisit séparément dans Gestes.");
         choice("Position du panneau",new String[]{"En haut","En bas","À gauche","À droite"},prefs.getInt("position",0),n->changeInt("position",n));
         slider("Largeur disponible (%)","width",65,100,100);slider("Hauteur disponible (%)","height",55,100,90);
-        slider("Colonnes des commandes","columns",2,5,4);
+        slider("Colonnes des cercles iOS","columns",2,5,4);
+        body.addView(text("Android garde deux grandes tuiles par ligne, ou une seule quand la largeur est réduite. iOS adapte aussi ses modules à l’espace disponible.",13,MUTED));
         choice("Emplacement de la poignée",new String[]{"Gauche / début","Centre","Droite / fin"},prefs.getInt("handlePosition",1),n->changeInt("handlePosition",n));
     }
     private void gestureSettings(){

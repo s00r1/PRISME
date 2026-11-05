@@ -93,15 +93,20 @@ public final class FloatingVolumeService extends Service implements SharedPrefer
         else context.stopService(new Intent(context, FloatingVolumeService.class));
     }
     public static void refresh(Context context) {
-        if(fr.dm100.prisme.OverlayPolicy.homeVisible||fr.dm100.prisme.OverlayPolicy.suspended(context)){context.stopService(new Intent(context,FloatingVolumeService.class));return;}
+        if(fr.dm100.prisme.OverlayPolicy.suspended(context)){context.stopService(new Intent(context,FloatingVolumeService.class));return;}
         FloatingVolumeService service = instance;
         if (service != null) {
             service.runOnMain(new Runnable() { @Override public void run() {
                 if (service.stopping) return;
-                service.pausedForPermission = false; service.reconcile(true);
+                // Yield the window without discarding an explicitly started session on firmware
+                // without BOOT_COUNT. The existing service can resume it when home loses focus.
+                if (!fr.dm100.prisme.OverlayPolicy.homeVisible) service.pausedForPermission = false;
+                service.reconcile(true);
+                if (fr.dm100.prisme.OverlayPolicy.homeVisible) service.stateChanged();
             }});
             return;
         }
+        if(fr.dm100.prisme.OverlayPolicy.homeVisible)return;
         FloatingVolumePrefs p = new FloatingVolumePrefs(context);
         try { if (p.mayResume(currentBoot(context)) && Settings.canDrawOverlays(context)) start(context.getApplicationContext(), REFRESH); }
         catch (RuntimeException ex) { report("Relance refusée : " + ex.getClass().getSimpleName()); }

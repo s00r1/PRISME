@@ -12,3 +12,9 @@ The test harness downloads **com.vaadin.external.google:android-json:0.0.2013110
 - [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 GitHub Actions and Android/JDK build tools are obtained separately under their own licenses. Names such as Apple, Samsung, Garmin, TAG, Hublot, Montblanc, Windows and macOS in style titles indicate visual inspiration only. No endorsement or affiliation is claimed. Demo icons and the PRISME graphic are original geometric illustrations.
+
+## Optional weather data — PRISME 6
+
+Weather data by [Open-Meteo.com](https://open-meteo.com/), distributed under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). The current forecast and geocoding endpoints are hosted by Open-Meteo. Their [free API terms](https://open-meteo.com/en/terms) permit non-commercial use subject to their limits; commercial redistributors must arrange an appropriate service plan instead of assuming the MIT app licence grants API access. The app requests metric forecasts and optionally converts Celsius to Fahrenheit locally. Icons are drawn by PRISME and are not provider assets.
+
+PRISME identifies the source in the weather detail panel, its settings and documentation. API responses may be cached locally; weather accuracy and availability are controlled by the provider. Published DM100 weather captures use Paris as an explicit demonstration city and show the retrieval time. [Privacy and exact request data](docs/PRIVACY.md).

@@ -1,179 +1,110 @@
-# PRISME — NUR FÜR RECHTECKIGE UHREN
+# PRISME 6
 
-## Referenz: großes 2,86″-Display · 640 × 480 quer (4:3) · vollständiges Android 7.1+ / API 25+
-
-> **NICHT FÜR RUNDE ODER QUADRATISCHE UHREN. Diese Version richtet sich an das rechteckige DM100-Format. Andere rechteckige Größen und Auflösungen sind nicht validiert.**
-
-## 🌐 [OFFIZIELLE PRISME-WEBSITE ÖFFNEN](https://s00r1.github.io/PRISME/)
-
-**https://s00r1.github.io/PRISME/**
-
-
-<table>
-<tr><td align="center" valign="top"><a href="https://www.ebay.nl/itm/185939246016"><img src="https://i.ebayimg.com/images/g/WZgAAOSwAUlkiEmk/s-l1600.jpg" width="270" alt="DM100 2.86 rectangular watch"></a></td><td align="center" valign="top"><a href="https://www.ebay.nl/itm/185939246016"><img src="https://i.ebayimg.com/images/g/5EcAAOSwrulkiEmS/s-l1600.jpg" width="270" alt="DM100 2.86 rectangular watch"></a></td></tr>
-</table>
-
-**Domiwear / Domino DM100 — getestetes Referenzmodell; zwei Ansichten desselben Modells**
-
-Externe Produktfotos: DM100-Angebot. Sie zeigen die Hardware, nicht PRISME. [Source](https://www.ebay.nl/itm/185939246016) · [Specifications](https://www.domino-china.com/news/19.html)
-
+Ein anpassbarer Startbildschirm für die DM100 und große rechteckige Uhren mit vollständigem Android. Gestalte Seiten auf der Uhr oder am PC; Notizen, Aufgaben und Einstellungen bleiben lokal.
 
 [Français](README.fr.md) · [English](README.en.md) · [Deutsch](README.de.md) · [中文](README.zh.md) · [Türkçe](README.tr.md) · [Русский](README.ru.md) · [العربية](README.ar.md)
 
-**Ein anpassbarer Startbildschirm für Uhren mit vollständigem Android.** Offline, ohne Konto, Werbung oder Telemetrie.
+> Aktuell: **6.0.0 · versionCode 24 · Android 7.1 / API 25 mindestens**. Referenzgerät: DM100, Android 7.1.1, 640 × 480 im Querformat. Runde/quadratische Uhren, Wear OS, watchOS und Tizen sind keine validierten Ziele. Root und ein Firmwarewechsel sind nicht erforderlich.
 
+## Downloads
 
-**[⬇ APK herunterladen](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Control Center](#control-center) · [Volume](#floating-volume) · [22 styles](#styles-showcase)
+| Downloads | PRISME 6 |
+| --- | --- |
+| [PRISME-6.0.0.apk](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0.apk) | Signierte Android-App für die Uhr. Über die vorhandene Installation installieren. |
+| [PRISME-PC-Studio-6.0.0.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-PC-Studio-6.0.0.zip) | Vollständige PC-Editoren für die Offline-Nutzung. ZIP entpacken und index.html öffnen. |
+| [PRISME-6.0.0-sources.zip](https://github.com/s00r1/PRISME/releases/download/v6.0.0/PRISME-6.0.0-sources.zip) | Quellcode, Tests, Web-Editoren und Dokumentation. |
+| [SHA256SUMS.txt](https://github.com/s00r1/PRISME/releases/download/v6.0.0/SHA256SUMS.txt) | Prüfsummen der veröffentlichten Dateien. |
 
-<table>
-<tr><td align="center" valign="top"><b>Control Center</b><br><a href="../assets/localized/de/screenshots/control-center-ios.png"><img src="../assets/localized/de/screenshots/control-center-ios.png" width="410" alt="Control Center"></a></td><td align="center" valign="top"><b>Volume</b><br><a href="../assets/localized/de/screenshots/volume-live-circle-open.png"><img src="../assets/localized/de/screenshots/volume-live-circle-open.png" width="410" alt="Volume"></a></td></tr>
-</table>
+[PRISME · Web](https://s00r1.github.io/PRISME/) · [PC Studio · Web](https://s00r1.github.io/PRISME/home-studio.html) · [GitHub · v6.0.0](https://github.com/s00r1/PRISME/releases/tag/v6.0.0)
 
+## Echte Ansichten der V6
 
-## Installation
+| PRISME 6 | PRISME 6 |
+| --- | --- |
+| ![DM100](../assets/device/v6/home-graphite.png) | ![DM100](../assets/device/v6/home-paper.png) |
+| ![DM100](../assets/device/v6/page-media.png) | ![DM100](../assets/device/v6/editor.png) |
 
-**[PRISME 5.4 APK herunterladen](https://github.com/s00r1/PRISME/releases/download/v5.4/PRISME-5.4.apk)** · [Versionen und Prüfsummen](https://github.com/s00r1/PRISME/releases)
+Echte DM100-Aufnahmen der V6-Oberfläche auf Französisch. Die klassische Galerie verwendet fiktive Demodaten, keine persönliche App-Liste.
 
-Erforderlich sind **vollständiges Android ab 7.1, mindestens API 25**, und die Installation gewöhnlicher Android-APKs. APK im Browser der Uhr herunterladen, mit dem Android-Installer öffnen und gegebenenfalls die Installationsquelle erlauben. PRISME starten und als Start-App wählen, sofern die Firmware dies erlaubt, oder als normale App öffnen. Für schwebende Lautstärke und globale Ausrichtung „Über anderen Apps einblenden“ erlauben. Sprache unter **Einstellungen → Stil → Sprache** wählen. Offizielle Updates über die vorhandene Version installieren.
+## Seiten und Gestaltung
 
-Vom Computer: `adb install -r PRISME-5.4.apk`. Root, Firmwarewechsel oder Änderungen an Google-Diensten sind zur Installation nicht nötig.
+**Der ausgewählte klassische Desktop bleibt standardmäßig sichtbar.** Die feste Taste „22 styles“ in den Einstellungen öffnet alle Stile. Karten sind optional; „Bureau“ und Android Zurück führen zum ausgewählten Desktop. Eine Stilwahl zeigt diesen sofort an.
 
-## ✨ Neu in PRISME 5.4
+Drei Seiten sind vorbereitet: Hauptseite, Arbeit und Medien. Bis zu **fünf Seiten**, **acht Karten je Seite** und ein **4 × 4-Raster** sind möglich. Uhr, Aufgaben, Timer, Musik, Notizen, Favoriten und Gerätestatus lassen sich verschieben und in ihrer Größe ändern. Überlappungen und Positionen außerhalb des Rasters werden abgewiesen.
 
-- **🔋 Eigener Batterie-Reiter**: 24 Anzeigestile, 12 Farbpaletten, ladestandsabhängige Farben, Prozentwert sowie Größe, Position, Transparenz und Grenzwerte. Anzeige **nur auf dem Dashboard** oder **über anderen Apps** (Android-Berechtigung erforderlich). Diagnose mit mehreren Android-Messquellen; die Firmware kann trotzdem falsche Werte melden.
-- **🎵 Eigener Musik-Reiter**: Miniplayer in **allen 22 Dashboard-Stilen** mit **Play/Pause, Zurück und Weiter**, 12 Designs sowie einstellbarer Größe, Position und Transparenz. Ein aktiver Mediaplayer ist erforderlich.
-- **🔄 Globale Drehung**: Hoch-/Querformat direkt im schwebenden Control Center umschalten, **ohne absichtlich zum Dashboard zurückzukehren**. Firmware und App können die Funktion einschränken.
-- **🎧 Rückkehr zum Startbildschirm**: App-Aufgaben möglichst nicht zurücksetzen. Hintergrundwiedergabe wird von Android und der jeweiligen App bestimmt und ist **nicht garantiert**.
+Antippen öffnet die Funktion; langes Drücken öffnet Position und Größe. Unter Bearbeiten den Ziehmodus wählen, eine Karte verschieben und mit Fertig beenden. Rückgängig/Wiederherstellen hält einen vorherigen Zustand bereit. Die Seiten teilen sich dieselben Notizen und Aufgaben. Notiztexte werden auf den Startkarten nicht offengelegt.
 
-**Hinweis:** Für die v5.4-APK wurde eine Play-Protect-Installationssperre gemeldet. Schutzeinstellungen nicht deaktivieren; siehe [Releases](https://github.com/s00r1/PRISME/releases). Die Galerie enthält auch ältere Screenshots.
+Sechs Paletten: Graphit, Glas, Papier, Instrument, Neon und Minimal; große Schrift ist optional. Die **22 klassischen Desktops** bleiben erhalten. Unter Bearbeiten zum klassischen Desktop wechseln; über die Suche „modularer Startbildschirm“ zurückkehren. Beide Gestaltungen sind voneinander unabhängig.
 
-## Funktionen
+## Widgets auf allen 22 Desktops
 
-- **22 unterschiedliche Anordnungen**: Kalender, Desktop, Galerie, Terminal, Arcade, Konstellation, Textverzeichnis, Mosaik, Waben, Instrumente, Notizbuch und Minimalansicht.
-- Ständige Navigation zu nativem Zifferblatt, Stilen, Heute und Einstellungen. Heute gedrückt halten öffnet fünf anpassbare Verknüpfungen.
-- **Kontrollzentrum im iOS- oder Android-Stil**: Schaltflächen, Reihenfolge, Farben, Transparenz, Größe, Position und Gesten. Manche Befehle öffnen die Android-Einstellungen.
-- **Hochformat / Querformat** per kurzem Tippen; langes Drücken bietet umgekehrte Ausrichtungen und Systemmodus. Drehbefehle auch in der Benachrichtigung. Auf DM100 geprüft; andere Firmware kann die Funktion einschränken.
-- **Schwebender Lautstärkeregler** mit Stilen, Formen, Größe, Deckkraft, Position, ausklappbaren Tasten und optionalem Verblassen.
-- App-/Einstellungssuche, Favoriten, zuletzt verwendete Apps, Arbeitsbereiche und eigene Namen.
-- Heute, automatisch gespeicherte Notizen, Aufgaben, Android-Alarmtimer, Stoppuhr mit Runden und Tischuhr.
-- Gesamtskalierung, Ränder, Schrift-/Symbolgrößen, Farben, Profile und lokale Sicherungen.
-- **Französisch, Englisch, Deutsch, vereinfachtes Chinesisch, Türkisch, Russisch und Arabisch**, einschließlich Rechts-nach-links-Darstellung.
+Zusätzlich zu den optionalen Rasterseiten gibt es einen gemeinsamen Widget-Bereich für die **22 klassischen Stile**. Der Katalog enthält **13 Typen**: Wetter, Uhr, Musik, Akku, Aufgaben, Notizbuch, Timer, Kalender, Weltuhr, System, Konzentration, Verknüpfungen und Stoppuhr. Wetter, Musik und Aufgaben sind in der Standardbelegung sichtbar; weitere Widgets lassen sich hinzufügen, entfernen oder neu ordnen. Bis zu 16 Einträge sind möglich. Entfernen oder Ausblenden eines Widgets ändert den ausgewählten Desktop nicht.
 
-<!-- PRISME-VISUAL-SHOWCASE -->
-<a id="control-center"></a>
-## Das Kontrollzentrum nach Ihren Wünschen
+Unter **Einstellungen → Widgets** oder mit langem Druck auf ein Widget lassen sich Darstellung, Dichte, Akzent, Transparenz, Rundung, Schriftgröße, Titel und Sichtbarkeit je Stil einstellen. Es gibt sechs Oberflächen: Desktop-Signatur, Glas, Vollfläche, Kontur, Minimal und Neon. Die Uhr bietet auch eine analoge Ansicht; die Weltuhr hat eine wählbare Zeitzone. Im Querformat steht der Bereich links oder rechts, im Hochformat oben; der Desktop behält einen eigenen Bereich. Der Bereich kann ganz ausgeblendet werden. Die letzte Änderung lässt sich zurücknehmen und wiederherstellen.
 
-iOS- oder Android-Ansicht, Verknüpfungen, Reihenfolge, Transparenz, Farben, Größe, Position und Gesten. Hochformat / Querformat antippen zum Drehen, gedrückt halten für Optionen.
+### Optionales Wetter mit Open-Meteo
 
-<table>
-<tr><td align="center" valign="top"><b>iOS</b><br><a href="../assets/localized/de/screenshots/control-center-ios.png"><img src="../assets/localized/de/screenshots/control-center-ios.png" width="410" alt="iOS"></a></td><td align="center" valign="top"><b>Android</b><br><a href="../assets/localized/de/screenshots/control-center-android.png"><img src="../assets/localized/de/screenshots/control-center-android.png" width="410" alt="Android"></a></td></tr>
-</table>
+Die verbundene Wetterfunktion ist **standardmäßig deaktiviert**. Erst in den Wettereinstellungen aktivieren, dann eine Stadt manuell suchen und wählen; GPS und Standortberechtigung werden nicht benötigt. Open-Meteo erhält dabei die IP-Adresse sowie den Suchtext oder die Koordinaten der gewählten Stadt. Aktuelle Temperatur, gefühlte Temperatur, Feuchtigkeit, Wind, die nächsten Stunden und fünf Tage werden im Detailfenster angezeigt. Celsius/Fahrenheit und das Aktualisierungsintervall im Vordergrund sind einstellbar. Datum und Alter des lokalen Caches bleiben sichtbar; ein Verbindungsfehler erzeugt keine erfundenen Messwerte. Ausschalten stoppt Wetteranfragen und erhält den Cache. [Datenanbieter: Open-Meteo](https://open-meteo.com/).
 
-<details><summary>Anpassungsoptionen ansehen</summary>
+### Zwei tatsächlich unterschiedliche Kontrollzentren
 
-<table>
-<tr><td align="center" valign="top"><b>Center Options Appearance</b><br><a href="../assets/localized/de/screenshots/center-options-appearance.png"><img src="../assets/localized/de/screenshots/center-options-appearance.png" width="270" alt="Center Options Appearance"></a></td><td align="center" valign="top"><b>Center Options Content</b><br><a href="../assets/localized/de/screenshots/center-options-content.png"><img src="../assets/localized/de/screenshots/center-options-content.png" width="270" alt="Center Options Content"></a></td><td align="center" valign="top"><b>Center Options Gestures</b><br><a href="../assets/localized/de/screenshots/center-options-gestures.png"><img src="../assets/localized/de/screenshots/center-options-gestures.png" width="270" alt="Center Options Gestures"></a></td></tr>
-<tr><td align="center" valign="top"><b>Center Options Layout</b><br><a href="../assets/localized/de/screenshots/center-options-layout.png"><img src="../assets/localized/de/screenshots/center-options-layout.png" width="270" alt="Center Options Layout"></a></td><td align="center" valign="top"><b>Center Ios Transparent</b><br><a href="../assets/localized/de/screenshots/center-ios-transparent.png"><img src="../assets/localized/de/screenshots/center-ios-transparent.png" width="270" alt="Center Ios Transparent"></a></td><td align="center" valign="top"><b>Center Ios Opaque</b><br><a href="../assets/localized/de/screenshots/center-ios-opaque.png"><img src="../assets/localized/de/screenshots/center-ios-opaque.png" width="270" alt="Center Ios Opaque"></a></td></tr>
-</table>
+**iOS:** die ersten vier gewählten Befehle in einem Modul mit runden Schaltern, ein kompakter Player sowie vertikale Helligkeits- und Lautstärkeregler. **Android:** große Uhr, breite Material-Kacheln in zwei Spalten, horizontale Regler und ein Player über die gesamte Breite. Auf schmaler Fläche werden die Module angepasst. Ausgewählte Befehle, Reihenfolge und lange Tastendrücke bleiben erhalten. Player und Regler sind einzeln ein- und ausblendbar. Zustände stammen aus Android; geschützte Funktionen öffnen die passenden Systemeinstellungen. Schließen, Zurück und die konfigurierten Gesten bleiben verfügbar.
 
-</details>
+## Werkzeuge
 
-<a id="floating-volume"></a>
-## Schwebende Lautstärke: kompakt und ausklappbar
+| PRISME | Werkzeuge |
+| --- | --- |
+| Timer | Bis zu acht benannte Countdowns, Pause/Fortsetzen, Neustart und Löschen; Startdauer 1–1.440 Minuten. |
+| Musik | Einfache Medientasten oder optional Titel/Künstler und Sitzungswahl. Der Player muss entsprechende Sitzungen bereitstellen. |
+| Rechner und Umrechner | Dezimalrechnung mit vier Grundrechenarten; Länge, Masse, Temperatur und Dauer ohne Netzwerk. |
+| Notizen und Aufgaben | Automatisch gespeichertes lokales Notizbuch und Checkliste; Zugriff über Suche und Karten. |
+| Zeitwerkzeuge | Stoppuhr mit Runden, Konzentrationstimer und Tischuhr. |
+| Kontrollzentrum | iOS-/Android-Ansichten, Reihenfolge, Farben, Gesten, Größen und globale Drehung. Einige Tasten öffnen Android-Einstellungen. |
+| Lautstärke und Akku | Schwebende Lautstärke; 24 Akkuanzeigen, zwölf Paletten und Diagnose der Firmwarewerte. |
+| Studio / Sense / Dock / Doctor | Klassische Widgets, lokale Zeit-/Laderegeln, optionales Dock und lokale Gerätediagnose. |
 
-Die kleine Taste klappt zu + und − auf. Form, Stil, Größe, Position und Deckkraft sind separat einstellbar. Hier sehen Sie die echten Android-Komponenten, einzeln und auf dem Startbildschirm.
+## Installation und Wechsel von V5
 
-<table>
-<tr><td align="center" valign="top"><b>Kreis geschlossen</b><br><img src="../assets/localized/de/screenshots/widget-circle-closed.png" width="155" height="155" alt="Kreis geschlossen"></td><td align="center" valign="top"><b>Kreis ausgeklappt</b><br><img src="../assets/localized/de/screenshots/widget-circle-open.png" width="155" height="52" alt="Kreis ausgeklappt"></td><td align="center" valign="top"><b>Android</b><br><img src="../assets/localized/de/screenshots/widget-android.png" width="54" height="155" alt="Android"></td><td align="center" valign="top"><b>Neon</b><br><img src="../assets/localized/de/screenshots/widget-neon.png" width="155" height="52" alt="Neon"></td></tr>
-<tr><td align="center" valign="top"><b>Minimal</b><br><img src="../assets/localized/de/screenshots/widget-minimal.png" width="155" height="52" alt="Minimal"></td><td align="center" valign="top"><b>Titan</b><br><img src="../assets/localized/de/screenshots/widget-titanium.png" width="54" height="155" alt="Titan"></td><td align="center" valign="top"><b>Hell</b><br><img src="../assets/localized/de/screenshots/widget-light.png" width="155" height="54" alt="Hell"></td><td align="center" valign="top"></td></tr>
-</table>
+1. Vorhandene Konfiguration unter Einstellungen → Profile exportieren und aufbewahren.
+2. Die signierte PRISME-6.0.0.apk herunterladen und über PRISME installieren. Eine normale Aktualisierung erfordert keine Deinstallation.
+3. Das ursprüngliche Signaturzertifikat bleibt erhalten; Notizen, Aufgaben und Einstellungen bleiben bestehen.
+4. PRISME als Start-App wählen, falls die Firmware dies erlaubt, oder als normale Anwendung öffnen.
+5. Schwebende Funktionen separat autorisieren. Der modulare Startbildschirm benötigt keinen Benachrichtigungszugriff.
 
-<table>
-<tr><td align="center" valign="top"><b>Kreis ausgeklappt</b><br><a href="../assets/localized/de/screenshots/volume-live-circle-open.png"><img src="../assets/localized/de/screenshots/volume-live-circle-open.png" width="410" alt="Kreis ausgeklappt"></a></td><td align="center" valign="top"><b>Android</b><br><a href="../assets/localized/de/screenshots/volume-live-android.png"><img src="../assets/localized/de/screenshots/volume-live-android.png" width="410" alt="Android"></a></td></tr>
-</table>
+```text
+adb install -r PRISME-6.0.0.apk
+```
 
-<details><summary>Anpassungsoptionen ansehen</summary>
+Alte JSON-Profile werden akzeptiert. V6 exportiert **Schema 7**: Das ist die Dateiformatnummer, keine App-Version 7. Für eine Rückkehr einen V5-Export behalten. Android kann eine niedrigere versionCode ablehnen; PRISME löscht zum Downgrade keine Daten automatisch.
 
-<table>
-<tr><td align="center" valign="top"><b>Volume Options Style</b><br><a href="../assets/localized/de/screenshots/volume-options-style.png"><img src="../assets/localized/de/screenshots/volume-options-style.png" width="410" alt="Volume Options Style"></a></td><td align="center" valign="top"><b>Volume Options Shape</b><br><a href="../assets/localized/de/screenshots/volume-options-shape.png"><img src="../assets/localized/de/screenshots/volume-options-shape.png" width="410" alt="Volume Options Shape"></a></td></tr>
-<tr><td align="center" valign="top"><b>Volume Options Position</b><br><a href="../assets/localized/de/screenshots/volume-options-position.png"><img src="../assets/localized/de/screenshots/volume-options-position.png" width="410" alt="Volume Options Position"></a></td><td align="center" valign="top"><b>Volume Options Advanced</b><br><a href="../assets/localized/de/screenshots/volume-options-advanced.png"><img src="../assets/localized/de/screenshots/volume-options-advanced.png" width="410" alt="Volume Options Advanced"></a></td></tr>
-</table>
+## PC-Editor: erstellen und übertragen
 
-</details>
+1. Online-Editor öffnen oder das PC-ZIP vollständig entpacken und index.html starten. Unter Windows ist auch LANCER-EDITEUR.cmd verfügbar.
+2. Einen vollständigen JSON-Export von PRISME laden. Ohne Export bleibt der Editor eine Vorschau und verhindert unvollständige Profildateien.
+3. Zwischen Widgets der 22 Stile und optionalen Rasterseiten wählen. Widget-Reihenfolge und Darstellung oder Kartenposition, Größe, Palette und große Schrift einstellen. Kollisionen im Raster werden abgewiesen.
+4. PRISME-6-Studio.json exportieren und per USB auf die Uhr kopieren.
+5. Unter Einstellungen → Profile → Konfiguration importieren die Android-Dateiauswahl öffnen, Datei wählen und bestätigen.
 
-<a id="styles-showcase"></a>
-## Deutlich unterschiedliche Stile
+Der Editor verarbeitet den Inhalt im Browserspeicher und lädt ihn nicht hoch. Andere Profilbereiche bleiben erhalten. Die Wettervorschau am PC verwendet gekennzeichnete Beispieldaten; die Stadt und die Netzwerkfreigabe werden auf der Uhr gewählt. Der Editor kann Einheiten und Aktualisierungsintervall übertragen. classic-studio.html bearbeitet weiterhin die 22 klassischen Desktops und ihre vier bisherigen Widgets. Die PC-Oberfläche und der ausführliche PC-Leitfaden sind derzeit französisch. Kein Server, Konto oder Entwicklungswerkzeug ist nötig.
 
-Kalender, Terminal, Arcade, Konstellation, Typografie, Waben oder Tagesübersicht verändern die Anordnung. Bilder lassen sich vollständig öffnen.
+## Berechtigungen und Wiederherstellung
 
-Apple, Samsung, Garmin und andere Stilnamen bezeichnen Inspiration, keine kompatiblen Uhrenmodelle.
+Keine Werbung, kein Konto und keine Telemetrie. PRISME 6 deklariert **INTERNET** für die optionale Wetterfunktion; Wetteranfragen sind standardmäßig ausgeschaltet. Notizen, Aufgaben, Favoriten und andere Profildaten werden nicht an den Wetteranbieter übertragen. Die Freigabe, Stadt und Koordinaten bleiben lokal auf der Uhr und werden nicht durch ein Design importiert. Ein normaler JSON-Export ist unverschlüsselt und kann persönliche Notizen, Aufgaben oder Favoriten enthalten. Solche Dateien nicht öffentlich posten.
 
-<table>
-<tr><td align="center" valign="top"><b>Prisme Touch</b><br><a href="../assets/localized/de/styles/style_00.png"><img src="../assets/localized/de/styles/style_00.png" width="270" alt="Prisme Touch"></a></td><td align="center" valign="top"><b>Tablette</b><br><a href="../assets/localized/de/styles/style_01.png"><img src="../assets/localized/de/styles/style_01.png" width="270" alt="Tablette"></a></td><td align="center" valign="top"><b>Ghost Terminal</b><br><a href="../assets/localized/de/styles/style_05.png"><img src="../assets/localized/de/styles/style_05.png" width="270" alt="Ghost Terminal"></a></td></tr>
-<tr><td align="center" valign="top"><b>Arcade 1986</b><br><a href="../assets/localized/de/styles/style_06.png"><img src="../assets/localized/de/styles/style_06.png" width="270" alt="Arcade 1986"></a></td><td align="center" valign="top"><b>Orbit</b><br><a href="../assets/localized/de/styles/style_08.png"><img src="../assets/localized/de/styles/style_08.png" width="270" alt="Orbit"></a></td><td align="center" valign="top"><b>Papier</b><br><a href="../assets/localized/de/styles/style_09.png"><img src="../assets/localized/de/styles/style_09.png" width="270" alt="Papier"></a></td></tr>
-<tr><td align="center" valign="top"><b>Samsung Galaxy</b><br><a href="../assets/localized/de/styles/style_13.png"><img src="../assets/localized/de/styles/style_13.png" width="270" alt="Samsung Galaxy"></a></td><td align="center" valign="top"><b>Nova</b><br><a href="../assets/localized/de/styles/style_20.png"><img src="../assets/localized/de/styles/style_20.png" width="270" alt="Nova"></a></td><td align="center" valign="top"><b>Silence</b><br><a href="../assets/localized/de/styles/style_21.png"><img src="../assets/localized/de/styles/style_21.png" width="270" alt="Silence"></a></td></tr>
-</table>
+Erweiterte Musik ist standardmäßig aus. Android verlangt dafür die sensible Freigabe des Benachrichtigungszugriffs; PRISME nutzt Mediensitzungen, ohne Nachrichtentexte zu lesen oder zu speichern. Overlay-, Systemeinstellungs- und Nicht-stören-Zugriffe haben getrennte Zwecke.
 
-<details><summary>Alle 22 Stile anzeigen</summary>
+Automatische Wiederherstellungspunkte liegen im privaten App-Speicher; zehn automatische Punkte bleiben erhalten. Im Werkzeugmenü sind exportierbare AES-256-GCM-Sicherungen mit mindestens zehn Passwortzeichen verfügbar. Ohne Passwort gibt es keine Fernwiederherstellung. Importdateien werden vor dem Schreiben validiert; ein Journal schützt unterbrochene Wiederherstellungen. Laufende Timer und Android-Freigaben werden nicht aus Themen importiert. Nach drei aufeinanderfolgenden unbehandelten Abstürzen bietet der Rettungsmodus einen Neustart oder den klassischen Desktop mit deaktivierten Overlays.
 
-<table>
-<tr><td align="center" valign="top"><b>Prisme Touch</b><br><a href="../assets/localized/de/styles/style_00.png"><img src="../assets/localized/de/styles/style_00.png" width="270" alt="Prisme Touch"></a></td><td align="center" valign="top"><b>Tablette</b><br><a href="../assets/localized/de/styles/style_01.png"><img src="../assets/localized/de/styles/style_01.png" width="270" alt="Tablette"></a></td><td align="center" valign="top"><b>Bureau Windows</b><br><a href="../assets/localized/de/styles/style_02.png"><img src="../assets/localized/de/styles/style_02.png" width="270" alt="Bureau Windows"></a></td></tr>
-<tr><td align="center" valign="top"><b>Dock macOS</b><br><a href="../assets/localized/de/styles/style_03.png"><img src="../assets/localized/de/styles/style_03.png" width="270" alt="Dock macOS"></a></td><td align="center" valign="top"><b>Kali Workbench</b><br><a href="../assets/localized/de/styles/style_04.png"><img src="../assets/localized/de/styles/style_04.png" width="270" alt="Kali Workbench"></a></td><td align="center" valign="top"><b>Ghost Terminal</b><br><a href="../assets/localized/de/styles/style_05.png"><img src="../assets/localized/de/styles/style_05.png" width="270" alt="Ghost Terminal"></a></td></tr>
-<tr><td align="center" valign="top"><b>Arcade 1986</b><br><a href="../assets/localized/de/styles/style_06.png"><img src="../assets/localized/de/styles/style_06.png" width="270" alt="Arcade 1986"></a></td><td align="center" valign="top"><b>Meca Cockpit</b><br><a href="../assets/localized/de/styles/style_07.png"><img src="../assets/localized/de/styles/style_07.png" width="270" alt="Meca Cockpit"></a></td><td align="center" valign="top"><b>Orbit</b><br><a href="../assets/localized/de/styles/style_08.png"><img src="../assets/localized/de/styles/style_08.png" width="270" alt="Orbit"></a></td></tr>
-<tr><td align="center" valign="top"><b>Papier</b><br><a href="../assets/localized/de/styles/style_09.png"><img src="../assets/localized/de/styles/style_09.png" width="270" alt="Papier"></a></td><td align="center" valign="top"><b>Aurora</b><br><a href="../assets/localized/de/styles/style_10.png"><img src="../assets/localized/de/styles/style_10.png" width="270" alt="Aurora"></a></td><td align="center" valign="top"><b>LCD Studio</b><br><a href="../assets/localized/de/styles/style_11.png"><img src="../assets/localized/de/styles/style_11.png" width="270" alt="LCD Studio"></a></td></tr>
-<tr><td align="center" valign="top"><b>Apple Ultra</b><br><a href="../assets/localized/de/styles/style_12.png"><img src="../assets/localized/de/styles/style_12.png" width="270" alt="Apple Ultra"></a></td><td align="center" valign="top"><b>Samsung Galaxy</b><br><a href="../assets/localized/de/styles/style_13.png"><img src="../assets/localized/de/styles/style_13.png" width="270" alt="Samsung Galaxy"></a></td><td align="center" valign="top"><b>Garmin MARQ</b><br><a href="../assets/localized/de/styles/style_14.png"><img src="../assets/localized/de/styles/style_14.png" width="270" alt="Garmin MARQ"></a></td></tr>
-<tr><td align="center" valign="top"><b>TAG Racing</b><br><a href="../assets/localized/de/styles/style_15.png"><img src="../assets/localized/de/styles/style_15.png" width="270" alt="TAG Racing"></a></td><td align="center" valign="top"><b>Hublot Fusion</b><br><a href="../assets/localized/de/styles/style_16.png"><img src="../assets/localized/de/styles/style_16.png" width="270" alt="Hublot Fusion"></a></td><td align="center" valign="top"><b>Tambour Light</b><br><a href="../assets/localized/de/styles/style_17.png"><img src="../assets/localized/de/styles/style_17.png" width="270" alt="Tambour Light"></a></td></tr>
-<tr><td align="center" valign="top"><b>Montblanc Summit</b><br><a href="../assets/localized/de/styles/style_18.png"><img src="../assets/localized/de/styles/style_18.png" width="270" alt="Montblanc Summit"></a></td><td align="center" valign="top"><b>Ultimate Design</b><br><a href="../assets/localized/de/styles/style_19.png"><img src="../assets/localized/de/styles/style_19.png" width="270" alt="Ultimate Design"></a></td><td align="center" valign="top"><b>Nova</b><br><a href="../assets/localized/de/styles/style_20.png"><img src="../assets/localized/de/styles/style_20.png" width="270" alt="Nova"></a></td></tr>
-<tr><td align="center" valign="top"><b>Silence</b><br><a href="../assets/localized/de/styles/style_21.png"><img src="../assets/localized/de/styles/style_21.png" width="270" alt="Silence"></a></td><td align="center" valign="top"></td><td align="center" valign="top"></td></tr>
-</table>
+Overlays werden über dem modularen Startbildschirm verborgen und in anderen Apps gemäß den lokalen Einstellungen wieder angezeigt. Eine gemeinsame Pause/Fortsetzen-Funktion ist im Werkzeugmenü verfügbar.
 
-</details>
+## Prüfungen und Grenzen
 
-## Werkzeuge für den Alltag
+Die bisherige V6-Validierung dokumentiert **67.407 Java-Prüfungen**, **1.775 Prüfungen des PC-Modells**, Galerietests, echte Edge-Browserabläufe und **16 Prüfungen auf der DM100** für Migration, Validierung, Wiederherstellung, Verschlüsselung, Alarme und eine synthetische Mediensitzung. Taktile Abläufe prüfen Seiten, Rasterbewegung, Paletten und den manuellen Rettungsmodus. Den aktuellen Stand der zusätzlichen Widget-, Wetter- und Kontrollzentrum-Prüfungen nennt der [Validierungsbericht](V6-VALIDATION.md); die bisherigen Zahlen belegen nicht automatisch diese neuen Abläufe.
 
-<table>
-<tr><td align="center" valign="top"><b>Today</b><br><a href="../assets/localized/de/screenshots/today.png"><img src="../assets/localized/de/screenshots/today.png" width="410" alt="Today"></a></td><td align="center" valign="top"><b>Notes</b><br><a href="../assets/localized/de/screenshots/notes.png"><img src="../assets/localized/de/screenshots/notes.png" width="410" alt="Notes"></a></td></tr>
-<tr><td align="center" valign="top"><b>Checklist</b><br><a href="../assets/localized/de/screenshots/checklist.png"><img src="../assets/localized/de/screenshots/checklist.png" width="410" alt="Checklist"></a></td><td align="center" valign="top"><b>Timer</b><br><a href="../assets/localized/de/screenshots/timer.png"><img src="../assets/localized/de/screenshots/timer.png" width="410" alt="Timer"></a></td></tr>
-</table>
+Modellfälle sind keine entsprechend große Zahl physisch getesteter Uhren. Andere Geräte, Langzeitautonomie, alle Drittanbieter-Player und Play-Protect-Zertifizierung werden nicht zugesichert. Firmware und Android bestimmen Hintergrundwiedergabe, Alarmzustellung, Overlays und Rotation. Sieben historische Oberflächensprachen bleiben erhalten; einige ausführliche neue V6-Meldungen sind noch französisch.
 
-## Übersichtliche Einstellungskategorien
+## Dokumentation und Hilfe
 
-<table>
-<tr><td align="center" valign="top"><b>Settings Style</b><br><a href="../assets/localized/de/screenshots/settings-style.png"><img src="../assets/localized/de/screenshots/settings-style.png" width="270" alt="Settings Style"></a></td><td align="center" valign="top"><b>Settings Shortcuts</b><br><a href="../assets/localized/de/screenshots/settings-shortcuts.png"><img src="../assets/localized/de/screenshots/settings-shortcuts.png" width="270" alt="Settings Shortcuts"></a></td><td align="center" valign="top"><b>Settings Tools</b><br><a href="../assets/localized/de/screenshots/settings-tools.png"><img src="../assets/localized/de/screenshots/settings-tools.png" width="270" alt="Settings Tools"></a></td></tr>
-</table>
+Für Fehlerberichte Modell, Android-API, PRISME-Version, Ausrichtung und genaue Schritte nennen. Keine Konten, Seriennummern, privaten Exporte oder Rohprotokolle veröffentlichen. MIT-Lizenz; Markennamen der Stile bedeuten keine Zugehörigkeit oder Hardwarefreigabe.
 
-
-Alle PRISME-Bilder stammen aus einer getrennten Demo-App mit allgemeinen Symbolen und erfundenen Inhalten, ohne Konten oder persönliche App-Liste.
-
-<!-- /PRISME-VISUAL-SHOWCASE -->
-
-## Uhren
-
-| Modell oder Familie | Status |
-|---|---|
-| Domiwear / Domino DM100, Android 7.1.1 | **Auf Gerät getestet**, Referenz 640 × 480 im Querformat |
-| Andere DM100-Varianten | Einzeln prüfen; gleicher Name bedeutet nicht gleiche Firmware |
-| Andere rechteckige Uhren mit 2,86″ / 640 × 480 | Nicht validiert; separater Gerätetest erforderlich |
-
-Ungetestete Modelle sind **Kandidaten, keine zertifizierte Liste**. Betriebssystem, API und APK-Installation auf der echten Uhr prüfen. Dies ist kein Wear-OS-Zifferblatt. Pixel Watch und Wear-OS-Galaxy-Watch sind nicht validiert. watchOS, Tizen und proprietäre Systeme ohne Android-APK-Installation liegen außerhalb des Ziels. [Kriterien und Quellen](COMPATIBILITY.md).
-
-## Bilder, Datenschutz und Grenzen
-
-[Menüs und Optionen](SCREENSHOTS.md) · [Alle 22 Stile](STYLES.md)
-
-Die Bilder zeigen echte Oberflächen eines getrennten Demo-Builds mit erfundenen Daten und allgemeinen Symbolen, keine Benutzerkonten oder persönliche App-Liste. Keine Internet-Berechtigung. Notizen, Aufgaben, Favoriten und Starts aus PRISME bleiben lokal; eigene Exporte können diese Daten enthalten. Keine privaten Schlüssel, Benutzer-Backups, Gerätekennungen oder persönlichen Protokolle werden veröffentlicht.
-
-Hersteller-Energiesparen kann Timer und schwebende Dienste beenden. Musiksteuerung benötigt einen aktiven Player. Übersetzungen können verfeinert werden. Für die gemeldeten seitlichen schwarzen Bereiche auf einer DM100 gibt es **keine bestätigte Reparatur**. PRISME verändert weder Displaypanel noch Treiber. Die Darstellung auf anderen Bildschirmen ist nicht garantiert.
-
-Java-Code, Ressourcen, Sprachdateien, Tests und optionaler Imou-Begleiter sind enthalten. [Erstellen und testen](BUILD.md) · [Berechtigungen](PRIVACY.md) · [Kompatibilität melden](https://github.com/s00r1/PRISME/issues/new/choose). Originalcode unter MIT-Lizenz: Nutzung, Änderung und Weitergabe mit Erhalt des Lizenzhinweises erlaubt. Markennamen beschreiben gestalterische Inspiration, ohne Verbindung zu den Marken.
-
-![PRISME — de](../assets/localized/de/screenshots/language-de.png)
-
-
-[◈ PRISME — Website / Site web](https://s00r1.github.io/PRISME/) · [Community / Testers](https://github.com/s00r1/PRISME/discussions/1)
-
-
-[DM100 hardware audit · 2026-11-05 (FR), current source/release status and real screenshots](AUDIT-2026-11-05.md)
-
-
-**PRISME 6.0.0-beta1:** [V6 guide (FR)](V6-GUIDE.md) · [Hardware validation](V6-VALIDATION.md) · [Beta download](https://github.com/s00r1/PRISME/releases/tag/v6.0.0-beta1). Stable release: v5.4.
+[V6 · FR](V6-GUIDE.md) · [PC Studio · FR](PC-STUDIO.md) · [English guide](README.en.md) · [Compatibility](COMPATIBILITY.md) · [22 styles](STYLES.md) · [Privacy](PRIVACY.md) · [Validation](V6-VALIDATION.md) · [Build](BUILD.md) · [MIT](../LICENSE) · [Issues](https://github.com/s00r1/PRISME/issues/new/choose)
