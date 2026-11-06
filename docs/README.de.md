@@ -1,3 +1,9 @@
+# PRISME 6 🚀
+
+### 🎬 Official Showcase Trailer
+
+https://github.com/user-attachments/assets/8d01bf13-1207-45df-ad87-998d1627bafe
+
 # PRISME 6
 
 Ein anpassbarer Startbildschirm für die DM100 und große rechteckige Uhren mit vollständigem Android. Gestalte Seiten auf der Uhr oder am PC; Notizen, Aufgaben und Einstellungen bleiben lokal.
