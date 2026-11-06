@@ -1,3 +1,9 @@
+# PRISME 6 🚀
+
+### 🎬 Official Showcase Trailer
+
+https://github.com/user-attachments/assets/75dfa959-bd4a-44db-9783-87301f9a6399
+
 # PRISME 6
 
 **Un bureau personnalisable pour la DM100 et les grandes montres Android rectangulaires.** Composez votre accueil sur la montre ou sur PC, retrouvez vos outils quotidiens et gardez vos données en local.
