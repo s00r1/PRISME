@@ -1,3 +1,9 @@
+# PRISME 6 🚀
+
+### 🎬 Official Showcase Trailer
+
+https://github.com/user-attachments/assets/8d01bf13-1207-45df-ad87-998d1627bafe
+
 <div dir="rtl">
 
 # PRISME 6
