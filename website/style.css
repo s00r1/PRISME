@@ -10,3 +10,13 @@ select{background:#14202a;color:white;border:1px solid #40515f;padding:12px 18px
 @media(max-width:1000px){header nav{gap:12px}.hero{gap:28px}.style-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.split{gap:30px}.tools{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:800px){header{padding:15px 5%}.hero{min-height:auto;grid-template-columns:1fr}.hero h1{letter-spacing:-2px}.hero .device{max-width:550px}.split{grid-template-columns:1fr}.compat{display:grid}.split .download-panel{padding:24px}section{padding:60px 6%}.actions{gap:12px}.style-grid{gap:15px}.tools{grid-template-columns:1fr 1fr}.device{transform:none}}
 @media(max-width:480px){.style-grid,.tools{grid-template-columns:1fr}.hero .actions .button{width:100%;text-align:center}header .brand{font-size:15px;letter-spacing:2px}header .small{font-size:11px;padding:8px 10px}.gallery{grid-template-columns:1fr}.split{gap:25px}.download-panel .button{width:100%;text-align:center}h2{letter-spacing:-1px}}
+
+
+/* PRISME 6 official video trailer */
+.promo-video{padding-top:70px;padding-bottom:70px;text-align:center;background:radial-gradient(ellipse at 50% 40%,#17405b 0%,#0b1420 73%);border-block:1px solid var(--line)}
+.promo-video .section-intro{margin:0 auto 30px;max-width:680px}
+.promo-video-frame{max-width:1040px;margin:auto;overflow:hidden;border:1px solid #456c86;border-radius:22px;background:#02080e;box-shadow:0 28px 90px #000a,0 0 55px #45b8da19}
+.promo-video-frame video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;background:#02080e}
+.promo-video-fallback{font-size:14px;margin:18px auto 0;color:var(--muted)}
+.promo-video-fallback a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+@media(max-width:600px){.promo-video{padding-top:48px;padding-bottom:48px}.promo-video-frame{border-radius:12px}}
