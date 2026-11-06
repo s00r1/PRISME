@@ -1,3 +1,9 @@
+# PRISME 6 🚀
+
+### 🎬 Official Showcase Trailer
+
+https://github.com/user-attachments/assets/8d01bf13-1207-45df-ad87-998d1627bafe
+
 # PRISME 6
 
 **A customizable home screen for the DM100 and large rectangular full-Android watches.** Build your pages on the watch or on a PC, keep everyday tools within reach, and keep your data local.
