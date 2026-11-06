@@ -1,3 +1,9 @@
+# PRISME 6 🚀
+
+### 🎬 Official Showcase Trailer
+
+https://github.com/user-attachments/assets/8d01bf13-1207-45df-ad87-998d1627bafe
+
 # PRISME 6
 
 DM100 ve tam Android çalıştıran büyük dikdörtgen saatler için kişiselleştirilebilir masaüstü. Seçtiğiniz 22 klasik stilden biri ana masaüstünüz olarak kalır; yeni kartlar isteğe bağlıdır.
