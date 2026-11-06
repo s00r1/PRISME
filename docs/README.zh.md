@@ -1,3 +1,9 @@
+# PRISME 6 🚀
+
+### 🎬 Official Showcase Trailer
+
+https://github.com/user-attachments/assets/8d01bf13-1207-45df-ad87-998d1627bafe
+
 # PRISME 6
 
 为 DM100 和大屏矩形完整 Android 手表打造的可定制桌面。在手表或电脑上编排页面，把常用工具放在手边，数据保留在本地。
